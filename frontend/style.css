@@ -1,0 +1,470 @@
+/* style.css */
+body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    background-color: #d1d5db; 
+    margin: 0; 
+    display: flex; 
+    justify-content: center; 
+    min-height: 100vh;
+}
+
+/* Container utama untuk tampilan Mobile */
+.mobile-container { 
+    background: #f3f4f6; 
+    width: 100%; 
+    max-width: 400px; 
+    min-height: 100vh; 
+    position: relative; 
+    box-shadow: 0 0 20px rgba(0,0,0,0.2); 
+}
+
+/* Card Style untuk Login & Daftar */
+.card { 
+    background: white; 
+    padding: 30px; 
+    border-radius: 15px; 
+    width: 350px; 
+    text-align: center; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+    align-self: center; /* Mengetengahkan kartu secara vertikal */
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+/* Header Dashboard */
+.header { 
+    background: white; 
+    padding: 15px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    border-bottom: 2px solid #e5e7eb; 
+}
+
+.user-info { display: flex; align-items: center; gap: 10px; }
+.user-info img { height: 45px; width: auto; }
+
+.header-text h3 { margin: 0; font-size: 16px; color: #00338D; }
+.header-text p { margin: 0; font-size: 11px; color: #777; }
+
+/* Menu Card Dashboard */
+.menu-card { 
+    background: #ffffff; 
+    border-radius: 20px; 
+    padding: 20px; 
+    margin-bottom: 20px; 
+    border-left: 10px solid #FF7A00; /* Aksen Oranye Tazkia */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.menu-card h4 { margin: 0; font-size: 17px; color: #00338D; }
+.status-open { color: #00338D; font-weight: bold; font-size: 12px; }
+
+/* Tombol-Tombol */
+.button-group { display: flex; gap: 12px; margin-top: 15px; }
+
+.btn-purple { 
+    background: #00338D; /* Biru Navy Tazkia */
+    color: white; 
+    border: none; 
+    border-radius: 12px; 
+    padding: 12px; 
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 8px; 
+    cursor: pointer;
+    text-decoration: none; 
+    font-size: 12px; 
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-purple:hover {
+    background: #00266b;
+}
+
+.btn-white { 
+    background: white; 
+    color: #333; 
+    border: 1px solid #ddd; 
+    border-radius: 12px; 
+    padding: 12px; 
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 8px; 
+    cursor: pointer;
+    font-size: 12px; 
+    font-weight: bold;
+}
+
+/* Tombol Login & Daftar */
+.btn-login, .btn-daftar {
+    width: 100%; 
+    padding: 12px; 
+    background: #00338D; 
+    color: white; 
+    border: none; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    font-weight: bold; 
+    margin-top: 15px;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+.btn-login:hover, .btn-daftar:hover {
+    background: #FF7A00; /* Berubah jadi Oranye saat disentuh */
+}
+
+/* Input Fields */
+.input-group { text-align: left; margin-bottom: 15px; }
+label { display: block; font-size: 13px; margin-bottom: 5px; font-weight: bold; color: #00338D; }
+
+input, select { 
+    width: 100%; 
+    padding: 12px; 
+    border-radius: 8px; 
+    border: 1px solid #ddd; 
+    background: #f9f9f9; 
+    box-sizing: border-box; 
+    outline: none; 
+    font-size: 14px;
+}
+
+input:focus {
+    border: 2px solid #FF7A00; /* Border Oranye saat mengetik */
+}
+
+/* Link-link teks */
+.forgot-pw, a {
+    color: #00338D;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.forgot-pw:hover, a:hover {
+    color: #FF7A00;
+    text-decoration: underline;
+}
+
+/* Penyesuaian khusus tampilan rekapan sesuai gambar referensi */
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 5px solid #00338D;
+        }
+        .stat-card h5 { 
+            margin: 0; 
+            font-size: 12px; 
+            color: #333; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .stat-value { 
+            font-size: 26px; 
+            font-weight: bold; 
+            margin-top: 5px; 
+        }
+        .stat-value span { 
+            font-size: 14px; 
+            font-weight: normal; 
+            color: #888; 
+        }
+
+        .color-blue { color: #00338D; }
+        .color-orange { color: #FF7A00; }
+        .color-green { color: #4CAF50; }
+
+        .table-container {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .table-header {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 1fr;
+            font-weight: bold;
+            color: #999;
+            font-size: 12px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f5f5f5;
+        }
+        .table-row {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 1fr;
+            padding: 15px 0;
+            font-size: 14px;
+            border-bottom: 1px solid #fcfcfc;
+            color: #333;
+        }
+    
+
+        /* style.css */
+body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    background-color: #f4f7f6; 
+    margin: 0; 
+    display: flex; 
+    justify-content: center; 
+    min-height: 100vh;
+}
+
+.mobile-container { 
+    background: #ffffff; 
+    width: 100%; 
+    max-width: 400px; 
+    min-height: 100vh; 
+    position: relative; 
+    box-shadow: 0 0 15px rgba(0,0,0,0.1); 
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+.header { 
+    background: #fff; 
+    padding: 15px 20px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    border-bottom: 1px solid #eee; 
+}
+
+.user-info { display: flex; align-items: center; gap: 10px; }
+.user-info img { height: 40px; width: auto; }
+
+.header-text h3 { margin: 0; font-size: 15px; color: #00338D; }
+.header-text p { margin: 0; font-size: 10px; color: #888; text-transform: uppercase; }
+
+/* Statistik Card */
+.stat-card {
+    background: #fff;
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border-left: 8px solid #00338D; /* Biru Tazkia */
+}
+
+.stat-card h5 { 
+    margin: 0; font-size: 12px; color: #555; 
+    text-transform: uppercase; letter-spacing: 0.5px; 
+}
+
+.stat-value { font-size: 26px; font-weight: bold; margin-top: 5px; }
+.stat-value span { font-size: 14px; font-weight: normal; }
+
+/* Tabel Riwayat */
+.table-container {
+    background: #fff;
+    border-radius: 20px;
+    padding: 20px;
+    margin-top: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.table-header {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr;
+    font-weight: bold;
+    color: #bbb;
+    font-size: 11px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.table-row {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr;
+    padding: 15px 0;
+    font-size: 13px;
+    border-bottom: 1px solid #f9f9f9;
+    color: #444;
+}
+
+/* Colors */
+.color-blue { color: #00338D; }
+.color-orange { color: #FF7A00; }
+.color-green { color: #2ecc71; }
+
+/* Dashboard Menu Card */
+.menu-card { 
+    background: #fff; 
+    border-radius: 20px; 
+    padding: 20px; 
+    margin-bottom: 20px; 
+    border-left: 8px solid #FF7A00; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+/* --- Root Colors --- */
+:root {
+    --tazkia-blue: #00338D;
+    --tazkia-orange: #FF7A00;
+    --bg-light: #F4F7FE;
+    --white: #ffffff;
+    --text-dark: #333333;
+    --text-muted: #888888;
+}
+
+/* --- Base Style --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: #e0e0e0;
+    display: flex;
+    justify-content: center;
+}
+
+.mobile-container {
+    width: 100%;
+    max-width: 480px;
+    min-height: 100vh;
+    background-color: var(--bg-light);
+    position: relative;
+    padding-bottom: 30px;
+}
+
+/* --- Header Section --- */
+.header {
+    background-color: var(--white);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-info img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+}
+
+.header-text h3 {
+    font-size: 16px;
+    color: var(--tazkia-blue);
+}
+
+.header-text p {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.btn-back {
+    background: none;
+    border: none;
+    color: var(--tazkia-blue);
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* --- Stats Grid --- */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding: 20px;
+}
+
+.stat-card {
+    background: var(--white);
+    padding: 15px 10px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+
+.stat-card p {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-card h2 {
+    font-size: 18px;
+    color: var(--tazkia-blue);
+}
+
+.stat-card .unit {
+    font-size: 10px;
+    color: var(--tazkia-orange);
+    display: block;
+}
+
+/* --- History Section --- */
+.history-section {
+    padding: 0 20px;
+}
+
+.history-section h4 {
+    margin-bottom: 15px;
+    color: var(--text-dark);
+    font-size: 14px;
+}
+
+.history-item {
+    background: var(--white);
+    padding: 15px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+    transition: transform 0.2s;
+}
+
+.history-item:active {
+    transform: scale(0.98);
+}
+
+.date-circle {
+    width: 50px;
+    height: 50px;
+    background: var(--tazkia-blue);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 1.2;
+}
+
+.item-detail p {
+    font-size: 13px;
+    color: var(--text-dark);
+    margin: 2px 0;
+}
+
+.item-detail strong {
+    color: var(--tazkia-blue);
+}

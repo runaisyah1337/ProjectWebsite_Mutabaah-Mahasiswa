@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - STMIK Tazkia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --tazkia-blue: #003399; --tazkia-green: #22c55e; --bg-gray: #dcdcdc; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-gray); margin: 0; display: flex; justify-content: center; }
+        .mobile-container { width: 100%; max-width: 400px; background-color: var(--bg-gray); min-height: 100vh; }
+        .header { background: white; display: flex; align-items: center; padding: 10px 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .logo-box img { height: 35px; margin-right: 12px; }
+        .header-text { flex-grow: 1; }
+        .header-text h3 { margin: 0; font-size: 15px; color: var(--tazkia-blue); font-weight: 800; }
+        .logout-btn { color: var(--tazkia-blue); font-size: 20px; cursor: pointer; border: none; background: none; }
+        .content { padding: 20px 15px; }
+        .greeting h1 { font-size: 24px; color: var(--tazkia-blue); margin: 0; }
+        .stat-card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 10px; border-left: 5px solid var(--tazkia-blue); }
+        .stat-label { font-size: 13px; color: var(--tazkia-blue); font-weight: 700; display: flex; align-items: center; }
+        .stat-label i { margin-right: 8px; color: var(--tazkia-green); }
+        .stat-value { font-size: 26px; font-weight: 800; margin-top: 5px; display: block; }
+        .table-card { background: white; border-radius: 15px; padding: 15px; margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        th { text-align: left; color: #999; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        td { padding: 12px 0; border-bottom: 1px solid #f9f9f9; }
+        .btn-pantau { color: var(--tazkia-green); text-decoration: none; font-weight: 800; margin-right: 10px; }
+        .btn-hapus { color: #ef4444; border: 1px solid #fee2e2; background: #fff5f5; padding: 4px 8px; border-radius: 5px; cursor: pointer; font-size: 10px; }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <div class="header">
+            <div class="logo-box"><img src="image-removebg-preview.png"></div>
+            <div class="header-text"><h3>Dashboard</h3><p>Admin area</p></div>
+            <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+        <div class="content">
+            <div class="greeting"><h1 id="adminName">Assalamu’alaikum Admin !</h1><p>Pantau Aktivitas Mahasiswa</p></div>
+            <div class="stat-card"><span class="stat-label"><i class="fas fa-user-tie"></i> Total Pembina</span><span class="stat-value" id="countP">2</span></div>
+            <div class="table-card">
+                <h2 style="font-size: 14px; color: var(--tazkia-blue);">Manajemen Pembina</h2>
+                <table>
+                    <thead><tr><th>ID</th><th>Nama</th><th>Mhs</th><th>Aksi</th></tr></thead>
+                    <tbody id="pembinaList">
+                        <tr id="row1"><td>M-001</td><td>Bapak Rijal</td><td>15</td>
+                            <td>
+                                <a href="monitoringadmin.html?user=Bapak Rijal&id=M001" class="btn-pantau">Pantau</a>
+                                <button class="btn-hapus" onclick="hapus('row1')">Hapus</button>
+                            </td>
+                        </tr>
+                        <tr id="row2"><td>M-002</td><td>Ibu Nabila</td><td>12</td>
+                            <td>
+                                <a href="monitoringadmin.html?user=Ibu Nabila&id=M002" class="btn-pantau">Pantau</a>
+                                <button class="btn-hapus" onclick="hapus('row2')">Hapus</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        window.onload = function() {
+            const user = JSON.parse(localStorage.getItem('tazkia_session'));
+            if (!user || user.role !== 'admin') { window.location.href = "login.html"; }
+            document.getElementById('adminName').innerText = "Assalamu’alaikum " + user.nama + " !";
+        };
+        function hapus(id) { if(confirm("Hapus data ini?")) { document.getElementById(id).remove(); } }
+        function logout() { localStorage.removeItem('tazkia_session'); window.location.href = "login.html"; }
+    </script>
+</body>
+</html>

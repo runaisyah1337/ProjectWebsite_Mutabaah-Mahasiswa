@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekapan Mutaba'ah - STMIK Tazkia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --tazkia-blue: #003399;
+            --tazkia-green: #27ae60;
+            --bg-gray: #cccccc;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg-gray);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .mobile-container {
+            width: 100%;
+            max-width: 400px;
+            background-color: #f0f2f5;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        }
+
+        /* Header sesuai gambar */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .logo-header {
+            width: 45px;
+            margin-right: 12px;
+        }
+
+        .header-title { flex-grow: 1; }
+        .header-title h3 { margin: 0; font-size: 16px; color: #000; font-weight: bold; }
+        .header-title p { margin: 0; font-size: 12px; color: #666; }
+
+        .logout-icon { font-size: 24px; color: #000; cursor: pointer; }
+
+        .content { padding: 20px; }
+
+        /* Card Statistik sesuai gambar */
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .stat-title { font-size: 14px; font-weight: bold; color: #000; margin-bottom: 5px; text-transform: uppercase; }
+        
+        .stat-value { font-size: 24px; font-weight: bold; }
+        .green-text { color: var(--tazkia-green); }
+        .blue-text { color: #5d5dff; }
+        .pink-text { color: #ff00ff; }
+
+        .stat-sub { font-size: 14px; color: #444; }
+
+        /* Tabel Riwayat sesuai gambar */
+        .history-card {
+            background: white;
+            border-radius: 15px 15px 0 0;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .history-title { font-weight: bold; font-size: 16px; margin-bottom: 10px; }
+
+        .table-container {
+            background: white;
+            border-radius: 0 0 15px 15px;
+            padding: 10px 15px 20px 15px;
+        }
+
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; color: #888; font-size: 14px; padding-bottom: 15px; }
+        td { padding: 12px 0; font-size: 14px; color: #000; font-weight: 500; border-bottom: 1px solid #eee; }
+
+        .back-btn {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: var(--tazkia-blue);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="mobile-container">
+    <div class="header">
+        <img src="image-removebg-preview.png" alt="Logo Tazkia" class="logo-header">
+        <div class="header-title">
+            <h3>Dashboard</h3>
+            <p>Mahasiswa area</p>
+        </div>
+        <i class="fas fa-sign-out-alt logout-icon" onclick="window.location.href='login.html'"></i>
+    </div>
+
+    <div class="content">
+        <div class="stat-card">
+            <div class="stat-title">Rata - Rata Sholat Jamaah</div>
+            <div class="stat-value"><span class="green-text" id="avgSholat">0</span> <span style="font-size: 16px; color: #666; font-weight: normal;">/ 5 waktu</span></div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-title">Total Tilawah {Semester}</div>
+            <div class="stat-value"><span class="blue-text" id="totalTilawah">0</span> <span style="font-size: 16px; color: #666; font-weight: normal;">Halaman</span></div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-title">Keaktifan Laporan</div>
+            <div class="stat-value"><span class="pink-text" id="keaktifan">0</span> <span style="font-size: 16px; color: #666; font-weight: normal;">Hari</span></div>
+        </div>
+
+        <div class="history-card">
+            <div class="history-title">Riwayat Data (Sesi Lokal)</div>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Shalat Berjamaah</th>
+                        <th>Tilawah</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    </tbody>
+            </table>
+            <a href="dashboardmahasiswa.html" class="back-btn"><i class="fas fa-arrow-left"></i> Kembali ke Dashboard</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Data simulasi (karena GForm belum terhubung ke Sheet asli)
+    // Dalam pengembangan asli, data ini diambil dari API Google Sheet.
+    const dataSimulasi = [
+        { tgl: "2025-11-23", sholat: 5, tilawah: 4 },
+        { tgl: "2025-11-24", sholat: 4, tilawah: 2 },
+        { tgl: "2025-11-25", sholat: 5, tilawah: 5 }
+    ];
+
+    window.onload = function() {
+        const tableBody = document.getElementById('tableBody');
+        let totalSholat = 0;
+        let totalHalaman = 0;
+
+        dataSimulasi.forEach(item => {
+            totalSholat += item.sholat;
+            totalHalaman += item.tilawah;
+
+            let row = `<tr>
+                <td>${item.tgl}</td>
+                <td>${item.sholat} waktu</td>
+                <td>${item.tilawah} halaman</td>
+            </tr>`;
+            tableBody.innerHTML += row;
+        });
+
+        // Hitung Statistik
+        document.getElementById('avgSholat').innerText = (totalSholat / dataSimulasi.length).toFixed(1);
+        document.getElementById('totalTilawah').innerText = totalHalaman;
+        document.getElementById('keaktifan').innerText = dataSimulasi.length;
+    };
+</script>
+
+</body>
+</html>

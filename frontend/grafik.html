@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grafik Analistik - STMIK Tazkia</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --tazkia-blue: #003399;
+            --tazkia-orange: #f37021;
+            --bg-light: #f4f6f9;
+        }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #cccccc; margin: 0; display: flex; justify-content: center; }
+        .mobile-container { width: 100%; max-width: 450px; background-color: var(--bg-light); min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.2); }
+        
+        /* Header */
+        .header { display: flex; align-items: center; padding: 15px; background: white; border-bottom: 1px solid #ddd; }
+        .logo-header { width: 45px; margin-right: 12px; }
+        .header-title { flex-grow: 1; }
+        .header-title h3 { margin: 0; font-size: 16px; color: var(--tazkia-blue); }
+        
+        .content { padding: 20px; }
+        .card { background: white; border-radius: 15px; padding: 15px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .card h4 { margin: 0 0 15px 0; color: #333; font-size: 14px; text-transform: uppercase; border-left: 4px solid var(--tazkia-orange); padding-left: 10px; }
+        
+        .filter-section { margin-bottom: 15px; }
+        select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; outline: none; }
+        
+        canvas { width: 100% !important; height: auto !important; }
+        
+        .nav-back { display: block; text-align: center; margin-top: 10px; color: var(--tazkia-blue); text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="mobile-container">
+    <div class="header">
+        <img src="image-removebg-preview.png" alt="Logo" class="logo-header">
+        <div class="header-title">
+            <h3 id="displayRole">Grafik Mahasiswa</h3>
+            <p id="displayName">Nama User</p>
+        </div>
+        <a href="dashboardmahasiswa.html" style="color: black;"><i class="fas fa-home"></i></a>
+    </div>
+
+    <div class="content">
+        <div id="adminFilter" class="filter-section" style="display: none;">
+            <p style="font-size: 12px; font-weight: bold; margin-bottom: 5px;">Pilih Mahasiswa:</p>
+            <select id="selectStudent" onchange="updateCharts()">
+                <option value="all">Ringkasan Seluruh Mahasiswa</option>
+                </select>
+        </div>
+
+        <div class="card">
+            <h4 id="pieTitle">Proporsi Sholat (Minggu Ini)</h4>
+            <canvas id="pieChart"></canvas>
+        </div>
+
+        <div class="card">
+            <h4 id="lineTitle">Tren Perkembangan Amalan</h4>
+            <canvas id="lineChart"></canvas>
+        </div>
+
+        <a href="dashboardmahasiswa.html" class="nav-back"><i class="fas fa-arrow-left"></i> Kembali</a>
+    </div>
+</div>
+
+<script>
+    let pieChart, lineChart;
+
+    window.onload = function() {
+        const user = JSON.parse(localStorage.getItem('tazkia_session'));
+        if (!user) { window.location.href = "login.html"; return; }
+
+        document.getElementById('displayName').innerText = user.nama;
+        const role = user.role; // mahasiswa, pembina, admin
+
+        if (role === 'admin' || role === 'pembina') {
+            document.getElementById('adminFilter').style.display = 'block';
+            document.getElementById('displayRole').innerText = "Panel Kontrol " + role;
+            loadStudentList(role);
+        }
+
+        initCharts();
+    };
+
+    function loadStudentList(role) {
+        const db = JSON.parse(localStorage.getItem('tazkia_db_users')) || [];
+        const select = document.getElementById('selectStudent');
+        
+        // Filter: Admin lihat semua, Pembina lihat mahasiswa (dalam sistem nyata perlu field 'pembina_id')
+        const students = db.filter(u => u.role === 'mahasiswa');
+        
+        students.forEach(s => {
+            let opt = document.createElement('option');
+            opt.value = s.nim;
+            opt.innerText = s.nama + " (" + s.nim + ")";
+            select.appendChild(opt);
+        });
+    }
+
+    function initCharts() {
+        // Data Dummy (Nanti dihubungkan ke localStorage/Sheet data pengisian)
+        const ctxPie = document.getElementById('pieChart').getContext('2d');
+        pieChart = new Chart(ctxPie, {
+            type: 'pie',
+            data: {
+                labels: ['5 Waktu (Full)', 'Bolong/Masbuk'],
+                datasets: [{
+                    data: [75, 25],
+                    backgroundColor: ['#27ae60', '#f37021']
+                }]
+            }
+        });
+
+        const ctxLine = document.getElementById('lineChart').getContext('2d');
+        lineChart = new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels: ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4'],
+                datasets: [{
+                    label: 'Skor Amalan',
+                    data: [65, 78, 70, 85],
+                    borderColor: '#003399',
+                    backgroundColor: 'rgba(0, 51, 153, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            }
+        });
+    }
+
+    function updateCharts() {
+        const selection = document.getElementById('selectStudent').value;
+        
+        // Logika perubahan data berdasarkan pilihan
+        if (selection === 'all') {
+            document.getElementById('lineTitle').innerText = "Tren Keseluruhan Mahasiswa (Mingguan)";
+            // Update data grafik lineChart ke data agregat
+            lineChart.data.datasets[0].data = [60, 65, 68, 72]; 
+        } else {
+            document.getElementById('lineTitle').innerText = "Tren Pribadi Mahasiswa (Bulanan)";
+            lineChart.data.datasets[0].data = [80, 70, 90, 85];
+        }
+        
+        lineChart.update();
+        pieChart.update();
+    }
+</script>
+
+</body>
+</html>

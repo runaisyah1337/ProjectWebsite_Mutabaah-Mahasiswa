@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoring Detail - STMIK Tazkia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root { --tazkia-blue: #003399; --tazkia-green: #22c55e; --bg-gray: #dcdcdc; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-gray); margin: 0; display: flex; justify-content: center; }
+        .mobile-container { width: 100%; max-width: 400px; background-color: var(--bg-gray); min-height: 100vh; }
+        .header { background: white; display: flex; align-items: center; padding: 12px 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .back-btn { color: var(--tazkia-blue); font-size: 20px; cursor: pointer; margin-right: 15px; }
+        .header h3 { margin: 0; font-size: 16px; color: var(--tazkia-blue); font-weight: 800; }
+        .content { padding: 20px 15px; }
+        .profile-card { background: var(--tazkia-blue); color: white; border-radius: 15px; padding: 20px; text-align: center; margin-bottom: 20px; }
+        .profile-card h2 { margin: 0; font-size: 20px; }
+        .card { background: white; border-radius: 15px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .card h4 { margin: 0 0 10px 0; color: var(--tazkia-blue); font-size: 14px; }
+        table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        th { text-align: left; color: #999; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+        td { padding: 10px 0; border-bottom: 1px solid #f9f9f9; }
+        .status { color: var(--tazkia-green); font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <div class="header">
+            <i class="fas fa-arrow-left back-btn" onclick="window.location.href='dashboardadmin.html'"></i>
+            <h3>Monitoring Detail</h3>
+        </div>
+        <div class="content">
+            <div class="profile-card">
+                <h2 id="targetName">Nama Pembina</h2>
+                <p id="targetId">ID: M-000</p>
+            </div>
+            <div class="card">
+                <h4>Grafik Aktivitas Binaan</h4>
+                <canvas id="chartAdmin"></canvas>
+            </div>
+            <div class="card">
+                <h4>Rekapan Amalan Harian</h4>
+                <table>
+                    <thead><tr><th>Tanggal</th><th>Sholat</th><th>Tilawah</th></tr></thead>
+                    <tbody>
+                        <tr><td>24/12/25</td><td class="status">5 Waktu</td><td>10 Hal</td></tr>
+                        <tr><td>23/12/25</td><td class="status">5 Waktu</td><td>8 Hal</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        document.getElementById('targetName').innerText = params.get('user') || "User";
+        document.getElementById('targetId').innerText = "ID: " + (params.get('id') || "---");
+
+        const ctx = document.getElementById('chartAdmin').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
+                datasets: [{
+                    label: 'Performa',
+                    data: [4, 5, 4.5, 5, 4.8, 4, 5],
+                    borderColor: '#003399',
+                    tension: 0.4,
+                    fill: true,
+                    backgroundColor: 'rgba(0, 51, 153, 0.1)'
+                }]
+            },
+            options: { plugins: { legend: { display: false } } }
+        });
+    </script>
+</body>
+</html>
