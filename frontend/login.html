@@ -3,55 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masuk Ke Akun - STMIK Tazkia</title>
+    <title>Masuk Akun - STMIK Tazkia</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
     <style>
-        :root { --tazkia-blue: #003399; --input-bg: #eef4ff; }
-        body { font-family: 'Segoe UI', sans-serif; background: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-card { width: 100%; max-width: 380px; padding: 20px; text-align: center; }
-        .logo { width: 80px; margin-bottom: 20px; }
-        h1 { color: var(--tazkia-blue); font-size: 30px; font-weight: bold; margin-bottom: 25px; }
-        .form-group { text-align: left; margin-bottom: 15px; }
-        label { color: var(--tazkia-blue); font-weight: bold; font-size: 15px; }
-        input { width: 100%; padding: 15px; margin-top: 8px; background: var(--input-bg); border: 1px solid #d1d9e6; border-radius: 12px; box-sizing: border-box; font-size: 16px; outline: none; }
-        .btn-masuk { width: 100%; padding: 16px; background: var(--tazkia-blue); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 18px; margin-top: 30px; }
-        .footer-text { margin-top: 25px; font-size: 14px; }
-        .footer-text a { color: var(--tazkia-blue); text-decoration: none; font-weight: bold; }
+        /* CSS Tambahan Khusus untuk Ikon Mata agar Lucu & Pas */
+        .password-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        #togglePassword {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--tazkia-blue);
+            font-size: 18px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 5px; /* Biar area klik lebih luas */
+        }
+
+        #togglePassword:hover {
+            color: var(--tazkia-orange) !important;
+            transform: translateY(-50%) scale(1.2);
+        }
+
+        /* Beri ruang di kanan input agar teks tidak tertutup ikon */
+        #passInput {
+            padding-right: 45px;
+        }
     </style>
 </head>
 <body>
-    <div class="login-card">
-        <img src="image-removebg-preview.png" class="logo">
-        <h1>Masuk Ke Akun</h1>
-        <div class="form-group">
-            <label>Email / NIM / No HP</label>
-            <input type="text" id="userInput" placeholder="Masukkan ID Anda">
+    <div class="mobile-container">
+        <div class="auth-card">
+            <img src="image-removebg-preview.png" class="logo" alt="Logo Tazkia">
+            <h1>Masuk Akun</h1>
+            
+            <div class="form-group">
+                <label for="userInput">NIM / No HP</label>
+                <input type="text" id="userInput" placeholder="Masukkan ID Anda">
+                <small style="font-size: 10px; color: #888; margin-top: 5px; display: block; line-height: 1.4;">
+                    *NIM untuk mahasiswa, No HP untuk admin dan pembina
+                </small>
+            </div>
+
+            <div class="form-group">
+                <div class="label-wrapper">
+                    <label for="passInput">Kata Sandi</label>
+                    <a href="lupasandi.html" class="forgot-link-inline">Lupa Sandi?</a>
+                </div>
+                <div class="password-wrapper">
+                    <input type="password" id="passInput" placeholder="••••••">
+                    <i class="fas fa-eye" id="togglePassword"></i>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="prosesLogin()">Masuk</button>
+            
+            <div class="footer-text">
+                Belum punya akun? <a href="daftar.html">Daftar</a>
+            </div>
         </div>
-        <div class="form-group">
-            <label>Kata Sandi</label>
-            <input type="password" id="passInput" placeholder="••••••">
-        </div>
-        <button class="btn-masuk" onclick="prosesLogin()">Masuk</button>
-        <div class="footer-text">Belum punya akun? <a href="daftar.html">Daftar</a></div>
     </div>
 
     <script>
-        function prosesLogin() {
-            const val = document.getElementById('userInput').value;
-            const pass = document.getElementById('passInput').value;
-            const db = JSON.parse(localStorage.getItem('tazkia_db_users')) || [];
-            
-            const user = db.find(u => (u.nim === val || u.no_hp === val || u.email === val) && u.password === pass);
+        const togglePassword = document.querySelector('#togglePassword');
+        const passwordInput = document.querySelector('#passInput');
 
-            if (user) {
-                localStorage.setItem('tazkia_session', JSON.stringify(user));
-                if (user.role === "admin") { window.location.href = "dashboardadmin.html"; }
-                else if (user.role === "pembina") { window.location.href = "dashboardpembina.html"; }
-                else { window.location.href = "dashboardmahasiswa.html"; }
+        togglePassword.addEventListener('click', function () {
+            // 1. Cek tipe input saat ini
+            const isPassword = passwordInput.getAttribute('type') === 'password';
+            
+            // 2. Ubah tipe input (password ke text, atau sebaliknya)
+            passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+            
+            // 3. Ganti ikon (fa-eye ke fa-eye-slash)
+            this.classList.toggle('fa-eye-slash');
+
+            // 4. Efek "Ngegembung" Lucu
+            this.style.transform = 'translateY(-50%) scale(1.4)';
+            setTimeout(() => {
+                this.style.transform = 'translateY(-50%) scale(1)';
+            }, 250);
+        });
+
+        // Simulasi fungsi login (sambungkan ke script.js kamu)
+        function prosesLogin() {
+            // Panggil fungsi login yang ada di script.js
+            if (typeof window.prosesLogin === 'function') {
+                window.prosesLogin();
             } else {
-                alert("Login Gagal! Akun tidak ditemukan atau password salah.");
+                console.log("Fungsi login di script.js belum terdeteksi.");
             }
         }
     </script>
+
+    <script src="script.js"></script>
 </body>
 </html>

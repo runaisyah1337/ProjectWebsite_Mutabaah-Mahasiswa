@@ -3,152 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grafik Analistik - STMIK Tazkia</title>
+    <title>Grafik Ibadah - STMIK Tazkia</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
     <style>
-        :root {
-            --tazkia-blue: #003399;
-            --tazkia-orange: #f37021;
-            --bg-light: #f4f6f9;
+        /* CSS DESKTOP LAYOUT & HEADER NAVIGATION */
+        .desktop-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
         }
-        body { font-family: 'Segoe UI', sans-serif; background-color: #cccccc; margin: 0; display: flex; justify-content: center; }
-        .mobile-container { width: 100%; max-width: 450px; background-color: var(--bg-light); min-height: 100vh; box-shadow: 0 0 20px rgba(0,0,0,0.2); }
-        
-        /* Header */
-        .header { display: flex; align-items: center; padding: 15px; background: white; border-bottom: 1px solid #ddd; }
-        .logo-header { width: 45px; margin-right: 12px; }
-        .header-title { flex-grow: 1; }
-        .header-title h3 { margin: 0; font-size: 16px; color: var(--tazkia-blue); }
-        
-        .content { padding: 20px; }
-        .card { background: white; border-radius: 15px; padding: 15px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .card h4 { margin: 0 0 15px 0; color: #333; font-size: 14px; text-transform: uppercase; border-left: 4px solid var(--tazkia-orange); padding-left: 10px; }
-        
-        .filter-section { margin-bottom: 15px; }
-        select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; outline: none; }
-        
-        canvas { width: 100% !important; height: auto !important; }
-        
-        .nav-back { display: block; text-align: center; margin-top: 10px; color: var(--tazkia-blue); text-decoration: none; font-weight: bold; }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .arrow-icon {
+            font-size: 24px;
+            color: #003399;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .arrow-icon:hover {
+            transform: translateX(5px);
+        }
+
+        @media (min-width: 992px) {
+            .charts-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+                align-items: start;
+            }
+            
+            .mobile-container {
+                max-width: 100% !important;
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        canvas {
+            width: 100% !important;
+        }
     </style>
 </head>
 <body>
 
-<div class="mobile-container">
-    <div class="header">
-        <img src="image-removebg-preview.png" alt="Logo" class="logo-header">
-        <div class="header-title">
-            <h3 id="displayRole">Grafik Mahasiswa</h3>
-            <p id="displayName">Nama User</p>
-        </div>
-        <a href="dashboardmahasiswa.html" style="color: black;"><i class="fas fa-home"></i></a>
-    </div>
-
-    <div class="content">
-        <div id="adminFilter" class="filter-section" style="display: none;">
-            <p style="font-size: 12px; font-weight: bold; margin-bottom: 5px;">Pilih Mahasiswa:</p>
-            <select id="selectStudent" onchange="updateCharts()">
-                <option value="all">Ringkasan Seluruh Mahasiswa</option>
-                </select>
+<div class="desktop-wrapper">
+    <div class="mobile-container">
+        <div class="header">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <img src="image-removebg-preview.png" alt="Logo" class="logo-header" style="width: 45px;">
+                <div class="header-title">
+                    <h3 id="displayTitle" style="margin: 0; font-size: 18px;">Grafik Perkembangan</h3>
+                    <p id="displayName" style="margin: 0; font-size: 12px; color: #888;">Memuat...</p>
+                </div>
+            </div>
+            <a href="javascript:void(0)" onclick="goBack()" class="arrow-icon">
+                <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
 
-        <div class="card">
-            <h4 id="pieTitle">Proporsi Sholat (Minggu Ini)</h4>
-            <canvas id="pieChart"></canvas>
-        </div>
+        <div class="charts-grid">
+            <div class="card">
+                <h4 id="pieTitle" style="margin-top: 0; font-size: 16px;">Distribusi Skor Amalan</h4>
+                <div style="height: 400px;"> 
+                    <canvas id="horizontalBarChart"></canvas>
+                </div>
+                <p style="text-align: center; font-size: 11px; color: #888; margin-top: 15px; border-top: 1px solid #f0f0f0; padding-top: 10px;">
+                    Skala:
+                    <span class="score-merah">1</span> = Kurang | 
+                    <span class="score-kuning">2</span> = Cukup | 
+                    <span class="score-hijau">3</span> = Baik
+                </p>
+            </div>
 
-        <div class="card">
-            <h4 id="lineTitle">Tren Perkembangan Amalan</h4>
-            <canvas id="lineChart"></canvas>
+            <div class="card">
+                <h4 style="margin-top: 0; font-size: 16px;">Tren Skor Mingguan (M1 - M4)</h4>
+                <div style="height: 400px;"> 
+                    <canvas id="lineChart"></canvas>
+                </div>
+            </div>
         </div>
-
-        <a href="dashboardmahasiswa.html" class="nav-back"><i class="fas fa-arrow-left"></i> Kembali</a>
     </div>
 </div>
 
 <script>
-    let pieChart, lineChart;
+    function getStatusColor(score) {
+        const s = Number(score);
+        if (s === 3) return '#28a745';
+        if (s === 2) return '#ffc107';
+        if (s === 1) return '#dc3545';
+        return '#444444';
+    }
 
-    window.onload = function() {
+    function getWeekOfMonth() {
+        const today = new Date();
+        const day = today.getDate();
+        const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
+        const adjustedDate = day + (firstDay === 0 ? 6 : firstDay - 1);
+        return Math.ceil(adjustedDate / 7);
+    }
+
+    function goBack() {
         const user = JSON.parse(localStorage.getItem('tazkia_session'));
-        if (!user) { window.location.href = "login.html"; return; }
+        if (user && user.role === 'admin') window.location.href = 'adminpantau.html';
+        else if (user && user.role === 'pembina') window.location.href = 'dashboardpembina.html';
+        else window.location.href = 'dashboardmahasiswa.html';
+    }
 
-        document.getElementById('displayName').innerText = user.nama;
-        const role = user.role; // mahasiswa, pembina, admin
+    let pieChartInstance = null;
+    let lineChartInstance = null;
 
-        if (role === 'admin' || role === 'pembina') {
-            document.getElementById('adminFilter').style.display = 'block';
-            document.getElementById('displayRole').innerText = "Panel Kontrol " + role;
-            loadStudentList(role);
-        }
+    window.onload = async function() {
+        const user = JSON.parse(localStorage.getItem('tazkia_session'));
+        const token = localStorage.getItem('token');
+        if (!token || !user) { window.location.href = "login.html"; return; }
 
-        initCharts();
+        const urlParams = new URLSearchParams(window.location.search);
+        const targetNim = urlParams.get('nim') || user.nim;
+        const targetWeek = urlParams.get('week') || getWeekOfMonth(); 
+
+        document.getElementById('displayName').innerText = "NIM: " + targetNim;
+        document.getElementById('pieTitle').innerText = `Komposisi Amal (Minggu ${targetWeek})`;
+
+        loadCharts(targetNim, token, targetWeek);
     };
 
-    function loadStudentList(role) {
-        const db = JSON.parse(localStorage.getItem('tazkia_db_users')) || [];
-        const select = document.getElementById('selectStudent');
-        
-        // Filter: Admin lihat semua, Pembina lihat mahasiswa (dalam sistem nyata perlu field 'pembina_id')
-        const students = db.filter(u => u.role === 'mahasiswa');
-        
-        students.forEach(s => {
-            let opt = document.createElement('option');
-            opt.value = s.nim;
-            opt.innerText = s.nama + " (" + s.nim + ")";
-            select.appendChild(opt);
+    async function loadCharts(nim, token, weekFilter) {
+        try {
+            const response = await fetch(`http://localhost:3000/api/evaluasi/stats?nim=${nim}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const allEvaluations = await response.json();
+            const currentWeekData = allEvaluations.find(ev => String(ev.weekStart) === String(weekFilter));
+            renderPieChart(currentWeekData ? currentWeekData.jawaban : {});
+            renderLineChart(allEvaluations);
+        } catch (err) { console.error(err); }
+    }
+
+    function renderPieChart(jawaban) {
+        const ctx = document.getElementById('horizontalBarChart').getContext('2d');
+        if (pieChartInstance) pieChartInstance.destroy();
+
+        const labels = ['Tilawah', 'Matsurot', 'Sholat Masjid', 'Sholat Malam', 'Puasa', 'Olahraga', 'Keluarga', 'Infaq', 'Palestina'];
+        const dataValues = [
+            Number(jawaban.tilawah || 0), Number(jawaban.matsurot || 0), 
+            Number(jawaban.sholatMasjid || 0), Number(jawaban.sholatMalam || 0), 
+            Number(jawaban.puasa || 0), Number(jawaban.olahraga || 0), 
+            Number(jawaban.keluarga || 0), Number(jawaban.infaq || 0), 
+            Number(jawaban.donasiPalestina || 0)
+        ];
+
+        pieChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Skor Amalan',
+                    data: dataValues,
+                    backgroundColor: dataValues.map(v => getStatusColor(v)),
+                    borderRadius: 5,
+                    barThickness: 20
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { beginAtZero: true, max: 3, ticks: { stepSize: 1 } },
+                    y: { ticks: { font: { size: 12, weight: 'bold' } } }
+                },
+                plugins: { legend: { display: false } }
+            }
         });
     }
 
-    function initCharts() {
-        // Data Dummy (Nanti dihubungkan ke localStorage/Sheet data pengisian)
-        const ctxPie = document.getElementById('pieChart').getContext('2d');
-        pieChart = new Chart(ctxPie, {
-            type: 'pie',
-            data: {
-                labels: ['5 Waktu (Full)', 'Bolong/Masbuk'],
-                datasets: [{
-                    data: [75, 25],
-                    backgroundColor: ['#27ae60', '#f37021']
-                }]
-            }
+    function renderLineChart(dataArray) {
+        const ctx = document.getElementById('lineChart').getContext('2d');
+        if (lineChartInstance) lineChartInstance.destroy();
+
+        const scores = [0, 0, 0, 0];
+        dataArray.forEach(ev => {
+            const w = parseInt(ev.weekStart);
+            if (w >= 1 && w <= 4) scores[w-1] = Object.values(ev.jawaban).reduce((a, b) => Number(a) + Number(b || 0), 0);
         });
 
-        const ctxLine = document.getElementById('lineChart').getContext('2d');
-        lineChart = new Chart(ctxLine, {
+        lineChartInstance = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4'],
                 datasets: [{
-                    label: 'Skor Amalan',
-                    data: [65, 78, 70, 85],
+                    label: 'Total Skor',
+                    data: scores,
                     borderColor: '#003399',
                     backgroundColor: 'rgba(0, 51, 153, 0.1)',
                     fill: true,
-                    tension: 0.4
+                    tension: 0.3
                 }]
+            },
+            options: { 
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { y: { beginAtZero: true, max: 35 } } 
             }
         });
     }
-
-    function updateCharts() {
-        const selection = document.getElementById('selectStudent').value;
-        
-        // Logika perubahan data berdasarkan pilihan
-        if (selection === 'all') {
-            document.getElementById('lineTitle').innerText = "Tren Keseluruhan Mahasiswa (Mingguan)";
-            // Update data grafik lineChart ke data agregat
-            lineChart.data.datasets[0].data = [60, 65, 68, 72]; 
-        } else {
-            document.getElementById('lineTitle').innerText = "Tren Pribadi Mahasiswa (Bulanan)";
-            lineChart.data.datasets[0].data = [80, 70, 90, 85];
-        }
-        
-        lineChart.update();
-        pieChart.update();
-    }
 </script>
-
 </body>
 </html>

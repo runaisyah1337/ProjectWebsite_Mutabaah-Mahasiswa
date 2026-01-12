@@ -5,200 +5,182 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Pembina - STMIK Tazkia</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
     <style>
-        :root {
-            --tazkia-blue: #003399;
-            --tazkia-green: #22c55e;
-            --bg-canvas: #dcdcdc;
-        }
-
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background-color: var(--bg-canvas);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-        }
-
-        .mobile-container {
-            width: 100%;
-            max-width: 400px;
-            background-color: var(--bg-canvas);
-            min-height: 100vh;
-        }
-
-        /* Header Area */
-        .header {
-            background-color: white;
-            display: flex;
-            align-items: center;
-            padding: 10px 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        .logo-container {
-            background-color: #f8f9fa;
-            padding: 6px;
-            border-radius: 8px;
-            margin-right: 12px;
-            display: flex;
-            align-items: center;
-        }
-
-        .logo-container img { height: 35px; }
-
-        .header-text { flex-grow: 1; }
-        .header-text h3 { margin: 0; font-size: 15px; font-weight: 800; color: var(--tazkia-blue); }
-        .header-text p { margin: 0; font-size: 11px; color: #666; }
-
-        .btn-logout { color: var(--tazkia-blue); font-size: 22px; cursor: pointer; }
-
-        /* Content Area */
-        .content { padding: 25px 15px; }
-
-        .greeting { margin-bottom: 25px; }
-        .greeting h1 { font-size: 26px; font-weight: 800; margin: 0; color: var(--tazkia-blue); }
-        .greeting p { margin: 5px 0 0; font-size: 14px; color: #444; }
-
-        /* Card Tabel Monitoring */
-        .monitor-card {
-            background-color: white;
-            border-radius: 24px;
-            padding: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-        }
-
-        .card-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 20px;
-        }
-
-        .card-top h2 { font-size: 17px; margin: 0; color: var(--tazkia-blue); font-weight: 800; width: 50%; }
-
-        .sync-label { font-size: 10px; color: #777; text-align: right; width: 45%; }
-
-        /* Styling Tabel */
-        .table-wrapper { overflow-x: auto; }
+        .dashboard-table-wrapper { max-height: 65vh; overflow-y: auto; border-radius: 12px; border: 1px solid #eee; background: white; }
         table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; font-size: 9px; color: #bbb; text-transform: uppercase; padding-bottom: 12px; border-bottom: 1px solid #f0f0f0; }
-        td { padding: 14px 0; border-bottom: 1px solid #f9f9f9; font-size: 12px; }
-
-        .student-info { font-weight: 700; color: #000; display: block; }
-        .student-sub { font-weight: 400; font-size: 10px; color: #888; }
-
-        .score-pill {
-            background-color: #dcfce7;
-            color: var(--tazkia-green);
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-weight: 800;
-        }
-
-        /* Grouping Buttons Aksi */
-        .action-group { display: flex; flex-direction: column; gap: 5px; }
-
-        .action-link {
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 10px;
-            display: flex;
-            align-items: center;
-        }
-
-        .link-grafik { color: var(--tazkia-green); }
-        .link-rekapan { color: var(--tazkia-blue); }
-
-        .action-link i { margin-left: 4px; font-size: 9px; }
+        thead th { position: sticky; top: 0; background-color: #f8fafc; z-index: 10; box-shadow: 0 2px 2px -1px rgba(0,0,0,0.1); padding: 15px 8px; color: var(--tazkia-blue); font-size: 13px; }
+        tbody tr:nth-child(even) { background-color: #fcfcfc; }
+        tbody tr:hover { background-color: #f1f5f9; transition: 0.2s; }
+        .search-container { margin: 20px 0; position: relative; }
+        .search-input { width: 100%; padding: 12px 15px 12px 40px; border-radius: 10px; border: 1px solid #ddd; font-size: 14px; outline: none; transition: 0.3s; }
+        .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #888; }
+        .action-buttons-group { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+        .btn-action { text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 10px; font-weight: bold; padding: 6px 12px; background: #fdfdfd; border: 1px solid #eee; border-radius: 6px; min-width: 90px; color: var(--tazkia-blue); }
+        .score-pill { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; display: inline-block; }
+        @media (min-width: 992px) { .dashboard-table-wrapper { max-height: 70vh; } .greeting h1 { font-size: 26px; } }
     </style>
 </head>
 <body>
 
-<div class="mobile-container">
+<div class="mobile-container container-wide">
     <div class="header">
-        <div class="logo-container">
-            <img src="image-removebg-preview.png" alt="STMIK Tazkia">
+        <div style="display: flex; align-items: center;">
+            <img src="image-removebg-preview.png" alt="Logo" class="logo-header">
+            <div class="header-title">
+                <h3>DASHBOARD</h3>
+                <p>Pembina Area</p>
+            </div>
         </div>
-        <div class="header-text">
-            <h3>Dashboard</h3>
-            <p>Pembina area</p>
-        </div>
-        <div class="btn-logout" onclick="handleLogout()">
-            <i class="fas fa-sign-out-alt"></i>
-        </div>
+        <button onclick="logout()" style="background:none; border:none; cursor:pointer; padding: 5px;">
+            <i class="fas fa-sign-out-alt" style="color:var(--tazkia-blue); font-size: 22px;"></i>
+        </button>
     </div>
 
-    <div class="content">
+    <div class="content" style="padding: 20px;">
         <div class="greeting">
-            <h1 id="pembinaName">Assalamu’alaikum Pembina !</h1>
-            <p>Pantau Aktivitas Ibadah Mahasiswa</p>
+            <h1 id="pembinaName" style="color:var(--tazkia-blue); margin-bottom: 5px;">Assalamu'alaikum!</h1>
+            <p style="color:#666; font-size:14px;">Pantau Rekapan Ibadah Anak Binaan Anda</p>
         </div>
 
-        <div class="monitor-card">
-            <div class="card-top">
-                <h2>Daftar Mahasiswa Binaan</h2>
-                <div class="sync-label">
-                    <i class="fas fa-info-circle"></i> Data Sinkron Gsheet
-                </div>
-            </div>
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="Cari nama atau NIM binaan..." onkeyup="filterTable()">
+        </div>
 
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Mahasiswa</th>
-                            <th>Rerata</th>
-                            <th>Opsi Pantau</th>
-                        </tr>
-                    </thead>
-                    <tbody id="listBinaan">
-                        <tr>
-                            <td>
-                                <span class="student-info">Akbar</span>
-                                <span class="student-sub">Halaqah A</span>
-                            </td>
-                            <td><span class="score-pill">4.5</span></td>
-                            <td class="action-group">
-                                <a href="grafik.html?user=akbar" class="action-link link-grafik">Grafik <i class="fas fa-chart-line"></i></a>
-                                <a href="rekapan.html?user=akbar" class="action-link link-rekapan">Rekapan <i class="fas fa-list-alt"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span class="student-info">Dinda</span>
-                                <span class="student-sub">Halaqah B</span>
-                            </td>
-                            <td><span class="score-pill">5.0</span></td>
-                            <td class="action-group">
-                                <a href="grafik.html?user=dinda" class="action-link link-grafik">Grafik <i class="fas fa-chart-line"></i></a>
-                                <a href="rekapan.html?user=dinda" class="action-link link-rekapan">Rekapan <i class="fas fa-list-alt"></i></a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <div class="table-card dashboard-table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="text-align: left;">MAHASISWA</th>
+                        <th style="text-align: center;">RERATA</th>
+                        <th style="text-align: center;">AKSI & LAPORAN</th>
+                    </tr>
+                </thead>
+                <tbody id="listBinaan">
+                    <tr><td colspan="3" style="text-align:center; padding:30px;">Memuat data mahasiswa...</td></tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 
 <script>
-    window.onload = function() {
+    let MASTER_DATA = [];
+
+    function getWeekOfMonth() {
+        const today = new Date();
+        const day = today.getDate();
+        const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
+        const adjustedDate = day + (firstDay === 0 ? 6 : firstDay - 1);
+        return Math.ceil(adjustedDate / 7);
+    }
+
+    window.onload = async function() {
         const user = JSON.parse(localStorage.getItem('tazkia_session'));
+        const token = localStorage.getItem('token');
+        const currentWeek = getWeekOfMonth();
+
         if (!user || user.role !== 'pembina') {
             window.location.href = "login.html";
             return;
         }
+
         document.getElementById('pembinaName').innerText = "Assalamu'alaikum " + user.nama + "!";
+        
+        try {
+            const response = await fetch('http://localhost:3000/api/evaluasi/all-stats', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const result = await response.json();
+            const rawData = result.students || [];
+
+            MASTER_DATA = rawData.map(item => {
+                // FILTER: Hanya ambil evaluasi minggu berjalan
+                const evalsThisWeek = (item.evaluations || []).filter(ev => 
+                    String(ev.weekStart) === String(currentWeek)
+                );
+
+                let rerataNum = 0;
+                if (evalsThisWeek.length > 0) {
+                    let totalSkor = 0;
+                    evalsThisWeek.forEach(ev => {
+                        if (ev.jawaban) {
+                            totalSkor += Object.values(ev.jawaban).reduce((a, b) => Number(a) + Number(b), 0);
+                        }
+                    });
+                    rerataNum = totalSkor / evalsThisWeek.length;
+                }
+
+                return { 
+                    nama: item.nama, 
+                    nim: item.studentId, 
+                    rerata: rerataNum
+                };
+            });
+            
+            // Sort agar yang skornya 0 atau paling rendah ada di paling atas
+            MASTER_DATA.sort((a, b) => a.rerata - b.rerata);
+            renderTable(MASTER_DATA);
+            
+        } catch (err) {
+            console.error(err);
+            document.getElementById('listBinaan').innerHTML = '<tr><td colspan="3" style="text-align:center;">Gagal mengambil data.</td></tr>';
+        }
     };
 
-    function handleLogout() {
+    function renderTable(dataArray) {
+        const tbody = document.getElementById('listBinaan');
+        const currentWeek = getWeekOfMonth();
+        tbody.innerHTML = '';
+
+        if (dataArray.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px;">Data tidak ditemukan.</td></tr>';
+            return;
+        }
+
+        dataArray.forEach(student => {
+            // Logika Warna: Skor < 15 (termasuk 0) jadi Merah, >= 15 Hijau
+            const pillStyle = student.rerata < 15 
+                ? "background: #fee2e2; color: #ef4444;" 
+                : "background: #dcfce7; color: #22c55e;";
+            
+            const row = `
+                <tr>
+                    <td style="padding-left: 15px;">
+                        <span style="font-weight:bold; display:block;">${student.nama}</span>
+                        <span style="font-size:11px; color:#888;">NIM: ${student.nim}</span>
+                    </td>
+                    <td style="text-align:center;">
+                        <span class="score-pill" style="${pillStyle}">${student.rerata.toFixed(1)}</span>
+                    </td>
+                    <td style="text-align:center; vertical-align: middle;">
+                        <div class="action-buttons-group">
+                            <a href="rekapan.html?nim=${student.nim}&nama=${encodeURIComponent(student.nama)}&week=${currentWeek}" class="btn-action">
+                                <i class="fas fa-list-check" style="color:#f37021;"></i> REKAPAN
+                            </a>
+                        </div>
+                    </td>
+                </tr>`;
+            tbody.innerHTML += row;
+        });
+    }
+
+    function filterTable() {
+        const query = document.getElementById('searchInput').value.toLowerCase().trim();
+        const filtered = MASTER_DATA.filter(student => 
+            student.nama.toLowerCase().includes(query) || 
+            student.nim.toString().includes(query)
+        );
+        renderTable(filtered);
+    }
+
+    function logout() {
         if(confirm("Apakah Anda yakin ingin keluar?")) {
-            localStorage.removeItem('tazkia_session');
+            localStorage.clear();
             window.location.href = "login.html";
         }
     }
 </script>
-
 </body>
 </html>

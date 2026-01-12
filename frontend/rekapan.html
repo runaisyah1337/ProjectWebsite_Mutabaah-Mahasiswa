@@ -3,182 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rekapan Mutaba'ah - STMIK Tazkia</title>
+    <title>Rekapan Aktivitas - STMIK Tazkia</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
     <style>
-        :root {
-            --tazkia-blue: #003399;
-            --tazkia-green: #27ae60;
-            --bg-gray: #cccccc;
-        }
-
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: var(--bg-gray);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-        }
-
-        .mobile-container {
-            width: 100%;
-            max-width: 400px;
-            background-color: #f0f2f5;
-            min-height: 100vh;
-            box-shadow: 0 0 20px rgba(0,0,0,0.2);
-        }
-
-        /* Header sesuai gambar */
-        .header {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            background: white;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .logo-header {
-            width: 45px;
-            margin-right: 12px;
-        }
-
-        .header-title { flex-grow: 1; }
-        .header-title h3 { margin: 0; font-size: 16px; color: #000; font-weight: bold; }
-        .header-title p { margin: 0; font-size: 12px; color: #666; }
-
-        .logout-icon { font-size: 24px; color: #000; cursor: pointer; }
-
-        .content { padding: 20px; }
-
-        /* Card Statistik sesuai gambar */
-        .stat-card {
-            background: white;
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        .stat-title { font-size: 14px; font-weight: bold; color: #000; margin-bottom: 5px; text-transform: uppercase; }
+        body { background: #f4f7fe; margin: 0; padding: 0; font-family: 'Inter', sans-serif; display: flex; justify-content: center; }
+        .recap-container { width: 100%; max-width: 850px; padding: 30px 20px; box-sizing: border-box; }
         
-        .stat-value { font-size: 24px; font-weight: bold; }
-        .green-text { color: var(--tazkia-green); }
-        .blue-text { color: #5d5dff; }
-        .pink-text { color: #ff00ff; }
+        /* BANNER */
+        .recap-banner { background: linear-gradient(135deg, #003399 0%, #0056b3 100%); padding: 30px; border-radius: 20px; color: white; text-align: center; margin-bottom: 25px; box-shadow: 0 10px 25px rgba(0, 51, 153, 0.1); }
+        
+        /* SUMMARY CARD (KHUSUS PEMBINA) */
+        .summary-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .summary-card { background: white; padding: 15px; border-radius: 15px; text-align: center; border: 1px solid #edf2f7; }
+        .summary-card i { font-size: 20px; margin-bottom: 8px; display: block; }
+        .summary-card h5 { margin: 0; font-size: 11px; color: #888; text-transform: uppercase; }
+        .summary-card p { margin: 5px 0 0; font-size: 16px; font-weight: bold; color: #333; }
 
-        .stat-sub { font-size: 14px; color: #444; }
+        /* ALERT BOX */
+        .alert-recommendation { background: #fff5f5; border-left: 5px solid #feb2b2; padding: 12px 18px; border-radius: 12px; margin-bottom: 25px; display: none; }
+        .alert-recommendation h4 { margin: 0 0 5px; color: #c53030; font-size: 13px; }
+        .alert-recommendation p { margin: 0; font-size: 12px; color: #742a2a; }
 
-        /* Tabel Riwayat sesuai gambar */
-        .history-card {
-            background: white;
-            border-radius: 15px 15px 0 0;
-            padding: 15px;
-            margin-top: 20px;
+        /* TIMELINE RAMPING */
+        .timeline { position: relative; padding-left: 20px; }
+        .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: #cbd5e1; border-radius: 4px; }
+        .timeline-item { position: relative; margin-bottom: 12px; }
+        .timeline-dot { position: absolute; left: -25px; top: 14px; width: 8px; height: 8px; background: white; border: 2px solid #003399; border-radius: 50%; z-index: 2; }
+        
+        .timeline-card { 
+            background: white; 
+            padding: 10px 18px; 
+            border-radius: 12px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03); 
+            border: 1px solid #edf2f7; 
         }
 
-        .history-title { font-weight: bold; font-size: 16px; margin-bottom: 10px; }
+        .item-info { display: flex; align-items: center; gap: 12px; }
+        .item-icon { width: 35px; height: 35px; background: #f0f7ff; color: #003399; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+        
+        .score-display { display: flex; align-items: center; gap: 10px; text-align: right; }
+        .badge-score { padding: 4px 10px; border-radius: 5px; font-weight: 800; font-size: 9px; text-transform: uppercase; }
+        .score-desc { font-size: 11px; color: #888; font-weight: 500; }
 
-        .table-container {
-            background: white;
-            border-radius: 0 0 15px 15px;
-            padding: 10px 15px 20px 15px;
-        }
+        .score-3 { background: #dcfce7; color: #16a34a; }
+        .score-2 { background: #fef9c3; color: #ca8a04; }
+        .score-1 { background: #fee2e2; color: #dc2626; }
 
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; color: #888; font-size: 14px; padding-bottom: 15px; }
-        td { padding: 12px 0; font-size: 14px; color: #000; font-weight: 500; border-bottom: 1px solid #eee; }
+        .nav-footer { text-align: center; margin-top: 30px; padding-bottom: 30px; }
+        /* --- EFEK INTERAKTIF (NGEGEMBUNG) --- */
+.timeline-card { 
+    background: white; 
+    padding: 10px 18px; 
+    border-radius: 12px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03); 
+    border: 1px solid #edf2f7; 
+    
+    /* Tambahkan baris di bawah ini agar gerakannya halus */
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    cursor: pointer;
+}
 
-        .back-btn {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: var(--tazkia-blue);
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 14px;
-        }
+/* Saat disentuh (Hover) */
+.timeline-card:hover { 
+    transform: scale(1.01); /* Ngegembung sedikit */
+    box-shadow: 0 8px 15px rgba(0, 51, 153, 0.1); /* Bayangan lebih halus */
+    z-index: 5; /* Agar tidak tertutup item lain saat membesar */
+}
+
+/* Tambahan: Efek pada kartu ringkasan pembina juga biar lucu */
+.summary-card {
+    background: white; 
+    padding: 15px; 
+    border-radius: 15px; 
+    text-align: center; 
+    border: 1px solid #edf2f7;
+    transition: all 0.3s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-2px); /* Melayang sedikit ke atas */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
     </style>
 </head>
 <body>
 
-<div class="mobile-container">
-    <div class="header">
-        <img src="image-removebg-preview.png" alt="Logo Tazkia" class="logo-header">
-        <div class="header-title">
-            <h3>Dashboard</h3>
-            <p>Mahasiswa area</p>
-        </div>
-        <i class="fas fa-sign-out-alt logout-icon" onclick="window.location.href='login.html'"></i>
+<div class="recap-container">
+    <div class="recap-banner">
+        <h2 id="weekTitle" style="margin: 0; font-size: 22px;">Rekapan Mingguan</h2>
+        <p id="studentName" style="font-size: 13px; opacity: 0.9; margin-top: 8px;">Memuat...</p>
     </div>
 
-    <div class="content">
-        <div class="stat-card">
-            <div class="stat-title">Rata - Rata Sholat Jamaah</div>
-            <div class="stat-value"><span class="green-text" id="avgSholat">0</span> <span style="font-size: 16px; color: #666; font-weight: normal;">/ 5 waktu</span></div>
+    <div class="summary-grid" id="summarySection" style="display: none;">
+        <div class="summary-card">
+            <i class="fas fa-star" style="color: #ffc107;"></i>
+            <h5>Skor</h5>
+            <p id="totalScoreText">0/27</p>
         </div>
+        <div class="summary-card">
+            <i class="fas fa-chart-line" style="color: #3b82f6;"></i>
+            <h5>Persentase</h5>
+            <p id="percentText">0%</p>
+        </div>
+        <div class="summary-card">
+            <i class="fas fa-exclamation-triangle" style="color: #ef4444;"></i>
+            <h5>Terendah</h5>
+            <p id="lowAmalanText">-</p>
+        </div>
+    </div>
 
-        <div class="stat-card">
-            <div class="stat-title">Total Tilawah {Semester}</div>
-            <div class="stat-value"><span class="blue-text" id="totalTilawah">0</span> <span style="font-size: 16px; color: #666; font-weight: normal;">Halaman</span></div>
-        </div>
+    <div class="alert-recommendation" id="alertBox">
+        <h4><i class="fas fa-comment-medical"></i> Catatan untuk Pembina:</h4>
+        <p id="alertMessage"></p>
+    </div>
 
-        <div class="stat-card">
-            <div class="stat-title">Keaktifan Laporan</div>
-            <div class="stat-value"><span class="pink-text" id="keaktifan">0</span> <span style="font-size: 16px; color: #666; font-weight: normal;">Hari</span></div>
-        </div>
+    <div class="timeline" id="timelineContent"></div>
 
-        <div class="history-card">
-            <div class="history-title">Riwayat Data (Sesi Lokal)</div>
-        </div>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Tanggal</th>
-                        <th>Shalat Berjamaah</th>
-                        <th>Tilawah</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    </tbody>
-            </table>
-            <a href="dashboardmahasiswa.html" class="back-btn"><i class="fas fa-arrow-left"></i> Kembali ke Dashboard</a>
-        </div>
+    <div class="nav-footer">
+        <a href="javascript:void(0)" onclick="goBack()" style="text-decoration: none; color: #64748b; font-size: 12px; font-weight: bold;">
+            <i class="fas fa-arrow-left"></i> KEMBALI
+        </a>
     </div>
 </div>
 
 <script>
-    // Data simulasi (karena GForm belum terhubung ke Sheet asli)
-    // Dalam pengembangan asli, data ini diambil dari API Google Sheet.
-    const dataSimulasi = [
-        { tgl: "2025-11-23", sholat: 5, tilawah: 4 },
-        { tgl: "2025-11-24", sholat: 4, tilawah: 2 },
-        { tgl: "2025-11-25", sholat: 5, tilawah: 5 }
-    ];
+    function getWeekOfMonth() {
+        const today = new Date();
+        const day = today.getDate();
+        const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
+        const adjustedDate = day + (firstDay === 0 ? 6 : firstDay - 1);
+        return Math.ceil(adjustedDate / 7);
+    }
 
-    window.onload = function() {
-        const tableBody = document.getElementById('tableBody');
-        let totalSholat = 0;
-        let totalHalaman = 0;
+    function goBack() {
+        const user = JSON.parse(localStorage.getItem('tazkia_session'));
+        if (user.role === 'admin') window.location.href = 'adminpantau.html';
+        else if (user.role === 'pembina') window.location.href = 'dashboardpembina.html';
+        else window.location.href = 'dashboardmahasiswa.html';
+    }
 
-        dataSimulasi.forEach(item => {
-            totalSholat += item.sholat;
-            totalHalaman += item.tilawah;
+    window.onload = async function() {
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('tazkia_session'));
+        if (!token || !user) { window.location.href = "login.html"; return; }
 
-            let row = `<tr>
-                <td>${item.tgl}</td>
-                <td>${item.sholat} waktu</td>
-                <td>${item.tilawah} halaman</td>
-            </tr>`;
-            tableBody.innerHTML += row;
-        });
+        const urlParams = new URLSearchParams(window.location.search);
+        const targetWeek = urlParams.get('week') || getWeekOfMonth(); 
+        const targetNim = urlParams.get('nim') || String(user.nim);
+        const targetNama = urlParams.get('nama') || (targetNim === String(user.nim) ? user.nama : "Mahasiswa");
 
-        // Hitung Statistik
-        document.getElementById('avgSholat').innerText = (totalSholat / dataSimulasi.length).toFixed(1);
-        document.getElementById('totalTilawah').innerText = totalHalaman;
-        document.getElementById('keaktifan').innerText = dataSimulasi.length;
+        document.getElementById('studentName').innerText = targetNama + " | NIM: " + targetNim;
+        document.getElementById('weekTitle').innerText = "Rekapan Minggu ke-" + targetWeek;
+
+        // --- CEK ROLE UNTUK MENAMPILKAN SUMMARY ---
+        if (user.role !== 'pembina') {
+            const sumSection = document.getElementById('summarySection');
+            const alrtBox = document.getElementById('alertBox');
+            if(sumSection) sumSection.remove();
+            if(alrtBox) alrtBox.remove();
+        }
+
+        loadData(targetNim, token, targetWeek);
     };
-</script>
 
+    async function loadData(nim, token, weekFilter) {
+        try {
+            const response = await fetch(`http://localhost:3000/api/evaluasi/stats?nim=${nim}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const data = await response.json();
+            const timeline = document.getElementById('timelineContent');
+            timeline.innerHTML = '';
+
+            let filteredData = data.filter(item => String(item.weekStart) === String(weekFilter));
+            if (filteredData.length === 0) {
+                timeline.innerHTML = '<div style="text-align:center; padding:40px; background:white; border-radius:15px; color:#888;">Belum ada laporan minggu ini.</div>';
+                return;
+            }
+
+            const j = filteredData[0].jawaban || {};
+            const activities = [
+                { label: 'Tilawah Al-Qur\'an', val: j.tilawah, icon: 'fa-book-open', desc1: '< 4 Juz', desc2: '4-7 Juz', desc3: '> 7 Juz' },
+                { label: 'Al-Matsurat', val: j.matsurot, icon: 'fa-pray', desc1: '< 3 Kali', desc2: '4-6 Kali', desc3: '> 7 Kali' },
+                { label: 'Sholat di Masjid', val: j.sholatMasjid, icon: 'fa-mosque', desc1: '< 6 Kali', desc2: '7-20 Kali', desc3: '> 21 Kali' },
+                { label: 'Sholat Malam', val: j.sholatMalam, icon: 'fa-moon', desc1: '< 1 Kali', desc2: '2 Kali', desc3: '> 3 Kali' },
+                { label: 'Puasa Sunnah', val: j.puasa, icon: 'fa-utensils', desc1: '0 Kali', desc2: '1 Kali', desc3: '2 Kali' },
+                { label: 'Olahraga', val: j.olahraga, icon: 'fa-running', desc1: '0 Kali', desc2: '1-2 Kali', desc3: '> 3 Kali' },
+                { label: 'Kegiatan Keluarga', val: j.keluarga, icon: 'fa-users', desc1: '0 Kali', desc2: '1-3 Kali', desc3: '> 4 Kali' },
+                { label: 'Infaq', val: j.infaq, icon: 'fa-hand-holding-heart', type: 'bool' },
+                { label: 'Donasi Palestina', val: j.donasiPalestina, icon: 'fa-globe', type: 'bool' }
+            ];
+
+            // HITUNG RINGKASAN (Untuk Pembina)
+            let totalSkor = 0;
+            let amalanTerendah = [];
+            activities.forEach(a => {
+                let s = Number(a.val || 1);
+                totalSkor += s;
+                if (s === 1) amalanTerendah.push(a.label);
+            });
+
+            const summarySection = document.getElementById('summarySection');
+            if (summarySection) {
+                summarySection.style.display = 'grid';
+                document.getElementById('totalScoreText').innerText = `${totalSkor}/27`;
+                document.getElementById('percentText').innerText = `${Math.round((totalSkor/27)*100)}%`;
+                document.getElementById('lowAmalanText').innerText = amalanTerendah.length > 0 ? amalanTerendah[0] : "Lengkap";
+                
+                if (amalanTerendah.length > 0) {
+                    document.getElementById('alertBox').style.display = 'block';
+                    document.getElementById('alertMessage').innerText = `Perlu bimbingan khusus pada: ${amalanTerendah.join(', ')}.`;
+                }
+            }
+
+            // RENDER TIMELINE RAMPING
+            activities.forEach(act => {
+                const item = document.createElement('div');
+                item.className = 'timeline-item';
+                let s = Number(act.val || 1);
+                let isYa = s === 3;
+                let status = s === 3 ? "BAIK" : s === 2 ? "CUKUP" : "KURANG";
+                let detail = act[`desc${s}`] || (isYa ? 'Sudah' : 'Belum');
+                
+                let badgeClass = act.type === 'bool' ? (isYa ? 'score-3' : 'score-1') : `score-${s}`;
+                let badgeText = act.type === 'bool' ? (isYa ? 'YA' : 'TIDAK') : status;
+
+                item.innerHTML = `
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-card">
+                        <div class="item-info">
+                            <div class="item-icon"><i class="fas ${act.icon}"></i></div>
+                            <h4 style="margin:0; font-size:13px;">${act.label}</h4>
+                        </div>
+                        <div class="score-display">
+                            <span class="badge-score ${badgeClass}">${badgeText} (${s})</span>
+                            <span class="score-desc">(${detail})</span>
+                        </div>
+                    </div>`;
+                timeline.appendChild(item);
+            });
+        } catch (err) { console.error(err); }
+    }
+</script>
 </body>
 </html>

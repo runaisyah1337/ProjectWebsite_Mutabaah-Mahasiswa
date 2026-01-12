@@ -5,69 +5,127 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Admin - STMIK Tazkia</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
     <style>
-        :root { --tazkia-blue: #003399; --tazkia-green: #22c55e; --bg-gray: #dcdcdc; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-gray); margin: 0; display: flex; justify-content: center; }
-        .mobile-container { width: 100%; max-width: 400px; background-color: var(--bg-gray); min-height: 100vh; }
-        .header { background: white; display: flex; align-items: center; padding: 10px 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .logo-box img { height: 35px; margin-right: 12px; }
-        .header-text { flex-grow: 1; }
-        .header-text h3 { margin: 0; font-size: 15px; color: var(--tazkia-blue); font-weight: 800; }
-        .logout-btn { color: var(--tazkia-blue); font-size: 20px; cursor: pointer; border: none; background: none; }
-        .content { padding: 20px 15px; }
-        .greeting h1 { font-size: 24px; color: var(--tazkia-blue); margin: 0; }
-        .stat-card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 10px; border-left: 5px solid var(--tazkia-blue); }
-        .stat-label { font-size: 13px; color: var(--tazkia-blue); font-weight: 700; display: flex; align-items: center; }
-        .stat-label i { margin-right: 8px; color: var(--tazkia-green); }
-        .stat-value { font-size: 26px; font-weight: 800; margin-top: 5px; display: block; }
-        .table-card { background: white; border-radius: 15px; padding: 15px; margin-top: 20px; }
-        table { width: 100%; border-collapse: collapse; font-size: 11px; }
-        th { text-align: left; color: #999; padding-bottom: 10px; border-bottom: 1px solid #eee; }
-        td { padding: 12px 0; border-bottom: 1px solid #f9f9f9; }
-        .btn-pantau { color: var(--tazkia-green); text-decoration: none; font-weight: 800; margin-right: 10px; }
-        .btn-hapus { color: #ef4444; border: 1px solid #fee2e2; background: #fff5f5; padding: 4px 8px; border-radius: 5px; cursor: pointer; font-size: 10px; }
+        /* CSS KHUSUS DASHBOARD DESKTOP */
+        @media (min-width: 992px) {
+            .admin-menu-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+                /* REVISI: Tambahkan margin top agar posisi card lebih turun ke bawah */
+                margin-top: 60px; 
+                padding: 0 40px;
+            }
+
+            .admin-card {
+                margin-bottom: 0 !important;
+                padding: 40px !important; /* Pertebal padding dalam agar lebih mewah */
+                height: 250px; 
+            }
+
+            .welcome-section {
+                margin-top: 40px; /* Tambah jarak atas untuk section welcome */
+            }
+        }
+
+        .admin-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .admin-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(243, 112, 33, 0.15);
+        }
+
+        .card-icon {
+            font-size: 45px;
+            margin-bottom: 15px;
+        }
+
+        .action-link-btn {
+            text-decoration: none; 
+            background: var(--tazkia-blue, #003399); 
+            color: white; 
+            padding: 14px; 
+            border-radius: 12px; 
+            display: block; 
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .action-link-btn:hover {
+            background: #002266;
+        }
     </style>
 </head>
 <body>
-    <div class="mobile-container">
+    <div class="mobile-container container-wide">
         <div class="header">
-            <div class="logo-box"><img src="image-removebg-preview.png"></div>
-            <div class="header-text"><h3>Dashboard</h3><p>Admin area</p></div>
-            <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+            <div style="display: flex; align-items: center;">
+                <img src="image-removebg-preview.png" alt="Logo Tazkia" class="logo-header">
+                <div class="header-title">
+                    <h3>DASHBOARD</h3>
+                    <p>Admin Area</p>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logout()" style="background:none; border:none; font-size:22px; color:#003399; cursor:pointer;">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
         </div>
+
         <div class="content">
-            <div class="greeting"><h1 id="adminName">Assalamu’alaikum Admin !</h1><p>Pantau Aktivitas Mahasiswa</p></div>
-            <div class="stat-card"><span class="stat-label"><i class="fas fa-user-tie"></i> Total Pembina</span><span class="stat-value" id="countP">2</span></div>
-            <div class="table-card">
-                <h2 style="font-size: 14px; color: var(--tazkia-blue);">Manajemen Pembina</h2>
-                <table>
-                    <thead><tr><th>ID</th><th>Nama</th><th>Mhs</th><th>Aksi</th></tr></thead>
-                    <tbody id="pembinaList">
-                        <tr id="row1"><td>M-001</td><td>Bapak Rijal</td><td>15</td>
-                            <td>
-                                <a href="monitoringadmin.html?user=Bapak Rijal&id=M001" class="btn-pantau">Pantau</a>
-                                <button class="btn-hapus" onclick="hapus('row1')">Hapus</button>
-                            </td>
-                        </tr>
-                        <tr id="row2"><td>M-002</td><td>Ibu Nabila</td><td>12</td>
-                            <td>
-                                <a href="monitoringadmin.html?user=Ibu Nabila&id=M002" class="btn-pantau">Pantau</a>
-                                <button class="btn-hapus" onclick="hapus('row2')">Hapus</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="welcome-section" style="text-align:center;">
+                <h1 id="adminName" style="color:#003399; font-size:22px; margin-bottom: 10px;">Assalamu'alaikum!</h1>
+                <p style="color:#888; font-size:14px;">Ringkasan Aktivitas Ibadah Kampus</p>
+            </div>
+
+            <div class="admin-menu-grid">
+                <div class="admin-card">
+                    <div>
+                        <i class="fas fa-users card-icon" style="color: var(--tazkia-orange);"></i> 
+                        <h2 style="font-size:18px; margin:10px 0; color: #333;">Monitoring Mahasiswa</h2>
+                        <p style="font-size:12px; color:#999; margin-bottom:20px;">Pantau grafik dan perkembangan ibadah mahasiswa secara detail.</p>
+                    </div>
+                    <a href="adminpantau.html" class="action-link-btn">Buka Data Pantau</a>
+                </div>
+
+                <div class="admin-card">
+                    <div>
+                        <i class="fas fa-chart-line card-icon" style="color: var(--tazkia-orange);"></i>
+                        <h2 style="font-size:18px; margin:10px 0; color: #333;">Statistik Kampus</h2>
+                        <p style="font-size:12px; color:#999; margin-bottom:20px;">Analisis akumulasi tren skor mingguan dan partisipasi global.</p>
+                    </div>
+                    <a href="admintren.html" class="action-link-btn">Lihat Tren Kampus</a>
+                </div>
             </div>
         </div>
     </div>
+
     <script>
         window.onload = function() {
             const user = JSON.parse(localStorage.getItem('tazkia_session'));
-            if (!user || user.role !== 'admin') { window.location.href = "login.html"; }
-            document.getElementById('adminName').innerText = "Assalamu’alaikum " + user.nama + " !";
+            if (!user || user.role !== 'admin') { 
+                window.location.href = "login.html"; 
+                return; 
+            }
+            document.getElementById('adminName').innerText = "Assalamu'alaikum " + user.nama + "!";
         };
-        function hapus(id) { if(confirm("Hapus data ini?")) { document.getElementById(id).remove(); } }
-        function logout() { localStorage.removeItem('tazkia_session'); window.location.href = "login.html"; }
+
+        function logout() { 
+            if(confirm("Keluar dari sistem?")) { 
+                localStorage.clear(); 
+                window.location.href = "login.html"; 
+            } 
+        }
     </script>
 </body>
 </html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lupa Sandi - STMIK Tazkia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="mobile-container">
+        <div class="auth-card">
+            <img src="image-removebg-preview.png" class="logo" alt="Logo Tazkia">
+            <h1>Reset Sandi</h1>
+            <p class="footer-text" style="color: #666; margin-bottom: 25px;">
+                Masukkan email Anda untuk menerima instruksi pemulihan akun.
+            </p>
+            
+            <div class="form-group">
+                <label for="emailInput">Email Terdaftar</label>
+                <input type="email" id="emailInput">
+            </div>
+
+            <button class="btn-primary" onclick="prosesReset()">Kirim Link Reset</button>
+            
+            <div class="footer-text">
+                Ingat kata sandi? <a href="login.html">Masuk Kembali</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    async function prosesReset() {
+        const email = document.getElementById('emailInput').value;
+        if (!email) {
+            alert("Harap masukkan email Anda!");
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:3000/api/auth/forgot-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email })
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                alert("Berhasil! " + data.message);
+                window.location.href = "login.html";
+            } else {
+                alert("Gagal: " + data.message);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Terjadi kesalahan pada server.");
+        }
+    }
+    </script>
+</body>
+</html>

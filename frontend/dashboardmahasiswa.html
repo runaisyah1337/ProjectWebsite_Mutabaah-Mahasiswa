@@ -5,212 +5,243 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Mahasiswa - STMIK Tazkia</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
     <style>
-        :root {
-            --tazkia-blue: #003399; /* Biru Navy sesuai Login */
-            --tazkia-orange: #f37021;
-            --input-bg: #eef4ff; /* Biru muda sesuai input Login */
+        /* CSS KHUSUS DASHBOARD MAHASISWA DESKTOP */
+        @media (min-width: 992px) {
+            .student-menu-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr; /* Membagi menu jadi 2 kolom */
+                gap: 25px;
+                margin-top: 40px;
+            }
+
+            .menu-card {
+                margin-bottom: 0 !important;
+                padding: 30px !important;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                min-height: 200px;
+            }
+
+            .welcome-section h1 {
+                font-size: 28px !important;
+            }
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-        }
-
-        /* Desain Mobile-Friendly */
-        .mobile-container {
-            width: 100%;
-            max-width: 400px;
-            background-color: white;
-            min-height: 100vh;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-        }
-
-        /* Header dengan Logo */
-        .header {
-            display: flex;
-            align-items: center;
-            padding: 20px 15px;
-            border-bottom: 2px solid var(--input-bg);
-            background: white;
-        }
-
-        .logo-header {
-            width: 50px;
-            margin-right: 15px;
-        }
-
-        .header-title { flex-grow: 1; }
-        .header-title h3 { margin: 0; font-size: 18px; color: var(--tazkia-blue); font-weight: bold; }
-        .header-title p { margin: 0; font-size: 12px; color: #666; }
-
-        .logout-btn {
-            background: none;
-            border: none;
-            font-size: 22px;
-            color: var(--tazkia-blue);
-            cursor: pointer;
-        }
-
-        /* Main Content */
-        .content { padding: 25px 20px; }
-
-        .welcome-section h1 {
-            color: var(--tazkia-blue);
-            font-size: 26px;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        .welcome-section p {
-            color: #555;
-            font-size: 15px;
-            margin-top: 0;
-            margin-bottom: 30px;
-        }
-
-        /* Menu Cards dengan Warna Senada Login */
+        /* Perbaikan Visual Card */
         .menu-card {
-            background-color: var(--input-bg); /* Menggunakan warna input login */
+            background: white;
             border-radius: 20px;
             padding: 20px;
-            margin-bottom: 25px;
-            border-left: 6px solid var(--tazkia-blue);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
         }
 
         .menu-card h2 {
-            font-size: 17px;
-            margin: 0 0 10px 0;
             color: var(--tazkia-blue);
-        }
-
-        .menu-card p {
-            font-size: 12px;
-            margin: 0 0 20px 0;
-            color: #666;
+            font-size: 18px;
+            margin-top: 0;
         }
 
         .btn-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
         }
 
-        /* Tombol Biru Navy Utama */
-        .action-btn {
-            background-color: var(--tazkia-blue);
-            color: white;
-            border: none;
+        /* Styling Tombol agar lebih konsisten */
+        .action-btn, .secondary-btn {
+            flex: 1;
+            padding: 12px;
             border-radius: 12px;
-            padding: 15px 5px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             font-weight: bold;
             font-size: 13px;
+            transition: 0.3s;
         }
 
-        /* Tombol Putih Sekunder */
-        .secondary-btn {
-            background-color: white;
-            color: var(--tazkia-blue);
-            border: 1px solid var(--tazkia-blue);
-            border-radius: 12px;
-            padding: 15px 5px;
-            display: flex;
-            flex-direction: column;
+        .action-btn { background: var(--tazkia-blue); color: white; }
+        .secondary-btn { background: #f0f4f8; color: var(--tazkia-blue); }
+        
+        .action-btn.locked {
+            background: #e2e8f0;
+            color: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        /* Modal Centering di Desktop */
+        .modal {
             align-items: center;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: bold;
+            justify-content: center;
         }
-
-        .action-btn i, .secondary-btn i {
-            font-size: 22px;
-            margin-bottom: 8px;
-        }
-
     </style>
 </head>
 <body>
 
-<div class="mobile-container">
+<div class="mobile-container container-wide">
     <div class="header">
-        <img src="image-removebg-preview.png" alt="Logo Tazkia" class="logo-header">
-        <div class="header-title">
-            <h3>DASHBOARD</h3>
-            <p id="userRoleHeader">Mahasiswa Area</p>
+        <div style="display: flex; align-items: center;">
+            <img src="image-removebg-preview.png" alt="Logo Tazkia" class="logo-header">
+            <div class="header-title">
+                <h3>DASHBOARD</h3>
+                <p id="userRoleHeader">Mahasiswa Area</p>
+            </div>
         </div>
-        <button class="logout-btn" onclick="logout()" title="Keluar">
+        <button class="logout-btn" onclick="logout()" style="background:none; border:none; color:var(--tazkia-blue); font-size:20px; cursor:pointer;">
             <i class="fas fa-sign-out-alt"></i>
         </button>
     </div>
 
-    <div class="content">
-        <div class="welcome-section">
-            <h1 id="welcomeName">Assalamu'alaikum!</h1>
-            <p>Pantau Aktivitas Ibadah Anda</p>
-        </div>
-
-        <div class="menu-card">
-            <h2><i class="fas fa-edit"></i> Isi Muta'bah Harian</h2>
-            <p>Klik tombol di bawah untuk mengisi formulir harian Anda.</p>
-            <div class="btn-grid">
-                <a href="https://docs.google.com/forms/d/1mg6VlrvKjKCzbXWWwlVlDCYYwkxwJav1hEXjWRIZmJA/edit" target="_blank" class="action-btn">
-                    <i class="fab fa-google-drive"></i>
-                    <span>Buka Gform</span>
-                </a>
-                <div class="secondary-btn" onclick="alert('Fitur Simulasi Segera Hadir')">
-                    <i class="fas fa-sync-alt"></i>
-                    <span>Simulasi Data</span>
+    <div class="content" style="padding: 25px 20px;">
+        <div class="welcome-section" style="text-align: center;">
+            <div class="status-row" style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 10px;">
+                <div id="weekIndicator" class="week-status" style="background: #f0f4f8; padding: 5px 15px; border-radius: 20px; font-size: 11px; font-weight: bold; color: var(--tazkia-blue);">
+                    MEMUAT MINGGU...
+                </div>
+                <div class="help-btn-small" onclick="openModal()" style="cursor: pointer; color: #888;">
+                    <i class="fas fa-question-circle"></i>
                 </div>
             </div>
+            
+            <h1 id="welcomeName" style="color: var(--tazkia-blue); font-size: 22px; margin: 5px 0;">Assalamu'alaikum!</h1>
+            <p style="color: #666; font-size: 14px;">Pantau Aktivitas Ibadah Anda</p>
         </div>
 
-        <div class="menu-card">
-            <h2><i class="fas fa-chart-line"></i> Rekapan Mingguan</h2>
-            <p>Lihat perkembangan ibadah mingguan Anda di sini.</p>
-            <div class="btn-grid">
-                <a href="rekapan.html" class="action-btn">
-                    <i class="fas fa-list-check"></i>
-                    <span>Lihat Rekapan</span>
-                </a>
-                <a href="grafik.html" class="secondary-btn">
-                    <i class="fas fa-chart-pie"></i>
-                    <span>Lihat Grafik</span>
-                </a>
+        <div class="student-menu-grid">
+            <div class="menu-card">
+                <div>
+                    <h2><i class="fas fa-edit"></i> Isi Mutaba'ah</h2>
+                    <p id="lockStatusText" style="font-size: 12px; color: #888;">Silakan lengkapi amalan harian Anda untuk minggu ini sebelum batas waktu.</p>
+                </div>
+                
+                <div class="btn-grid">
+                    <a href="isimutabaah.html" class="action-btn" id="btnIsiMutabaah">
+                        <i class="fas fa-pen-to-square"></i>
+                        <span>Isi Sekarang</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="menu-card">
+                <div>
+                    <h2><i class="fas fa-chart-line"></i> Monitoring</h2>
+                    <p style="font-size: 12px; color: #888;">Evaluasi perkembangan spiritual Anda melalui data angka dan grafik.</p>
+                </div>
+                <div class="btn-grid">
+                    <a href="rekapan.html" class="action-btn" id="rekapLink">
+                        <i class="fas fa-list-check"></i>
+                        <span>Rekapan</span>
+                    </a>
+                    <a href="grafik.html" class="secondary-btn" id="grafikLink">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>Grafik</span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<script>
-    window.onload = function() {
-        // Mengambil data sesi yang disimpan saat Login
-        const user = JSON.parse(localStorage.getItem('tazkia_session'));
+<div id="faqModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center;">
+    <div class="modal-content" style="background: white; padding: 30px; border-radius: 20px; width: 90%; max-width: 450px; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.2);">
         
-        // Proteksi: Jika belum login, paksa balik ke login.html
-        if (!user) {
-            window.location.href = "login.html";
-            return;
+        <h3 style="color: var(--tazkia-blue); margin-top: 0; text-align: center; font-size: 20px;">
+            <i class="fas fa-info-circle"></i> Pusat Bantuan
+        </h3>
+        
+        <div style="margin-top: 20px;">
+            <div class="faq-item" style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee;">
+                <h5 style="margin: 0; color: #22c55e; font-size: 14px;">
+                    <i class="fas fa-door-open"></i> Kapan Form Terbuka?
+                </h5>
+                <p style="margin: 5px 0; font-size: 13px; color: #555; line-height: 1.5;">
+                    Formulir dibuka setiap hari <b>Senin pukul 04:00 WIB</b> (Waktu Subuh).
+                </p>
+            </div>
+
+            <div class="faq-item" style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee;">
+                <h5 style="margin: 0; color: #ef4444; font-size: 14px;">
+                    <i class="fas fa-lock"></i> Kapan Form Terkunci?
+                </h5>
+                <p style="margin: 5px 0; font-size: 13px; color: #555; line-height: 1.5;">
+                    Batas akhir pengisian adalah hari <b>Minggu pukul 23:59 WIB</b>.
+                </p>
+            </div>
+
+            <div class="faq-item" style="margin-bottom: 25px;">
+                <h5 style="margin: 0; color: var(--tazkia-blue); font-size: 14px;">
+                    <i class="fas fa-chart-bar"></i> Data Tidak Muncul?
+                </h5>
+                <p style="margin: 5px 0; font-size: 13px; color: #555; line-height: 1.5;">
+                    Pastikan Anda telah menekan tombol <b>Kirim</b> pada formulir. Data grafik dan rekapan akan diperbarui secara real-time setelah pengiriman.
+                </p>
+            </div>
+        </div>
+
+        <button onclick="closeModal()" style="width: 100%; padding: 14px; background: var(--tazkia-blue); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 14px;">
+            Saya Mengerti
+        </button>
+    </div>
+</div>
+
+<script>
+    function getWeekOfMonth() {
+        const today = new Date();
+        const day = today.getDate();
+        const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
+        const adjustedDate = day + (firstDay === 0 ? 6 : firstDay - 1);
+        return Math.ceil(adjustedDate / 7);
+    }
+
+    window.onload = function() {
+        const user = JSON.parse(localStorage.getItem('tazkia_session'));
+        if (!user) { window.location.href = "login.html"; return; }
+
+        const today = new Date();
+        const currentDay = today.getDay(); 
+        const currentHour = today.getHours();
+        const currentMin = today.getMinutes();
+
+        // Logika Penguncian
+        let isLocked = false;
+        // Minggu malam
+        if (currentDay === 0 && (currentHour > 23 || (currentHour === 23 && currentMin >= 59))) isLocked = true;
+        // Senin pagi
+        if (currentDay === 1 && currentHour < 4) isLocked = true;
+
+        const btnIsi = document.getElementById('btnIsiMutabaah');
+        const lockStatusText = document.getElementById('lockStatusText');
+
+        if (isLocked) {
+            btnIsi.classList.add('locked');
+            btnIsi.href = "#"; // Nonaktifkan link
+            btnIsi.innerHTML = '<i class="fas fa-lock"></i> <span>TERKUNCI</span>';
+            lockStatusText.innerHTML = `<b style="color:#ef4444;">Form sedang diproses. Dibuka kembali Senin jam 04:00 Subuh.</b>`;
         }
 
-        // Menampilkan Nama dan Role secara dinamis
+        const currentWeek = getWeekOfMonth();
+        const monthNames = ["JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI", "JULI", "AGUSTUS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DESEMBER"];
+        document.getElementById('weekIndicator').innerText = `MINGGU ${currentWeek} | ${monthNames[today.getMonth()]} ${today.getFullYear()}`;
         document.getElementById('welcomeName').innerText = "Assalamu'alaikum " + user.nama + "!";
-        document.getElementById('userRoleHeader').innerText = user.role.charAt(0).toUpperCase() + user.role.slice(1) + " Area";
+        document.getElementById('userRoleHeader').innerText = "Mahasiswa Area";
+        
+        document.getElementById('rekapLink').href = `rekapan.html?week=${currentWeek}`;
+        document.getElementById('grafikLink').href = `grafik.html?week=${currentWeek}`;
     };
 
-    function logout() {
-        if(confirm("Apakah Anda yakin ingin keluar?")) {
-            localStorage.removeItem('tazkia_session');
-            window.location.href = "login.html";
-        }
-    }
+    function openModal() { document.getElementById('faqModal').style.display = "flex"; }
+    function closeModal() { document.getElementById('faqModal').style.display = "none"; }
+    function logout() { if(confirm("Apakah Anda yakin ingin keluar?")) { localStorage.clear(); window.location.href = "login.html"; } }
 </script>
-
 </body>
 </html>

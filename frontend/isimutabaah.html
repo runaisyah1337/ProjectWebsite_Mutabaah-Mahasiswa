@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Isi Mutabaah - STMIK Tazkia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* CSS UNTUK CENTERING TOTAL */
+        body {
+            background: #f4f7fe;
+            display: flex;
+            justify-content: center; /* Tengah horizontal */
+            align-items: center;     /* Tengah vertikal */
+            min-height: 100vh;       /* Memastikan body setinggi layar */
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 1100px;
+            background: white;
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.05);
+        }
+
+        @media (min-width: 992px) {
+            #mutabaahForm {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+            }
+
+            .form-header, .footer-actions {
+                grid-column: span 3; /* Melintang penuh */
+            }
+        }
+
+        /* Grouping Tombol di Bawah */
+        .footer-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn-submit-form {
+            width: 100%;
+            max-width: 500px; /* Agar tidak terlalu melar di desktop */
+            background: var(--tazkia-blue);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .btn-submit-form:hover {
+            background: #002d86;
+            transform: translateY(-2px);
+        }
+
+        .link-back {
+            text-decoration: none;
+            color: #888;
+            font-size: 14px;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .link-back:hover {
+            color: #ef4444;
+        }
+
+        .input-group {
+            background: #fcfcfc;
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid #f0f0f0;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <form id="mutabaahForm">
+        <div class="form-header" style="text-align: center;">
+            <img src="image-removebg-preview.png" alt="Logo" width="70">
+            <h2 style="color: var(--tazkia-blue); margin: 15px 0; font-size: 26px;">Evaluasi Mingguan</h2>
+            <p id="subHeaderStatus" style="color: #888; margin-bottom: 20px;">Silakan input amalan ibadah Anda dengan jujur</p>
+        </div>
+
+        <div class="input-group"><label><i class="fas fa-book-open"></i> Tilawah Al-Qur'an</label>
+            <select name="tilawah" class="form-select" required>
+                <option value="" disabled selected>-- Pilih Capaian --</option>
+                <option value="1">Merah (1) = < 4 Juz</option>
+                <option value="2">Kuning (2) = > 4 Juz</option>
+                <option value="3">Hijau (3) = > 7 Juz</option>
+            </select>
+        </div>
+
+        <div class="input-group"><label><i class="fas fa-pray"></i> Al-Matsurat Kubro</label>
+            <select name="matsurot" class="form-select" required>
+                <option value="" disabled selected>-- Pilih Capaian --</option>
+                <option value="1">Merah (1) = < 3 Kali</option>
+                <option value="2">Kuning (2) = 4-6 Kali</option>
+                <option value="3">Hijau (3) = > 7 Kali</option>
+            </select>
+        </div>
+
+        <div class="input-group"><label><i class="fas fa-mosque"></i> Sholat di Masjid</label>
+            <select name="sholatMasjid" class="form-select" required>
+                <option value="" disabled selected>-- Pilih Capaian --</option>
+                <option value="1">Merah (1) = < 6 Kali</option>
+                <option value="2">Kuning (2) = 7-20 Kali</option>
+                <option value="3">Hijau (3) = > 21 Kali</option>
+            </select>
+        </div>
+
+        <div class="input-group"><label><i class="fas fa-moon"></i> Sholat Malam</label>
+            <select name="sholatMalam" class="form-select" required>
+                <option value="" disabled selected>-- Pilih Capaian --</option>
+                <option value="1">Merah (1) = < 1 Kali</option>
+                <option value="2">Kuning (2) = 2 Kali</option>
+                <option value="3">Hijau (3) = > 3 Kali</option>
+            </select>
+        </div>
+
+        <div class="input-group"><label><i class="fas fa-utensils"></i> Puasa Sunnah</label>
+            <select name="puasa" class="form-select" required>
+                <option value="" disabled selected>-- Pilih Capaian --</option>
+                <option value="1">Merah (1) = 0 Kali</option>
+                <option value="2">Kuning (2) = 1 Kali</option>
+                <option value="3">Hijau (3) = 2 Kali</option>
+            </select>
+        </div>
+
+        <div class="input-group"><label><i class="fas fa-running"></i> Olahraga / Fisik</label>
+            <select name="olahraga" class="form-select" required>
+                <option value="" disabled selected>-- Pilih Capaian --</option>
+                <option value="1">Merah (1) = 0 Kali</option>
+                <option value="2">Kuning (2) = 1-2 Kali</option>
+                <option value="3">Hijau (3) = > 3 Kali</option>
+            </select>
+        </div>
+
+        <div class="input-group"><label><i class="fas fa-users"></i> Kegiatan Keluarga</label>
+            <select name="keluarga" class="form-select" required>
+                <option value="" disabled selected>-- Pilih Capaian --</option>
+                <option value="1">Merah (1) = 0 Kali</option>
+                <option value="2">Kuning (2) = 1-3 Kali</option>
+                <option value="3">Hijau (3) = > 4 Kali</option>
+            </select>
+        </div>
+
+        <div class="input-group"><label><i class="fas fa-hand-holding-heart"></i> Infaq Mingguan</label>
+            <select name="infaq" class="form-select" required>
+                <option value="" disabled selected>-- Pilih Capaian --</option>
+                <option value="3">Ya (3)</option>
+                <option value="1">Tidak (1)</option>
+            </select>
+        </div>
+
+        <div class="input-group"><label><i class="fas fa-globe"></i> Donasi Palestina</label>
+            <select name="donasiPalestina" class="form-select" required>
+                <option value="" disabled selected>-- Pilih Capaian --</option>
+                <option value="3">Ya (3)</option>
+                <option value="1">Tidak (1)</option>
+            </select>
+        </div>
+
+        <div class="footer-actions">
+            <button type="submit" class="btn-submit-form">
+                <i class="fas fa-save"></i> SIMPAN AMALAN MINGGUAN
+            </button>
+            <a href="dashboardmahasiswa.html" class="link-back">
+                <i class="fas fa-times"></i> Batal & Kembali ke Dashboard
+            </a>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Script JS Anda tetap sama, fungsionalitas tidak berubah
+    const sessionStr = localStorage.getItem('tazkia_session');
+    const token = localStorage.getItem('token');
+    if (!sessionStr || !token) { window.location.href = "login.html"; }
+    const session = JSON.parse(sessionStr);
+
+    function getWeekOfMonth() {
+        const today = new Date();
+        const day = today.getDate();
+        const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
+        const adjustedDate = day + (firstDay === 0 ? 6 : firstDay - 1);
+        return Math.ceil(adjustedDate / 7);
+    }
+
+    window.onload = async function() {
+        try {
+            const currentWeek = getWeekOfMonth();
+            const res = await fetch(`http://localhost:3000/api/evaluasi/stats?nim=${session.nim}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const data = await res.json();
+            if (Array.isArray(data)) {
+                const existingData = data.find(d => Number(d.weekStart) === currentWeek);
+                if (existingData && existingData.jawaban) {
+                    const j = existingData.jawaban;
+                    const form = document.getElementById('mutabaahForm');
+                    Object.keys(j).forEach(key => { if (form.elements[key]) form.elements[key].value = j[key]; });
+                    document.querySelector('.btn-submit-form').innerHTML = '<i class="fas fa-sync"></i> UPDATE DATA AMALAN';
+                    document.getElementById('subHeaderStatus').innerHTML = `<b style="color:var(--tazkia-orange)">Data Minggu ke-${currentWeek} sudah terisi.</b>`;
+                }
+            }
+        } catch (err) { console.error(err); }
+    };
+
+    document.getElementById('mutabaahForm').onsubmit = async function(e) {
+        e.preventDefault();
+        const btn = document.querySelector('.btn-submit-form');
+        btn.innerText = "Mengirim...";
+        btn.disabled = true;
+
+        const formData = new FormData(this);
+        const jawaban = {};
+        formData.forEach((value, key) => { jawaban[key] = value; });
+
+        try {
+            const res = await fetch('http://localhost:3000/api/evaluasi/webhook', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({ studentId: session.nim, jawaban: jawaban })
+            });
+            if(res.ok) { alert("Alhamdulillah, data berhasil disimpan!"); window.location.href = "dashboardmahasiswa.html"; }
+        } catch (err) { alert("Koneksi gagal."); }
+        finally { btn.disabled = false; }
+    };
+</script>
+</body>
+</html>

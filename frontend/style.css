@@ -1,470 +1,1290 @@
 /* style.css */
-body { 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-    background-color: #d1d5db; 
-    margin: 0; 
-    display: flex; 
-    justify-content: center; 
-    min-height: 100vh;
-}
-
-/* Container utama untuk tampilan Mobile */
-.mobile-container { 
-    background: #f3f4f6; 
-    width: 100%; 
-    max-width: 400px; 
-    min-height: 100vh; 
-    position: relative; 
-    box-shadow: 0 0 20px rgba(0,0,0,0.2); 
-}
-
-/* Card Style untuk Login & Daftar */
-.card { 
-    background: white; 
-    padding: 30px; 
-    border-radius: 15px; 
-    width: 350px; 
-    text-align: center; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-    align-self: center; /* Mengetengahkan kartu secara vertikal */
-    margin-top: auto;
-    margin-bottom: auto;
-}
-
-/* Header Dashboard */
-.header { 
-    background: white; 
-    padding: 15px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
-    border-bottom: 2px solid #e5e7eb; 
-}
-
-.user-info { display: flex; align-items: center; gap: 10px; }
-.user-info img { height: 45px; width: auto; }
-
-.header-text h3 { margin: 0; font-size: 16px; color: #00338D; }
-.header-text p { margin: 0; font-size: 11px; color: #777; }
-
-/* Menu Card Dashboard */
-.menu-card { 
-    background: #ffffff; 
-    border-radius: 20px; 
-    padding: 20px; 
-    margin-bottom: 20px; 
-    border-left: 10px solid #FF7A00; /* Aksen Oranye Tazkia */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-
-.menu-card h4 { margin: 0; font-size: 17px; color: #00338D; }
-.status-open { color: #00338D; font-weight: bold; font-size: 12px; }
-
-/* Tombol-Tombol */
-.button-group { display: flex; gap: 12px; margin-top: 15px; }
-
-.btn-purple { 
-    background: #00338D; /* Biru Navy Tazkia */
-    color: white; 
-    border: none; 
-    border-radius: 12px; 
-    padding: 12px; 
-    flex: 1; 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    justify-content: center; 
-    gap: 8px; 
-    cursor: pointer;
-    text-decoration: none; 
-    font-size: 12px; 
-    font-weight: bold;
-    transition: 0.3s;
-}
-
-.btn-purple:hover {
-    background: #00266b;
-}
-
-.btn-white { 
-    background: white; 
-    color: #333; 
-    border: 1px solid #ddd; 
-    border-radius: 12px; 
-    padding: 12px; 
-    flex: 1; 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    justify-content: center; 
-    gap: 8px; 
-    cursor: pointer;
-    font-size: 12px; 
-    font-weight: bold;
-}
-
-/* Tombol Login & Daftar */
-.btn-login, .btn-daftar {
-    width: 100%; 
-    padding: 12px; 
-    background: #00338D; 
-    color: white; 
-    border: none; 
-    border-radius: 8px; 
-    cursor: pointer; 
-    font-weight: bold; 
-    margin-top: 15px;
-    font-size: 15px;
-    transition: 0.3s;
-}
-
-.btn-login:hover, .btn-daftar:hover {
-    background: #FF7A00; /* Berubah jadi Oranye saat disentuh */
-}
-
-/* Input Fields */
-.input-group { text-align: left; margin-bottom: 15px; }
-label { display: block; font-size: 13px; margin-bottom: 5px; font-weight: bold; color: #00338D; }
-
-input, select { 
-    width: 100%; 
-    padding: 12px; 
-    border-radius: 8px; 
-    border: 1px solid #ddd; 
-    background: #f9f9f9; 
-    box-sizing: border-box; 
-    outline: none; 
-    font-size: 14px;
-}
-
-input:focus {
-    border: 2px solid #FF7A00; /* Border Oranye saat mengetik */
-}
-
-/* Link-link teks */
-.forgot-pw, a {
-    color: #00338D;
-    text-decoration: none;
-    font-size: 12px;
-}
-
-.forgot-pw:hover, a:hover {
-    color: #FF7A00;
-    text-decoration: underline;
-}
-
-/* Penyesuaian khusus tampilan rekapan sesuai gambar referensi */
-        .stat-card {
-            background: white;
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            border-left: 5px solid #00338D;
-        }
-        .stat-card h5 { 
-            margin: 0; 
-            font-size: 12px; 
-            color: #333; 
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .stat-value { 
-            font-size: 26px; 
-            font-weight: bold; 
-            margin-top: 5px; 
-        }
-        .stat-value span { 
-            font-size: 14px; 
-            font-weight: normal; 
-            color: #888; 
-        }
-
-        .color-blue { color: #00338D; }
-        .color-orange { color: #FF7A00; }
-        .color-green { color: #4CAF50; }
-
-        .table-container {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            margin-top: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-        .table-header {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr 1fr;
-            font-weight: bold;
-            color: #999;
-            font-size: 12px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #f5f5f5;
-        }
-        .table-row {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr 1fr;
-            padding: 15px 0;
-            font-size: 14px;
-            border-bottom: 1px solid #fcfcfc;
-            color: #333;
-        }
-    
-
-        /* style.css */
-body { 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-    background-color: #f4f7f6; 
-    margin: 0; 
-    display: flex; 
-    justify-content: center; 
-    min-height: 100vh;
-}
-
-.mobile-container { 
-    background: #ffffff; 
-    width: 100%; 
-    max-width: 400px; 
-    min-height: 100vh; 
-    position: relative; 
-    box-shadow: 0 0 15px rgba(0,0,0,0.1); 
-    display: flex;
-    flex-direction: column;
-}
-
-/* Header */
-.header { 
-    background: #fff; 
-    padding: 15px 20px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
-    border-bottom: 1px solid #eee; 
-}
-
-.user-info { display: flex; align-items: center; gap: 10px; }
-.user-info img { height: 40px; width: auto; }
-
-.header-text h3 { margin: 0; font-size: 15px; color: #00338D; }
-.header-text p { margin: 0; font-size: 10px; color: #888; text-transform: uppercase; }
-
-/* Statistik Card */
-.stat-card {
-    background: #fff;
-    border-radius: 15px;
-    padding: 15px;
-    margin-bottom: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    border-left: 8px solid #00338D; /* Biru Tazkia */
-}
-
-.stat-card h5 { 
-    margin: 0; font-size: 12px; color: #555; 
-    text-transform: uppercase; letter-spacing: 0.5px; 
-}
-
-.stat-value { font-size: 26px; font-weight: bold; margin-top: 5px; }
-.stat-value span { font-size: 14px; font-weight: normal; }
-
-/* Tabel Riwayat */
-.table-container {
-    background: #fff;
-    border-radius: 20px;
-    padding: 20px;
-    margin-top: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-}
-
-.table-header {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr 1fr;
-    font-weight: bold;
-    color: #bbb;
-    font-size: 11px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.table-row {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr 1fr;
-    padding: 15px 0;
-    font-size: 13px;
-    border-bottom: 1px solid #f9f9f9;
-    color: #444;
-}
-
-/* Colors */
-.color-blue { color: #00338D; }
-.color-orange { color: #FF7A00; }
-.color-green { color: #2ecc71; }
-
-/* Dashboard Menu Card */
-.menu-card { 
-    background: #fff; 
-    border-radius: 20px; 
-    padding: 20px; 
-    margin-bottom: 20px; 
-    border-left: 8px solid #FF7A00; 
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-}
-
-/* --- Root Colors --- */
 :root {
-    --tazkia-blue: #00338D;
+    --tazkia-blue: #003399;
     --tazkia-orange: #FF7A00;
-    --bg-light: #F4F7FE;
+    --bg-light: #f4f7f6;
+    --input-bg: #eef4ff;
+    --border-color: #d1d9e6;
+    --radius: 12px;
     --white: #ffffff;
-    --text-dark: #333333;
-    --text-muted: #888888;
 }
 
-/* --- Base Style --- */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-    background-color: #e0e0e0;
+    background-color: #16458a; /* Warna background luar mobile container */
     display: flex;
     justify-content: center;
-}
-
-.mobile-container {
-    width: 100%;
-    max-width: 480px;
     min-height: 100vh;
-    background-color: var(--bg-light);
-    position: relative;
-    padding-bottom: 30px;
 }
 
-/* --- Header Section --- */
-.header {
-    background-color: var(--white);
-    padding: 20px;
+/* KONTENER UTAMA: Semua halaman akan memiliki ukuran ini */
+.mobile-container {
+    background: var(--bg-light);
+    width: 100%;
+    max-width: 320px; /* Seragam untuk semua tampilan */
+    min-height: 100vh;
+    position: relative;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+/* CARD STYLE: Untuk Login & Daftar */
+.auth-card {
+    background: var(--white);
+    padding: 30px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 350px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin: auto; /* Memastikan kartu selalu di tengah layar */
+}
+
+.logo {
+    width: 80px;
+    margin-bottom: 20px;
+}
+
+h1 {
+    color: var(--tazkia-blue);
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* FORM STYLING */
+.form-group {
+    text-align: left;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.label-wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    margin-bottom: 8px;
 }
 
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.user-info img {
-    width: 50px;
-    height: 50px;
-    object-fit: contain;
-}
-
-.header-text h3 {
-    font-size: 16px;
+label {
     color: var(--tazkia-blue);
-}
-
-.header-text p {
-    font-size: 12px;
-    color: var(--text-muted);
-}
-
-.btn-back {
-    background: none;
-    border: none;
-    color: var(--tazkia-blue);
-    font-size: 20px;
-    cursor: pointer;
-}
-
-/* --- Stats Grid --- */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    padding: 20px;
-}
-
-.stat-card {
-    background: var(--white);
-    padding: 15px 10px;
-    border-radius: 15px;
-    text-align: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-}
-
-.stat-card p {
-    font-size: 10px;
-    color: var(--text-muted);
-    margin-bottom: 5px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.stat-card h2 {
-    font-size: 18px;
-    color: var(--tazkia-blue);
-}
-
-.stat-card .unit {
-    font-size: 10px;
-    color: var(--tazkia-orange);
-    display: block;
-}
-
-/* --- History Section --- */
-.history-section {
-    padding: 0 20px;
-}
-
-.history-section h4 {
-    margin-bottom: 15px;
-    color: var(--text-dark);
+    font-weight: bold;
     font-size: 14px;
 }
 
-.history-item {
-    background: var(--white);
-    padding: 15px;
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 10px;
-    transition: transform 0.2s;
+input, select {
+    width: 100%;
+    padding: 14px;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    box-sizing: border-box;
+    font-size: 15px;
+    outline: none;
+    transition: 0.3s;
 }
 
-.history-item:active {
-    transform: scale(0.98);
+input:focus {
+    border: 1px solid var(--tazkia-orange);
 }
 
-.date-circle {
-    width: 50px;
-    height: 50px;
+/* BUTTONS */
+.btn-primary {
+    width: 100%;
+    padding: 16px;
     background: var(--tazkia-blue);
     color: white;
-    border-radius: 50%;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 15px;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    background: var(--tazkia-orange);
+}
+
+/* FOOTER & LINKS */
+.footer-text {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+/* Cari bagian ini di style.css Anda */
+.footer-text a, .forgot-link-inline {
+    color: var(--tazkia-blue);
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 12px; /* GANTI NILAI INI, misalnya jadi 14px */
+}
+
+.footer-text a:hover, .forgot-link-inline:hover {
+    text-decoration: underline;
+    color: var(--tazkia-orange);
+}
+/* style.css */
+.auth-card p.footer-text {
+    line-height: 1.5;
+    margin-top: 10px;
+}
+/* style.css (Tambahan untuk Dashboard) */
+
+/* Header Standar Dashboard */
+.header {
+    background: var(--white);
     display: flex;
     align-items: center;
-    justify-content: center;
-    text-align: center;
-    font-size: 11px;
-    font-weight: bold;
-    line-height: 1.2;
+    justify-content: space-between;
+    padding: 15px 20px;
+    border-bottom: 2px solid var(--input-bg);
 }
 
-.item-detail p {
-    font-size: 13px;
-    color: var(--text-dark);
-    margin: 2px 0;
+.logo-header { 
+    height: 50px; /* Ukuran seragam sesuai gambar */
+    width: auto;
 }
 
-.item-detail strong {
+.header-title { 
+    flex-grow: 1; 
+    margin-left: 15px;
+}
+
+.header-title h3 { 
+    margin: 0; 
+    font-size: 18px; 
+    color: var(--tazkia-blue); 
+    font-weight: bold; 
+}
+
+.header-title p { 
+    margin: 0; 
+    font-size: 11px; 
+    color: var(--text-muted); 
+}
+
+.logout-btn-icon {
     color: var(--tazkia-blue);
+    font-size: 20px;
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+/* Konten Dashboard */
+.content { padding: 5px 10px; }
+
+/* Status Row & Badge */
+.status-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.badge-orange {
+    background-color: var(--tazkia-orange);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+/* Menu Card Dashboard */
+.menu-card {
+    background-color: var(--input-bg);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-left: 6px solid var(--tazkia-blue);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.menu-card h2 { font-size: 17px; margin: 0 0 10px 0; color: var(--tazkia-blue); }
+
+/* Grid Tombol */
+.btn-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 15px; 
+    margin-top: 15px;
+}
+
+/* Tombol Aksi Dashboard */
+.action-btn-dash {
+    background-color: var(--tazkia-blue);
+    color: white;
+    border-radius: 12px;
+    padding: 15px 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 13px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.action-btn-dash:hover { background-color: var(--tazkia-orange); }
+
+.secondary-btn-dash {
+    background-color: white;
+    color: var(--tazkia-blue);
+    border: 1px solid var(--tazkia-blue);
+    border-radius: 12px;
+    padding: 15px 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.secondary-btn-dash:hover { border-color: var(--tazkia-orange); color: var(--tazkia-orange); }
+
+/* Table Styling untuk Pembina */
+.monitor-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.monitor-table th { text-align: left; font-size: 10px; color: #888; text-transform: uppercase; padding-bottom: 10px; }
+.monitor-table td { padding: 12px 0; border-bottom: 1px solid #f9f9f9; font-size: 13px; }
+
+.score-pill { padding: 4px 10px; border-radius: 8px; font-weight: bold; font-size: 12px; }
+/* --- Bagian Khusus Pembina (Pindahan dari HTML) --- */
+:root { 
+    --tazkia-blue: #003399;
+    --tazkia-green: #22c55e; 
+    --bg-canvas: #f0f2f5; 
+}
+
+/* Memastikan ukuran kontainer seragam */
+.mobile-container { 
+    width: 100%; 
+    max-width: 400px; 
+    background-color: rgba(255, 255, 255, 0.922); 
+    min-height: 100vh; 
+    box-shadow: 0 0 20px rgba(0,0,0,0.1); 
+}
+
+.logo-container img { height: 60px; margin-right: 12px; }
+
+.header-title { 
+    flex-grow: 1; 
+    margin-left: 5px;
+}
+
+.header-title h3 { margin: 0; font-size: 20px; color: var(--tazkia-blue); font-weight: bold; }
+.header-title p { margin: 0; font-size: 10px; color: #666; }
+
+.search-input { 
+    width: 100%; 
+    padding: 12px; 
+    border-radius: 12px; 
+    border: 1px solid #ddd; 
+    outline: none; 
+    box-sizing: border-box; 
+    font-size: 14px; 
+}
+
+.monitor-card { 
+    background: white; 
+    border-radius: 20px; 
+    padding: 15px; 
+    margin-top: 15px; 
+    border: 1px solid #eee; 
+}
+
+table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+th { text-align: left; font-size: 10px; color: #888; text-transform: uppercase; padding-bottom: 10px; }
+td { padding: 12px 0; border-bottom: 1px solid #f9f9f9; font-size: 13px; }
+
+.student-nim { font-size: 11px; color: #666; display: block; }
+.score-pill { padding: 4px 10px; border-radius: 8px; font-weight: bold; font-size: 12px; }
+
+.action-btn-grafik { 
+    text-decoration: none; 
+    color: white !important; 
+    background-color: var(--tazkia-blue); 
+    /* Kecilkan padding dan lebar tombol */
+    padding: 6px 10px !important; 
+    width: auto !important; 
+    min-width: 80px;
+    border-radius: 5px; 
+    font-weight: bold; 
+    /* Kecilkan ukuran teks */
+    font-size: 9px !important; 
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: 0.3s;
+}
+
+.action-btn-grafik:hover { background-color: #f37021; }
+/* --- Root & Reset --- */
+:root { 
+    --tazkia-blue: #003399; 
+    --tazkia-orange: #f37021; 
+    --bg-light: #f4f6f9; 
+}
+
+/* --- Container Seragam (400px) --- */
+.mobile-container { 
+    width: 100%; 
+    max-width: 400px; /* Ukuran seragam sesuai permintaan */
+    background-color: var(--bg-light); 
+    min-height: 100vh; 
+    margin: 0 auto;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1); 
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Header Area --- */
+.header { 
+    display: flex; 
+    align-items: center; 
+    padding: 15px; 
+    background: white; 
+    border-bottom: 1px solid #ddd; 
+}
+.logo-header { width: 45px; margin-right: 12px; }
+.header-title { flex-grow: 1; text-align: left; }
+.header-title h3 { margin: 0; font-size: 16px; color: var(--tazkia-blue); text-transform: uppercase; font-weight: bold; }
+.header-title p { margin: 0; font-size: 12px; color: #666; }
+
+/* --- Admin Dashboard Cards --- */
+.admin-card {
+    background-color: white;
+    border-radius: 20px;
+    padding: 8px 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    border-left: 8px solid var(--tazkia-blue);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.card-icon { font-size: 35px; margin-bottom: 10px; }
+.action-link {
+    display: inline-block;
+    padding: 12px 35px;
+    background-color: var(--tazkia-blue);
+    color: white !important;
+    text-decoration: none;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+.action-link:hover { background-color: var(--tazkia-orange); transform: translateY(-2px); }
+
+/* --- Rekapan & Grafik Cards --- */
+.card { 
+    background: white; 
+    border-radius: 15px; 
+    padding: 20px; 
+    margin-bottom: 20px; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+}
+.card h4 { 
+    margin: 0 0 15px 0; 
+    color: var(--tazkia-blue); 
+    font-size: 15px; 
+    border-left: 4px solid var(--tazkia-orange); 
+    padding-left: 10px; 
+}
+.rekap-item { 
+    display: flex; 
+    justify-content: space-between; 
+    padding: 10px 0; 
+    border-bottom: 1px solid #eee; 
+    font-size: 14px; 
+}
+.score { font-weight: bold; color: var(--tazkia-blue); }
+
+/* --- Navigasi Kembali --- */
+.nav-back { 
+    display: block; 
+    text-align: center; 
+    padding: 15px; 
+    background-color: var(--tazkia-blue); 
+    color: white !important; 
+    text-decoration: none; 
+    font-weight: bold; 
+    border-radius: 12px; 
+    margin: 20px auto;
+    width: 90%;
+    cursor: pointer;
+}
+.nav-back:hover { background-color: var(--tazkia-orange); }
+
+/* --- Info Box --- */
+.score-info-top { 
+    background: white; 
+    border-radius: 12px; 
+    padding: 12px; 
+    margin-bottom: 15px; 
+    border-left: 5px solid var(--tazkia-orange); 
+    font-size: 11px; 
+    color: #555;
+}
+:root {
+            --tazkia-blue: #003399; 
+            --tazkia-orange: #f37021;
+            --input-bg: #eef4ff; 
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: white;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .mobile-container {
+            width: 100%;
+            max-width: 400px;
+            background-color: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 20px 15px;
+            border-bottom: 2px solid var(--input-bg);
+            background: white;
+        }
+
+        .logo-header { width: 50px; margin-right: 15px; }
+        .header-title { flex-grow: 1; }
+        .header-title h3 { margin: 0; font-size: 20px; color: var(--tazkia-blue); font-weight: bold; }
+        .header-title p { margin: 0; font-size: 10px; color: #666; }
+
+        .logout-btn { background: none; border: none; font-size: 22px; color: var(--tazkia-blue); cursor: pointer; }
+
+        .content { padding: 5px 10px; }
+
+        /* Style Header Sejajar (Minggu & FAQ) */
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .week-status {
+            background-color: var(--tazkia-orange);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .help-btn-small {
+            background: var(--tazkia-orange);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+
+        .help-btn-small:hover { transform: scale(1.1); background-color: var(--tazkia-blue); }
+
+        .welcome-section h1 { color: var(--tazkia-blue); font-size: 26px; margin-bottom: 5px; font-weight: bold; }
+        .welcome-section p { color: #555; font-size: 15px; margin-top: 0; margin-bottom: 30px; }
+
+        .menu-card {
+            background-color: var(--input-bg);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 6px solid var(--tazkia-blue);
+        }
+
+        .menu-card h2 { font-size: 17px; margin: 0 0 10px 0; color: var(--tazkia-blue); }
+        .menu-card p { font-size: 12px; margin: 0 0 20px 0; color: #666; }
+
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        .action-btn {
+            background-color: var(--tazkia-blue);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 15px 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 13px;
+            transition: 0.3s;
+        }
+
+        .action-btn:hover { background-color: var(--tazkia-orange); }
+        .action-btn.locked { background-color: #ccc; cursor: not-allowed; pointer-events: none; }
+
+        .secondary-btn {
+            background-color: white;
+            color: var(--tazkia-blue);
+            border: 1px solid var(--tazkia-blue);
+            border-radius: 12px;
+            padding: 15px 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .secondary-btn:hover { border-color: var(--tazkia-orange); color: var(--tazkia-orange); }
+        .action-btn i, .secondary-btn i { font-size: 35px; margin-bottom: 8px; }
+
+        /* MODAL FAQ */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            align-items: center; justify-content: center;
+        }
+        /* Cari bagian ini di style.css */
+.modal-content h3 {
+    color: var(--tazkia-blue);
+    font-weight: bold;
+    margin-bottom: 15px; /* Tambahkan baris ini jika belum ada */
+}
+        .modal-content {
+            background-color: white; width: 85%; max-width: 350px;
+            padding: 25px; border-radius: 20px; position: relative;
+        }
+        .faq-item { margin-bottom: 10px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .faq-item h5 { margin: 0 0 5px 0; color: var(--tazkia-blue); font-size: 14px; }
+        .faq-item p { margin: 0; font-size: 11px; color: #666; }
+    /* --- Admin Tren & Pantau Styles --- */
+.footer-text {
+    text-align: center;
+    margin-top: 25px;
+    color: #777;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.arrow-icon {
+    color: var(--tazkia-blue);
+    font-size: 22px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.arrow-icon:hover {
+    color: var(--tazkia-orange);
+}
+
+/* Tabel Pantau Mahasiswa */
+.table-card {
+    background: white;
+    border-radius: 20px;
+    padding: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+    border: 1px solid #f5f5f5;
+    margin-top: 10px;
+}
+
+.table-card table { width: 100%; border-collapse: collapse; }
+.table-card th { text-align: left; font-size: 10px; color: #aaa; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0; }
+.table-card td { padding: 15px 0; border-bottom: 1px solid #f9f9f9; }
+
+.mhs-name { font-size: 14px; color: var(--tazkia-blue); font-weight: bold; margin: 0; }
+.mhs-nim { font-size: 11px; color: #999; margin: 0; }
+
+.pill-rerata {
+    background: #dcfce7;
+    color: #166534;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.icon-grafik { color: var(--tazkia-blue); font-size: 18px; text-decoration: none; }
+/* style.css - Full Unified Version */
+
+:root {
+    --tazkia-blue: #003399;
+    --tazkia-orange: #FF7A00;
+    --bg-darker: #e0e0e0; /* Putih lebih gelap untuk background luar */
+    --bg-light: #f4f7f6;
+    --input-bg: #eef4ff;
+    --border-color: #d1d9e6;
+    --radius: 12px;
+    --white: #ffffff; /* Warna putih bersih untuk kontainer */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-darker); /* Latar belakang luar kontainer */
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+/* --- KONTENER UTAMA SERAGAM --- */
+.mobile-container {
+    background: var(--white);
+    width: 100%;
+    max-width: 400px; 
+    min-height: 100vh;
+    position: relative;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- LOGO DASHBOARD SERAGAM (55px) --- */
+/* Menargetkan logo di semua dashboard selain halaman login/daftar */
+.logo-header, 
+.logo-container img,
+.header img { 
+    height: 55px !important; 
+    width: auto !important;
+}
+
+/* --- EFEK SENTUH ORANGE TAZKIA (GLOBAL) --- */
+/* Menargetkan semua tombol, link, ikon, dan teks interaktif */
+/* 1. Aturan untuk link teks biasa agar jadi orange saat disentuh */
+a:hover:not(.nav-back):not(.action-btn):not(.action-link):not(.btn-primary) {
+    color: var(--tazkia-orange) !important;
+}
+
+/* 2. Aturan KHUSUS untuk semua tombol agar teksnya TETAP PUTIH saat disentuh */
+.btn-primary:hover, 
+.action-btn:hover, 
+.action-link:hover, 
+.nav-back:hover,
+.action-btn-grafik:hover,
+.btn-masuk:hover {
+    background-color: var(--tazkia-orange) !important;
+    color: #ffffff !important; /* Paksa jadi putih bersih */
+    border-color: var(--tazkia-orange) !important;
+}
+
+/* Perubahan warna teks/ikon saat disentuh */
+a:hover, 
+i:hover, 
+.secondary-btn:hover, 
+.secondary-btn-dash:hover, 
+.icon-grafik:hover, 
+.forgot-link-inline:hover, 
+.arrow-icon:hover,
+.nav-back:hover {
+    color: var(--tazkia-orange) !important;
+}
+
+/* Perubahan warna background tombol saat disentuh */
+.btn-primary:hover, 
+.btn-masuk:hover, 
+.btn-daftar:hover, 
+.action-btn:hover, 
+.action-btn-dash:hover, 
+.action-link:hover, 
+.action-btn-grafik:hover,
+.help-btn-small:hover 
+.nav-back:hover {
+    background-color: var(--tazkia-orange) !important;
+    color: var(--white) !important;
+    border-color: var(--tazkia-orange) !important;
+}
+
+/* --- AUTH CARDS (Login, Daftar, Lupa Sandi) --- */
+.auth-card, .login-card, .register-card {
+    background: var(--white);
+    padding: 30px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 350px;
+    text-align: center;
+    margin: auto;
+}
+
+.logo {
+    width: 80px;
+    margin-bottom: 20px;
+}
+
+/* --- DASHBOARD HEADER --- */
+.header {
+    background: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    border-bottom: 2px solid var(--input-bg);
+}
+
+.header-title { flex-grow: 1; margin-left: 15px; }
+.header-title h3 { margin: 0; font-size: 18px; color: var(--tazkia-blue); font-weight: bold; }
+.header-title p { margin: 0; font-size: 11px; color: #666; }
+
+/* --- CONTENT & CARDS --- */
+.content { padding: 5px 10px; }
+
+.menu-card, .admin-card, .monitor-card, .card, .table-card {
+    background-color: var(--white);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-left: 8px solid var(--tazkia-blue);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* --- FORM ELEMENTS --- */
+.form-group { text-align: left; margin-bottom: 15px; width: 100%; }
+label { color: var(--tazkia-blue); font-weight: bold; font-size: 14px; display: block; margin-bottom: 8px; }
+
+input, select {
+    width: 100%;
+    padding: 14px;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    font-size: 15px;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus { border: 1.5px solid var(--tazkia-orange); }
+
+/* --- TABLES & LISTS --- */
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; font-size: 10px; color: #aaa; padding-bottom: 15px; border-bottom: 1px solid #f0f0f0; }
+td, .rekap-item, .table-row { padding: 12px 0; border-bottom: 1px solid #f9f9f9; font-size: 13px; }
+
+.mhs-name, .score, .student-nim { font-weight: bold; color: var(--tazkia-blue); }
+
+/* --- UTILS --- */
+.badge-orange {
+    background-color: var(--tazkia-orange);
+    color: var(--white);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.footer-text { text-align: center; margin-top: 25px; color: #777; font-size: 13px; line-height: 1.5; }
+
+.btn-grid, .button-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+/* --- PERBAIKAN TOTAL TOMBOL (TERMASUK TABEL) --- */
+
+/* 1. Kunci warna teks untuk semua elemen tombol agar tidak "hilang" saat hover */
+.btn-primary, 
+.action-btn, 
+.action-link, 
+.nav-back, 
+.action-btn-grafik, 
+.btn-masuk,
+.action-btn-dash {
+    color: #ffffff !important; /* Warna teks dasar putih */
+    transition: all 0.3s ease;
+}
+
+/* 2. Aturan Hover Khusus: Background Orange, Teks WAJIB Putih */
+.btn-primary:hover, 
+.action-btn:hover, 
+.action-link:hover, 
+.nav-back:hover, 
+.action-btn-grafik:hover, 
+.btn-masuk:hover,
+.action-btn-dash:hover {
+    background-color: var(--tazkia-orange) !important;
+    color: #ffffff !important; /* Mengunci teks tetap putih saat disentuh */
+    border-color: var(--tazkia-orange) !important;
+}
+
+/* 3. Pastikan Link teks biasa (yang bukan tombol) tetap bisa jadi orange */
+a:hover:not(.nav-back):not(.action-btn):not(.action-link):not(.action-btn-grafik):not(.btn-primary) {
+    color: var(--tazkia-orange) !important;
+}
+/* Pastikan ini di baris paling akhir file style.css */
+
+/* 1. Atur kondisi normal tombol grafik */
+.action-btn-grafik, 
+td .action-btn-grafik {
+    background-color: var(--tazkia-blue) !important;
+    color: #ffffff !important;
+    display: inline-block !important;
+    text-decoration: none !important;
+    opacity: 1 !important;
+}
+
+/* 2. Atur kondisi HOVER (Saat Disentuh) */
+/* Kita buat selectornya sangat panjang supaya "menang" melawan selector lain */
+.mobile-container .content .monitor-card table td .action-btn-grafik:hover,
+.action-btn-grafik:hover {
+    background-color: var(--tazkia-orange) !important;
+    color: #ffffff !important; /* Kunci warna teks tetap putih */
+    text-decoration: none !important;
+}
+/* Warna Merah untuk Skor Rendah */
+.pill-rerata.low-score {
+    background-color: #fee2e2; /* Merah muda lembut */
+    color: #991b1b;           /* Teks merah tua */
+}
+/* Mengunci elemen agar tidak meluber */
+.card, .table-card, .monitor-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box; /* Padding dihitung ke dalam lebar */
+}
+
+canvas {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+body { 
+    font-family: 'Segoe UI', sans-serif; 
+    background-color: var(--bg-darker); 
+    margin: 0; 
+    display: flex; 
+    justify-content: center; 
+    min-height: 100vh; 
+}
+
+/* KONTENER UTAMA: Tetap 400px */
+.mobile-container { 
+    width: 100%; 
+    max-width: 400px; 
+    min-height: 100vh; 
+    background: white; 
+    padding: 20px; 
+    box-sizing: border-box; 
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER */
+.header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 25px; 
+    border-bottom: 2px solid var(--input-bg); 
+    padding-bottom: 15px; 
+}
+
+.logo-header { 
+    width: 50px; 
+    margin-right: 12px; 
+}
+
+.header-title h3 { 
+    margin: 0; 
+    color: var(--tazkia-blue); 
+    font-size: 18px; 
+}
+
+.header-title p { 
+    margin: 0; 
+    font-size: 12px; 
+    color: #666; 
+}
+
+/* CARDS */
+.card { 
+    background: white; 
+    border-radius: 15px; 
+    padding: 15px; 
+    margin-bottom: 20px; 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+    border: 1px solid #eee; 
+
+    border-left: 8px solid var(--tazkia-blue); 
+    box-sizing: border-box;
+}
+
+.card h4 { 
+    margin-top: 0; 
+    margin-bottom: 15px; 
+    font-size: 14px; 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+}
+
+canvas { 
+    max-width: 100% !important; 
+}
+
+/* FOOTER */
+.footer-text { 
+    font-size: 11px; 
+    color: #777; 
+    line-height: 1.6; 
+    text-align: center; 
+    margin-top: 20px; 
+    padding: 10px; 
+    background: var(--input-bg); 
+    border-radius: 10px; 
+}
+
+/* LOGIKA GANTI IKON KE PANAH KANAN */
+.nav-icon-back i {
+    font-size: 0 !important;
+}
+
+.nav-icon-back i::before {
+    content: "\f061"; /* Kode Font Awesome untuk arrow-right */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 20px;
+    visibility: visible;
+    color: var(--tazkia-blue);
+    display: inline-block;
+}
+
+.nav-icon-back:hover i::before {
+    color: var(--tazkia-orange);
+}
+/* Style Khusus Halaman Isi Mutabaah */
+.form-container { 
+    width: 100%; 
+    max-width: 320px; 
+    background: white; 
+    padding: 25px; 
+    border-radius: 20px; 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+}
+
+.form-header { 
+    text-align: center; 
+    margin-bottom: 25px; 
+}
+
+.form-header h2 { 
+    color: var(--tazkia-blue); 
+    margin: 10px 0 5px; 
+}
+
+.form-header p { 
+    color: #666; 
+    font-size: 14px; 
+    margin: 0; 
+}
+
+.input-group { 
+    margin-bottom: 15px; 
+    border-bottom: 1px solid #f0f4ff; 
+    padding-bottom: 10px; 
+}
+
+.input-group label { 
+    display: block; 
+    margin-bottom: 8px; 
+    font-weight: 600; 
+    color: #333; 
+    font-size: 14px; 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+}
+
+.input-group label i { 
+    color: var(--tazkia-orange); 
+    width: 20px; 
+    text-align: center; 
+}
+
+.form-select { 
+    width: 100%; 
+    padding: 12px; 
+    border: 2px solid #eef4ff; 
+    border-radius: 10px; 
+    outline: none; 
+    transition: 0.3s; 
+    background: #f9fbff; 
+    font-size: 14px; 
+    color: #444; 
+}
+
+.form-select:focus { 
+    border-color: var(--tazkia-blue); 
+    background: white; 
+}
+
+.btn-submit-form { 
+    width: 100%; 
+    padding: 15px; 
+    background: var(--tazkia-blue); 
+    color: white; 
+    border: none; 
+    border-radius: 12px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    font-size: 16px; 
+    margin-top: 10px; 
+    transition: 0.3s; 
+}
+
+.btn-submit-form:hover { 
+    background: #002570; 
+    transform: translateY(-2px); 
+}
+
+.link-back { 
+    display: block; 
+    text-align: center; 
+    margin-top: 15px; 
+    color: #666; 
+    text-decoration: none; 
+    font-size: 14px; 
+}
+.btn-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Untuk monitoring ada 2 kolom */
+    gap: 15px;
+    margin-top: 15px;
+}
+
+/* Jika hanya satu tombol (seperti di bagian Isi Mutabaah), buat agar memenuhi lebar atau tetap kotak */
+.menu-card .btn-grid:has(#btnIsiMutabaah) {
+    grid-template-columns: 1fr; /* Buat 1 kolom saja agar tombolnya besar */
+}
+
+.action-btn {
+    background-color: #003399; /* Biru Tazkia */
+    color: white;
+    display: flex;
+    flex-direction: column; /* Ikon di atas, teks di bawah */
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border-radius: 15px;
+    text-decoration: none;
+    transition: 0.3s;
+    border: none;
+}
+
+.action-btn i {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.action-btn span {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.action-btn:hover {
+    background-color: #002570;
+    transform: translateY(-3px);
+}
+
+/* Gaya untuk tombol saat terkunci */
+.action-btn.locked {
+    background-color: #ccc !important;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+/* Menghilangkan space berlebih antara header dan isi dashboard */
+.header { padding-bottom: 5px !important; }
+.content { padding-top: 5px !important; }
+.welcome-section { margin-top: 0 !important; }
+/* Warna Skor & Teks Ya/Tidak */
+.score-hijau, .text-ya { color: #22c55e !important; font-weight: bold; }
+.score-kuning { color: #facc15 !important; font-weight: bold; }
+.score-merah, .text-tidak { color: #ef4444 !important; font-weight: bold; }
+
+/* Header Kolom Nilai */
+.rekap-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f9f9f9;
+}
+
+.header-skor {
+    text-align: right;
+    font-size: 11px;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    font-weight: bold;
+    padding-right: 5px;
+}
+
+.score {
+    text-align: right;
+    min-width: 40px;
+}
+/* 1. Paksa kolom terakhir (Header Laporan & Tombol) jadi rata tengah */
+th:nth-child(3), 
+td:nth-child(3),
+.monitor-table th:last-child, 
+.monitor-table td:last-child {
+    text-align: center !important;
+    display: table-cell !important; /* Memastikan sifat sel tabel tetap terjaga */
+}
+
+/* 2. Pastikan tombol REKAPAN tidak memiliki margin yang mendorongnya ke kiri */
+.action-btn-grafik {
+    display: inline-flex !important;
+    margin: 0 auto !important; 
+    float: none !important; /* Hapus jika ada float kiri */
+}
+
+/* 3. Atur agar kolom RERATA tidak memakan ruang kolom LAPORAN */
+th:nth-child(2), 
+td:nth-child(2) {
+    width: 60px !important;
+    text-align: center !important;
+}
+
+/* 4. Beri batas lebar pada kolom NAMA agar kolom LAPORAN punya ruang di tengah */
+th:first-child, 
+td:first-child {
+    max-width: 130px !important;
+}
+/* Pastikan container lebar maksimal di desktop */
+.mobile-container.container-wide {
+    max-width: 1200px;
+}
+
+/* Mengatur Grid untuk Desktop */
+@media (min-width: 992px) {
+    .content-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* Membagi jadi 2 kolom sejajar */
+        gap: 20px;
+        align-items: stretch; /* Agar tinggi card sama */
+    }
+    
+    .card {
+        margin-bottom: 0; /* Rapikan margin karena sudah diatur gap */
+    }
+}
+/* Di Desktop: Beri padding ekstra agar tabel tidak mepet ke pinggir layar */
+@media (min-width: 992px) {
+    .dashboard-table-wrapper {
+        padding: 20px;
+    }
+
+    /* Ubah tombol aksi yang tadinya vertikal jadi horizontal di desktop */
+    .action-buttons-group {
+        display: flex;
+        flex-direction: row !important; /* Ke samping */
+        justify-content: flex-end;
+        gap: 15px;
+    }
+
+    .btn-action {
+        padding: 8px 12px;
+        border-radius: 6px;
+        background: #f8fafc;
+        transition: 0.3s;
+    }
+
+    .btn-action:hover {
+        background: #f1f5f9;
+    }
+}
+
+/* Default untuk Mobile (Tetap Vertikal) */
+.action-buttons-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+}
+
+.btn-action {
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.btn-grafik { color: var(--tazkia-blue); }
+.btn-rekapan { color: #f37021; }
+/* Container untuk grup tombol */
+.action-buttons-group {
+    display: flex;
+    flex-direction: column; /* Tetap bertumpuk ke bawah */
+    align-items: center;    /* UBAH dari flex-end ke center agar sejajar judul */
+    gap: 8px;
+    margin: 0 auto;         /* Memastikan berada di tengah cell */
+    width: fit-content;     /* Agar container hanya selebar tombol */
+}
+
+/* Tambahan styling agar tombol terlihat seperti di gambar (pakai background putih/soft) */
+.btn-action {
+    background: #f8fafc; 
+    padding: 6px 12px;
+    border-radius: 8px;
+    width: 100px;           /* Beri lebar tetap agar seragam seperti di gambar */
+    justify-content: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+@media (min-width: 992px) {
+    .action-buttons-group {
+        flex-direction: row !important; /* Di desktop, jika ingin sejajar ke samping seperti gambar */
+        justify-content: center;
+        gap: 10px;
+    }
+}
+/* Menghilangkan ikon mata bawaan browser agar tidak double */
+input::-ms-reveal, 
+input::-ms-clear {
+    display: none !important;
+}
+
+/* Memastikan tidak ada sisa icon lain di background input */
+input[type="password"] {
+    background-image: none !important;
 }

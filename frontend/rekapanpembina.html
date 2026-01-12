@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekap Kelompok - STMIK Tazkia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body style="background-color: #f4f7f6;">
+
+<div class="mobile-container">
+    <div class="header" style="background: #1a1a1a; color: white; padding: 25px 20px; text-align: center; border-bottom: 3px solid #f37021;">
+        <h3 style="margin: 0; letter-spacing: 2px; font-weight: 800;">REKAPITULASI KUALITAS</h3>
+        <p style="font-size: 11px; color: #f37021; margin-top: 5px; font-weight: bold; text-transform: uppercase;">Performa Kelompok Pembina</p>
+    </div>
+
+    <div class="content" style="padding: 15px;">
+        <div class="monitor-card" style="background: #1a1a1a; color: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.4); border: 1px solid #333;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead style="background: #262626; color: #888; font-size: 10px; text-transform: uppercase; letter-spacing: 1px;">
+                    <tr>
+                        <th style="padding: 15px; text-align: left;">Nama Kelompok</th>
+                        <th style="text-align:center;">Anggota</th>
+                        <th style="text-align:center;">Rerata</th>
+                        <th style="text-align:left; padding-right: 15px;">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="rekapKelompokBody" style="font-size: 13px;">
+                    <tr><td colspan="4" style="text-align:center; padding: 60px; color: #555;">
+                        <i class="fas fa-spinner fa-spin" style="font-size: 24px; margin-bottom: 10px;"></i><br>
+                        Menganalisis data kelompok...
+                    </td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="padding: 0 10px;">
+            <a href="dashboardpembina.html" class="nav-back" style="display: block; margin-top: 30px; text-align: center; background: white; padding: 15px; border-radius: 12px; color: #1a1a1a; font-weight: bold; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid #ddd;">
+                <i class="fas fa-arrow-left"></i> Kembali ke Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Fungsi Label Kualitas (Standardisasi Warna)
+    function getStatusKualitas(skor) {
+        if (skor >= 25) return '<span style="color: #22c55e; font-weight: bold;">● Sangat Baik</span>';
+        if (skor >= 15) return '<span style="color: #ffc107; font-weight: bold;">● Cukup</span>';
+        return '<span style="color: #ef4444; font-weight: bold;">● Perlu Atensi</span>';
+    }
+
+    window.onload = async function() {
+        const token = localStorage.getItem('token');
+        if (!token) { window.location.href = "login.html"; return; }
+
+        try {
+            const response = await fetch('http://localhost:3000/api/evaluasi/all-stats', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const result = await response.json();
+            const students = result.students || [];
+
+            const kelompokMap = {};
+
+            // Logika Pengelompokan & Kalkulasi
+            students.forEach(s => {
+                // Gunakan Proper Case untuk nama kelompok agar rapi di tabel
+                let rawGroupName = s.pembinaName || "Tanpa Pembina";
+                let displayGroupName = rawGroupName.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+                
+                // Key untuk Map (kecil semua agar tidak dobel karena beda kapital)
+                let groupKey = displayGroupName.toLowerCase().trim();
+
+                // Hitung rerata satu mahasiswa
+                let totalSkor = 0;
+                const evals = s.evaluations || [];
+                evals.forEach(ev => {
+                    if (ev.jawaban) {
+                        totalSkor += Object.values(ev.jawaban).reduce((a, b) => Number(a) + Number(b), 0);
+                    }
+                });
+                const rerataMhs = evals.length > 0 ? (totalSkor / evals.length) : 0;
+
+                if (!kelompokMap[groupKey]) {
+                    kelompokMap[groupKey] = { displayName: displayGroupName, jml: 0, totalRerata: 0 };
+                }
+                kelompokMap[groupKey].jml += 1;
+                kelompokMap[groupKey].totalRerata += rerataMhs;
+            });
+
+            const tbody = document.getElementById('rekapKelompokBody');
+            tbody.innerHTML = '';
+
+            // Render ke tabel & Urutkan berdasarkan rerata tertinggi
+            const sortedGroups = Object.entries(kelompokMap).sort((a, b) => (b[1].totalRerata / b[1].jml) - (a[1].totalRerata / a[1].jml));
+
+            if (sortedGroups.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:#888;">Data belum tersedia.</td></tr>';
+                return;
+            }
+
+            sortedGroups.forEach(([key, data]) => {
+                const rerataGrup = (data.totalRerata / data.jml).toFixed(1);
+                const row = `
+                    <tr style="border-bottom: 1px solid #262626;">
+                        <td style="padding: 20px 15px; font-weight: bold; color: #fff;">
+                            <i class="fas fa-circle-user" style="color: #f37021; margin-right: 5px;"></i> ${data.displayName}
+                        </td>
+                        <td style="text-align:center; color: #aaa;">${data.jml} <small>Mhs</small></td>
+                        <td style="text-align:center; color: #fff; font-weight: 900; font-size: 15px;">${rerataGrup}</td>
+                        <td style="padding: 15px;">${getStatusKualitas(rerataGrup)}</td>
+                    </tr>`;
+                tbody.innerHTML += row;
+            });
+
+        } catch (err) {
+            console.error(err);
+            document.getElementById('rekapKelompokBody').innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color: #ef4444;">Gagal mengambil data dari server.</td></tr>';
+        }
+    }
+</script>
+</body>
+</html>

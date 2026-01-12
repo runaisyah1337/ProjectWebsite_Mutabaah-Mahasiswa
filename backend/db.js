@@ -1,18 +1,16 @@
-const mysql = require('mysql2');
+const mongoose = require('mongoose');
 
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'Mutiara123',      // isi jika MySQL kamu pakai password
-  database: 'db_mahasiswa'
-});
+// Gunakan nama 'projectmutabaah' tepat sebelum tanda tanya (?)
+const mongoURI = "mongodb+srv://aisyahnasution3300_db_user:proyek4matkul@proyekita.pwydp0t.mongodb.net/projectmutabaah?retryWrites=true&w=majority";
 
-db.connect((err) => {
-  if (err) {
-    console.error('❌ Koneksi gagal:', err);
-  } else {
-    console.log('✅ MySQL terhubung ke db_mahasiswa');
-  }
-});
+const connectDB = async () => {
+    try {
+        await mongoose.connect(mongoURI);
+        // Tambahkan baris ini untuk memverifikasi nama database di terminal
+        console.log(`✅ Terhubung ke Database: ${mongoose.connection.name}`);
+    } catch (err) {
+        console.error("❌ Gagal terhubung:", err.message);
+    }
+};
 
-module.exports = db;
+module.exports = connectDB;

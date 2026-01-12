@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tren Kampus - Admin</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="mobile-container container-wide">
+    <div class="header">
+        <div style="display: flex; align-items: center;">
+            <img src="image-removebg-preview.png" alt="Logo" class="logo-header">
+            <div class="header-title">
+                <h3>TREN KAMPUS</h3>
+                <p>Statistik Global Mahasiswa</p>
+            </div>
+        </div>
+        <a href="dashboardadmin.html" class="nav-icon-back">
+            <i class="fas fa-arrow-alt-circle-left"></i>
+        </a>
+    </div>
+
+    <div class="card" style="margin-bottom: 10px; padding: 15px;">
+        <label for="weekFilter" style="font-weight: bold; font-size: 13px; color: var(--tazkia-blue);">
+            <i class="fas fa-calendar-alt"></i> Pilih Periode Pantauan:
+        </label>
+        <select id="weekFilter" onchange="changeWeek()" style="width: 100%; margin-top: 8px; padding: 10px; border-radius: 8px; border: 1px solid #ddd; outline: none; font-weight: bold;">
+            <option value="1">Minggu 1</option>
+            <option value="2">Minggu 2</option>
+            <option value="3">Minggu 3</option>
+            <option value="4">Minggu 4</option>
+        </select>
+    </div>
+
+    <div class="content-grid">
+        <div class="card">
+            <h4 style="color: var(--tazkia-blue);" id="barChartTitle">
+                <i class="fas fa-users" style="color: var(--tazkia-orange);"></i> 
+                Kualitas Amalan Mingguan
+            </h4>
+            <div style="height: 350px;"> 
+                <canvas id="frequencyChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <h4 style="color: var(--tazkia-blue);">
+                <i class="fas fa-chart-line" style="color: var(--tazkia-orange);"></i> 
+                Tingkat Partisipasi Mahasiswa (%)
+            </h4>
+            <div style="height: 350px;">
+                <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Kode JavaScript kamu tetap sama sepenuhnya, tidak ada perubahan logika di sini
+    let ALL_STUDENT_DATA = []; 
+    const TOTAL_MAHASISWA_KAMPUS = 112;
+
+    window.onload = async function() {
+        const token = localStorage.getItem('token');
+        try {
+            const res = await fetch('http://localhost:3000/api/evaluasi/all-stats', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const result = await res.json();
+            
+            ALL_STUDENT_DATA = result.students || [];
+            document.getElementById('weekFilter').value = result.currentWeek || 1;
+            
+            updateDashboard();
+            renderTrendChart(calculateParticipationRate());
+            
+        } catch (e) { console.error("Gagal load:", e); }
+    };
+
+    function changeWeek() {
+        updateDashboard();
+    }
+
+    function calculateParticipationRate() {
+        let weeklyParticipants = [0, 0, 0, 0];
+        ALL_STUDENT_DATA.forEach(student => {
+            (student.evaluations || []).forEach(ev => {
+                const w = parseInt(ev.weekStart);
+                if (w >= 1 && w <= 4 && ev.jawaban) {
+                    weeklyParticipants[w-1]++;
+                }
+            });
+        });
+        return weeklyParticipants.map(count => ((count / TOTAL_MAHASISWA_KAMPUS) * 100).toFixed(1));
+    }
+
+    function updateDashboard() {
+        const selectedWeek = parseInt(document.getElementById('weekFilter').value);
+        document.getElementById('barChartTitle').innerHTML = `
+            <i class="fas fa-users" style="color: var(--tazkia-orange);"></i> 
+            Kualitas Amalan (Minggu ${selectedWeek})
+        `;
+
+        let totals = { tilawah: 0, matsurot: 0, sholatMasjid: 0, sholatMalam: 0, puasa: 0, olahraga: 0, keluarga: 0, infaq: 0, donasiPalestina: 0 };
+        let counts = { tilawah: 0, matsurot: 0, sholatMasjid: 0, sholatMalam: 0, puasa: 0, olahraga: 0, keluarga: 0, infaq: 0, donasiPalestina: 0 };
+
+        ALL_STUDENT_DATA.forEach(student => {
+            const evalMingguIni = (student.evaluations || []).find(ev => parseInt(ev.weekStart) === selectedWeek);
+            if (evalMingguIni && evalMingguIni.jawaban) {
+                const j = evalMingguIni.jawaban;
+                Object.keys(totals).forEach(key => {
+                    if (j[key] !== undefined) {
+                        totals[key] += Number(j[key]);
+                        counts[key]++;
+                    }
+                });
+            }
+        });
+
+        const frequencyData = Object.keys(totals).map(key => counts[key] > 0 ? (totals[key] / counts[key]) : 0);
+        renderFrequencyChart(frequencyData);
+    }
+
+    function renderFrequencyChart(dataValues) {
+        const ctx = document.getElementById('frequencyChart').getContext('2d');
+        if (window.myBarChart) { window.myBarChart.destroy(); }
+
+        const dynamicColors = dataValues.map(value => {
+            if (value >= 2.5) return '#22c55e';
+            if (value >= 1.5) return '#facc15';
+            return '#ef4444';
+        });
+
+        window.myBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Tilawah', 'Matsurot', 'Masjid', 'Solat Malam', 'Puasa', 'Olahraga', 'Keluarga', 'Infaq', 'Donasi'],
+                datasets: [{
+                    data: dataValues,
+                    backgroundColor: dynamicColors,
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                indexAxis: 'y', 
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { beginAtZero: true, max: 3, ticks: { stepSize: 1 } }
+                }
+            }
+        });
+    }
+
+    function renderTrendChart(percentages) {
+        const ctx = document.getElementById('trendChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Mgg 1', 'Mgg 2', 'Mgg 3', 'Mgg 4'],
+                datasets: [{
+                    label: 'Tingkat Partisipasi (%)',
+                    data: percentages, 
+                    borderColor: '#22c55e',
+                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 3,
+                    pointRadius: 5
+                }]
+            },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false, // Ditambahkan agar mengikuti tinggi container div
+                scales: { 
+                    y: { 
+                        beginAtZero: true, 
+                        max: 100,
+                        ticks: { callback: v => v + '%' }
+                    } 
+                } 
+            }
+        });
+    }
+</script>
+</body>
+</html>

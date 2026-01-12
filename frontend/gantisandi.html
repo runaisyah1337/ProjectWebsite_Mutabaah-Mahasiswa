@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sandi Baru - STMIK Tazkia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* CSS Khusus Ikon Mata agar Lucu & Pas */
+        .password-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .toggle-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--tazkia-blue, #003399);
+            font-size: 18px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 5px;
+            z-index: 10;
+        }
+
+        .toggle-icon:hover {
+            color: var(--tazkia-orange, #FF7A00) !important;
+            transform: translateY(-50%) scale(1.2);
+        }
+
+        /* Beri ruang di kanan input */
+        input[type="password"], input[type="text"] {
+            padding-right: 45px;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <div class="auth-card">
+            <img src="image-removebg-preview.png" class="logo" alt="Logo Tazkia">
+            <h1>Sandi Baru</h1>
+            <p class="footer-text" style="color: #666; margin-bottom: 25px;">
+                Silakan buat kata sandi baru yang kuat.
+            </p>
+            
+            <div class="form-group">
+                <label>Kata Sandi Baru</label>
+                <div class="password-wrapper">
+                    <input type="password" id="newPass" placeholder="••••••">
+                    <i class="fas fa-eye toggle-icon" onclick="toggleVisibility('newPass', this)"></i>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Konfirmasi Kata Sandi</label>
+                <div class="password-wrapper">
+                    <input type="password" id="confirmPass" placeholder="••••••">
+                    <i class="fas fa-eye toggle-icon" onclick="toggleVisibility('confirmPass', this)"></i>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="updateSandi()">Simpan Sandi</button>
+        </div>
+    </div>
+
+    <script>
+    // FUNGSI TOGGLE MATA (LUCU & NGEGEMBUNG)
+    function toggleVisibility(inputId, iconElement) {
+        const input = document.getElementById(inputId);
+        const isPassword = input.getAttribute('type') === 'password';
+        
+        // Switch tipe input
+        input.setAttribute('type', isPassword ? 'text' : 'password');
+        
+        // Ganti ikon
+        iconElement.classList.toggle('fa-eye-slash');
+
+        // Efek Ngegembung Lucu
+        iconElement.style.transform = 'translateY(-50%) scale(1.4)';
+        setTimeout(() => {
+            iconElement.style.transform = 'translateY(-50%) scale(1)';
+        }, 250);
+    }
+
+    async function updateSandi() {
+        const newPass = document.getElementById('newPass').value;
+        const confirmPass = document.getElementById('confirmPass').value;
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        let token = urlParams.get('token');
+
+        if (!token) {
+            alert("Token tidak ditemukan. Silakan klik link dari email/whatsapp kembali.");
+            return;
+        }
+
+        token = decodeURIComponent(token).trim();
+
+        if (newPass.length < 6) {
+            alert("Kata sandi minimal 6 karakter!");
+            return;
+        }
+
+        if (newPass !== confirmPass) {
+            alert("Konfirmasi kata sandi tidak cocok!");
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:3000/api/auth/reset-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    token: token, 
+                    newPassword: newPass 
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                alert("Alhamdulillah, kata sandi berhasil diperbarui!");
+                window.location.href = "login.html";
+            } else {
+                alert("Gagal: " + (data.message || "Token kedaluwarsa"));
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Terjadi kesalahan koneksi ke server.");
+        }
+    }
+    </script>
+</body>
+</html>
