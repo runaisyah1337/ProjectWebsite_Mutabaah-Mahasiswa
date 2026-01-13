@@ -5,62 +5,70 @@ Aplikasi pemantauan ibadah harian mahasiswa berbasis web. Dibuat untuk memudahka
 ---
 
 ## 🛠️ Persiapan Sebelum Menjalankan
-Sebelum memulai, pastikan laptop kamu sudah terinstall:
-1. **Node.js** (Versi 16 ke atas)
-2. **Git**
-3. **Browser** (Chrome/Edge/Firefox)
+Pastikan laptop kamu sudah terinstall:
+* **Node.js** (Versi 16 ke atas)
+* **Git**
+* **VS Code** (Disarankan)
 
 ---
 
-## 🚀 Cara Menjalankan di Laptop (Lokal)
+## 🚀 Cara Menjalankan di Lokal (Lokal)
 
 Ikuti langkah-langkah ini secara berurutan:
 
 ### 1. Persiapan Database (MongoDB Atlas)
-Aplikasi ini memerlukan database cloud. 
-- Pastikan kamu sudah punya akun di MongoDB Atlas.
-- Dapatkan **Connection String** (Contoh: mongodb+srv://user:pass@cluster.mongodb.net/db_name).
+Aplikasi ini memerlukan database cloud.
+1. Dapatkan **Connection String** dari MongoDB Atlas.
+2. Pastikan IP Address kamu sudah di-whitelist (Network Access -> Add IP `0.0.0.0/0`).
 
 ### 2. Setup Backend (Server)
-Buka Terminal/CMD, lalu ketik perintah berikut:
+Buka Terminal/CMD, salin dan tempel perintah berikut:
 
+```bash
 # Masuk ke folder backend
 cd backend
 
 # Install semua library yang dibutuhkan
 npm install
 
-# Buat file .env di dalam folder backend
-# Isi file tersebut dengan:
-MONGO_URI=isi_dengan_connection_string_atlas_kamu
-PORT=3000
+# Buat file konfigurasi .env (Ganti bagian link_mongodb_kamu)
+echo "MONGO_URI=mongodb+srv://user:pass@cluster.mongodb.net/db_name" > .env
+echo "PORT=3000" >> .env
 
-# Jalankan servernya
+# Jalankan server
 npm start
+Pastikan muncul tulisan: "✅ Terhubung ke Database".
 
-*Jika muncul tulisan "✅ Terhubung ke Database", berarti server sudah jalan.*
+3. Setup Frontend (Tampilan)
+Buka terminal baru (jangan matikan terminal backend), lalu jalankan:
 
-### 3. Setup Frontend (Tampilan)
-- Jangan tutup terminal backend yang sedang berjalan.
-- Masuk ke folder `frontend`.
-- Cari file **login.html**.
-- Klik kanan, lalu pilih "Open with Live Server" (jika pakai VS Code) atau langsung klik 2x untuk membuka di Browser.
+Bash
+
+# Masuk ke folder frontend
+cd frontend
+
+# Jika menggunakan VS Code, buka login.html dengan Live Server
+# Atau jalankan perintah ini jika kamu punya 'live-server' terinstall:
+npx live-server login.html
+📂 Struktur Folder Proyek
+Bash
+
+root/      # Dokumentasi & Git
+├── backend/   # Server, API & Database
+└── frontend/  # HTML, CSS, JS & Chart.js
+⚠️ Catatan Penting
+CORS: Backend sudah mengizinkan akses dari frontend.
+
+Database: Whitelist IP Address wajib dilakukan di Dashboard MongoDB Atlas.
+
+👥 Developed by:
+Aisyah
+
+Abdurrahman Fathi Mubarok
+
+Destri Komalasari
+
+Mutiara Adinda
+
 
 ---
-
-## 📂 Struktur Folder Proyek
-- root/: Berisi dokumentasi (README) dan pengaturan Git (.gitignore).
-- backend/: Server Node.js, koneksi database, dan logika API.
-- frontend/: File tampilan (HTML, CSS, JS) dan grafik Chart.js.
-
----
-
-## ⚠️ Catatan Penting
-- **CORS**: Pastikan backend sudah mengizinkan akses dari frontend agar data bisa tampil.
-- **Database**: Pastikan IP Address kamu sudah di-whitelist di Dashboard MongoDB Atlas (Network Access) agar koneksi tidak ditolak.
-
----
-Developed by :- Aisyah
-              - Abdurrahman Fathi Mubarok
-              - Destri Komalasari
-              - Mutiara Adinda

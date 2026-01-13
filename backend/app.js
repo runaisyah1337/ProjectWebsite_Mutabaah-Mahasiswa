@@ -6,13 +6,20 @@ const authRoutes = require('./routes/auth.routes');
 const evaluasiRoutes = require('./routes/evaluasi.routes');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-const bcrypt = require('bcrypt'); // TAMBAHAN: Library untuk enkripsi password
+const bcrypt = require('bcrypt');
 const User = require('./models/User');
 
 const app = express();
 
+// 1. GLOBAL CONFIGURATION
+const PORT = process.env.PORT || 3000;
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://127.0.0.1:5500';
+
+// 2. DATABASE CONNECTION
 connectDB();
 
+// 3. MIDDLEWARE
+// Nanti kalau sudah punya link Vercel, ganti cors() menjadi cors({ origin: FRONTEND_URL })
 app.use(cors()); 
 app.use(express.json()); 
 
@@ -38,8 +45,8 @@ app.post('/api/auth/forgot-password', async (req, res) => {
             }
         });
 
-        // URL Frontend sesuai testing kamu
-        const resetUrl = `http://127.0.0.1:5500/frontend/gantisandi.html?token=${resetToken}`;
+        // Menggunakan variabel global FRONTEND_URL
+        const resetUrl = `${FRONTEND_URL}/frontend/gantisandi.html?token=${resetToken}`;
 
         const mailOptions = {
             to: user.email,
@@ -60,8 +67,12 @@ app.post('/api/auth/forgot-password', async (req, res) => {
         res.json({ message: "Link reset password telah dikirim ke email Anda." });
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Terjadi kesalahan pada server." });
+        // Logging error yang lebih informatif untuk debugging saat hosting
+        console.error("❌ Error on Forgot Password:", error.message);
+        res.status(500).json({ 
+            message: "Gagal mengirim email. Pastikan App Password Gmail sudah benar.",
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined 
+        });
     }
 });
 
@@ -80,11 +91,9 @@ app.post('/api/auth/reset-password', async (req, res) => {
             return res.status(400).json({ message: "Token tidak valid atau sudah kedaluwarsa." });
         }
 
-        // --- PROSES HASHING PASSWORD BARU ---
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(newPassword, salt); 
         
-        // Bersihkan token agar tidak bisa dipakai ulang
         user.resetPasswordToken = undefined;
         user.resetPasswordExpires = undefined;
 
@@ -92,7 +101,7 @@ app.post('/api/auth/reset-password', async (req, res) => {
         res.json({ message: "Kata sandi berhasil diperbarui. Silakan login kembali." });
 
     } catch (error) {
-        console.error(error);
+        console.error("❌ Error on Reset Password:", error.message);
         res.status(500).json({ message: "Gagal memperbarui kata sandi." });
     }
 });
@@ -100,7 +109,8 @@ app.post('/api/auth/reset-password', async (req, res) => {
 app.use('/api/evaluasi', evaluasiRoutes);
 app.use('/api/auth', authRoutes);
 
-const PORT = 3000;
+// RUNNING SERVER
 app.listen(PORT, () => {
-    console.log(`🚀 Server berjalan di http://localhost:${PORT}`);
+    console.log(`🚀 Server berjalan di port: ${PORT}`);
+    console.log(`🌍 Frontend URL yang digunakan: ${FRONTEND_URL}`);
 });
