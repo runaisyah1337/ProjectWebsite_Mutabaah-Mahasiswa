@@ -89,7 +89,7 @@
         document.getElementById('pembinaName').innerText = "Assalamu'alaikum " + user.nama + "!";
         
         try {
-            const response = await fetch('http://localhost:3000/api/evaluasi/all-stats', {
+            const response = await fetch('https://extensive-essy-mutabaahmahasiswa-1ba513c9.koyeb.app/api/evaluasi/all-stats', {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const result = await response.json();

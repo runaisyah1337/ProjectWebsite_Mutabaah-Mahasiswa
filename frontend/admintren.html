@@ -67,7 +67,7 @@
     window.onload = async function() {
         const token = localStorage.getItem('token');
         try {
-            const res = await fetch('http://localhost:3000/api/evaluasi/all-stats', {
+            const res = await fetch('https://extensive-essy-mutabaahmahasiswa-1ba513c9.koyeb.app/api/evaluasi/all-stats', {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const result = await res.json();

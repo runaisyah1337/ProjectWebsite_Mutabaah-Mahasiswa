@@ -3,7 +3,7 @@ async function prosesLogin() {
     const passInput = document.getElementById('passInput').value;
 
     try {
-        const response = await fetch('http://localhost:3000/api/auth/login', {
+        const response = await fetch('https://extensive-essy-mutabaahmahasiswa-1ba513c9.koyeb.app/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
