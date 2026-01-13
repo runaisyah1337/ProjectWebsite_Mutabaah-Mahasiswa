@@ -24,18 +24,18 @@ Aplikasi ini memerlukan database cloud.
 ### 2. Setup Backend (Server)
 Buka Terminal/CMD, lalu ketik perintah berikut:
 
-# Masuk ke folder backend
+#### Masuk ke folder backend
 cd backend
 
-# Install semua library yang dibutuhkan
+#### Install semua library yang dibutuhkan
 npm install
 
-# Buat file .env di dalam folder backend
-# Isi file tersebut dengan:
+#### Buat file .env di dalam folder backend
+#### Isi file tersebut dengan:
 MONGO_URI=isi_dengan_connection_string_atlas_kamu
 PORT=3000
 
-# Jalankan servernya
+#### Jalankan servernya
 npm start
 
 *Jika muncul tulisan "✅ Terhubung ke Database", berarti server sudah jalan.*
