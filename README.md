@@ -1,124 +1,66 @@
-🌟 Website Mutabaah Mahasiswa – STMIK Tazkia
+# 🌟 Website Mutabaah Mahasiswa - STMIK Tazkia
 
-Website Mutabaah Mahasiswa adalah aplikasi berbasis web yang digunakan untuk mencatat dan memantau ibadah harian mahasiswa.
-Aplikasi ini membantu:
+Aplikasi pemantauan ibadah harian mahasiswa berbasis web. Dibuat untuk memudahkan mahasiswa mencatat amal harian dan membantu Pembina melihat perkembangan statistik secara real-time.
 
-Mahasiswa mencatat amal harian
+---
 
-Pembina memantau perkembangan ibadah secara digital dan real-time
+## 🛠️ Persiapan Sebelum Menjalankan
+Sebelum memulai, pastikan laptop kamu sudah terinstall:
+1. **Node.js** (Versi 16 ke atas)
+2. **Git**
+3. **Browser** (Chrome/Edge/Firefox)
 
-🎯 Tujuan Aplikasi
+---
 
-Memudahkan pencatatan ibadah harian mahasiswa
+## 🚀 Cara Menjalankan di Laptop (Lokal)
 
-Membantu pembina dalam monitoring dan evaluasi
+Ikuti langkah-langkah ini secara berurutan:
 
-Menggantikan pencatatan manual menjadi sistem digital
+### 1. Persiapan Database (MongoDB Atlas)
+Aplikasi ini memerlukan database cloud. 
+- Pastikan kamu sudah punya akun di MongoDB Atlas.
+- Dapatkan **Connection String** (Contoh: mongodb+srv://user:pass@cluster.mongodb.net/db_name).
 
-🛠️ Persiapan Sebelum Menjalankan
+### 2. Setup Backend (Server)
+Buka Terminal/CMD, lalu ketik perintah berikut:
 
-Pastikan di laptop kamu sudah terinstall:
-
-Node.js (versi 16 atau lebih baru)
-
-Git
-
-Visual Studio Code (disarankan)
-
-Akun MongoDB Atlas
-
-💡 Jika belum punya MongoDB Atlas, daftar gratis di website resminya.
-
-🚀 Cara Menjalankan Aplikasi
-
-Ikuti langkah berikut berurutan dari atas ke bawah.
-
-1️⃣ Setup Database (MongoDB Atlas)
-
-Login ke MongoDB Atlas
-
-Buat Cluster
-
-Ambil MongoDB Connection String
-
-Whitelist IP Address:
-
-Masuk ke Network Access
-
-Klik Add IP Address
-
-Masukkan:
-
-0.0.0.0/0
-
-2️⃣ Menjalankan Backend (Server)
-
-Buka folder project menggunakan VS Code
-
-Buka Terminal di VS Code
-
-Masuk ke folder backend:
-
+# Masuk ke folder backend
 cd backend
 
-
-Install semua dependensi:
-
+# Install semua library yang dibutuhkan
 npm install
 
-
-Buat file .env di folder backend, lalu isi dengan:
-
-MONGO_URI=mongodb+srv://user:password@cluster.mongodb.net/db_name
+# Buat file .env di dalam folder backend
+# Isi file tersebut dengan:
+MONGO_URI=isi_dengan_connection_string_atlas_kamu
 PORT=3000
 
-
-Jalankan backend:
-
+# Jalankan servernya
 npm start
 
+*Jika muncul tulisan "✅ Terhubung ke Database", berarti server sudah jalan.*
 
-✅ Jika berhasil, backend akan berjalan di port 3000
+### 3. Setup Frontend (Tampilan)
+- Jangan tutup terminal backend yang sedang berjalan.
+- Masuk ke folder `frontend`.
+- Cari file **login.html**.
+- Klik kanan, lalu pilih "Open with Live Server" (jika pakai VS Code) atau langsung klik 2x untuk membuka di Browser.
 
-3️⃣ Menjalankan Frontend (Tampilan Website)
+---
 
-Buka terminal baru (jangan menutup backend)
+## 📂 Struktur Folder Proyek
+- root/: Berisi dokumentasi (README) dan pengaturan Git (.gitignore).
+- backend/: Server Node.js, koneksi database, dan logika API.
+- frontend/: File tampilan (HTML, CSS, JS) dan grafik Chart.js.
 
-Masuk ke folder frontend:
+---
 
-cd frontend
+## ⚠️ Catatan Penting
+- **CORS**: Pastikan backend sudah mengizinkan akses dari frontend agar data bisa tampil.
+- **Database**: Pastikan IP Address kamu sudah di-whitelist di Dashboard MongoDB Atlas (Network Access) agar koneksi tidak ditolak.
 
-
-Buka file login.html menggunakan:
-
-Live Server (disarankan), atau
-
-Jalankan perintah:
-
-npx live-server login.html
-
-
-🌐 Website akan terbuka otomatis di browser.
-
-📂 Struktur Folder Proyek
-root/
-├── backend/    # Server, API, dan koneksi database
-└── frontend/   # Tampilan website (HTML, CSS, JavaScript)
-
-⚠️ Catatan Penting
-
-Backend harus dijalankan terlebih dahulu sebelum membuka frontend
-
-Pastikan MongoDB Atlas sudah whitelist IP
-
-Jika backend mati, frontend tidak akan bisa mengambil data
-
-👥 Tim Pengembang
-
-Aisyah
-
-Abdurrahman Fathi Mubarok
-
-Destri Komalasari
-
-Mutiara Adinda
+---
+Developed by :- Aisyah
+              - Abdurrahman Fathi Mubarok
+              - Destri Komalasari
+              - Mutiara Adinda
