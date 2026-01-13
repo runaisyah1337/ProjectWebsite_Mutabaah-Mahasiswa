@@ -1,99 +1,120 @@
-# 🌟 Website Mutabaah Mahasiswa – STMIK Tazkia
+🌟 Website Mutabaah Mahasiswa – STMIK Tazkia
 
-Website **Mutabaah Mahasiswa** merupakan aplikasi pemantauan ibadah harian mahasiswa berbasis web.  
-Aplikasi ini dirancang untuk membantu **mahasiswa mencatat amal harian** serta memudahkan **Pembina** dalam memantau perkembangan ibadah mahasiswa melalui **statistik real-time**.
+Website Mutabaah Mahasiswa adalah aplikasi berbasis web yang digunakan untuk mencatat dan memantau ibadah harian mahasiswa.
+Aplikasi ini membantu:
 
----
+Mahasiswa mencatat amal harian
 
-## ✨ Fitur Utama
-- Pencatatan ibadah harian mahasiswa
-- Statistik dan visualisasi data ibadah
-- Pemantauan perkembangan mahasiswa oleh Pembina
-- Aplikasi berbasis web (Frontend & Backend terpisah)
+Pembina memantau perkembangan ibadah secara digital dan real-time
 
----
+🎯 Tujuan Aplikasi
 
-## 🛠️ Persiapan Sebelum Menjalankan
-Pastikan perangkat kamu telah terpasang:
+Memudahkan pencatatan ibadah harian mahasiswa
 
-- **Node.js** (versi 16 atau lebih baru)
-- **Git**
-- **Visual Studio Code** (disarankan)
-- Koneksi internet (untuk MongoDB Atlas)
+Membantu pembina dalam monitoring dan evaluasi
 
----
+Menggantikan pencatatan manual menjadi sistem digital
 
-## 🚀 Cara Menjalankan Aplikasi Secara Lokal
+🛠️ Persiapan Sebelum Menjalankan
 
-Ikuti langkah-langkah berikut **secara berurutan**.
+Pastikan di laptop kamu sudah terinstall:
 
----
+Node.js (versi 16 atau lebih baru)
 
-### 1️⃣ Persiapan Database (MongoDB Atlas)
+Git
 
-Aplikasi ini menggunakan **MongoDB Atlas (Cloud Database)**.
+Visual Studio Code (disarankan)
 
-Langkah-langkah:
-1. Buat cluster di MongoDB Atlas
-2. Salin **Connection String**
-3. Pastikan IP Address sudah di-whitelist:
-   - Menu: **Network Access**
-   - Tambahkan IP: `0.0.0.0/0` (Allow all IP)
+Akun MongoDB Atlas
 
----
+💡 Jika belum punya MongoDB Atlas, daftar gratis di website resminya.
 
-### 2️⃣ Setup Backend (Server)
+🚀 Cara Menjalankan Aplikasi
 
-Buka Terminal / CMD, lalu jalankan:
+Ikuti langkah berikut berurutan dari atas ke bawah.
 
-```bash
-# Masuk ke folder backend
+1️⃣ Setup Database (MongoDB Atlas)
+
+Login ke MongoDB Atlas
+
+Buat Cluster
+
+Ambil MongoDB Connection String
+
+Whitelist IP Address:
+
+Masuk ke Network Access
+
+Klik Add IP Address
+
+Masukkan:
+
+0.0.0.0/0
+
+2️⃣ Menjalankan Backend (Server)
+
+Buka folder project menggunakan VS Code
+
+Buka Terminal di VS Code
+
+Masuk ke folder backend:
+
 cd backend
 
-# Install semua dependency
+
+Install semua dependensi:
+
 npm install
 
-# Buat file konfigurasi environment
-echo "MONGO_URI=mongodb+srv://user:pass@cluster.mongodb.net/db_name" > .env
-echo "PORT=3000" >> .env
 
-# Jalankan server
+Buat file .env di folder backend, lalu isi dengan:
+
+MONGO_URI=mongodb+srv://user:password@cluster.mongodb.net/db_name
+PORT=3000
+
+
+Jalankan backend:
+
 npm start
-Jika berhasil, akan muncul pesan:
 
-pgsql
-Copy code
-✅ Terhubung ke Database
-3️⃣ Setup Frontend (Tampilan Web)
-Buka terminal baru (jangan menutup terminal backend), lalu jalankan:
 
-bash
-Copy code
-# Masuk ke folder frontend
+✅ Jika berhasil, backend akan berjalan di port 3000
+
+3️⃣ Menjalankan Frontend (Tampilan Website)
+
+Buka terminal baru (jangan menutup backend)
+
+Masuk ke folder frontend:
+
 cd frontend
-Kemudian:
 
-Jika menggunakan VS Code → buka login.html menggunakan Live Server
 
-Atau jika sudah menginstall live-server:
+Buka file login.html menggunakan:
 
-bash
-Copy code
+Live Server (disarankan), atau
+
+Jalankan perintah:
+
 npx live-server login.html
+
+
+🌐 Website akan terbuka otomatis di browser.
+
 📂 Struktur Folder Proyek
-text
-Copy code
 root/
-├── backend/     # Server, API, dan koneksi Database
-└── frontend/    # HTML, CSS, JavaScript, dan Chart.js
+├── backend/    # Server, API, dan koneksi database
+└── frontend/   # Tampilan website (HTML, CSS, JavaScript)
+
 ⚠️ Catatan Penting
-CORS: Backend telah dikonfigurasi agar dapat diakses oleh frontend
 
-Database: IP Address wajib di-whitelist pada MongoDB Atlas agar koneksi berhasil
+Backend harus dijalankan terlebih dahulu sebelum membuka frontend
 
-Pastikan backend berjalan sebelum membuka frontend
+Pastikan MongoDB Atlas sudah whitelist IP
+
+Jika backend mati, frontend tidak akan bisa mengambil data
 
 👥 Tim Pengembang
+
 Aisyah
 
 Abdurrahman Fathi Mubarok
@@ -101,7 +122,3 @@ Abdurrahman Fathi Mubarok
 Destri Komalasari
 
 Mutiara Adinda
-
-📌 Penutup
-Aplikasi ini dikembangkan sebagai bagian dari proyek akademik di STMIK Tazkia.
-Diharapkan dapat membantu meningkatkan kedisiplinan dan monitoring ibadah mahasiswa secara digital.
