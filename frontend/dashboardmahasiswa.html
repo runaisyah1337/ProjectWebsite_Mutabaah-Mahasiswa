@@ -205,7 +205,7 @@
 
     window.onload = function() {
         const user = JSON.parse(localStorage.getItem('tazkia_session'));
-        if (!user) { window.location.href = "login.html"; return; }
+        if (!user) { window.location.href = "index.html"; return; }
 
         const today = new Date();
         const currentDay = today.getDay(); 
@@ -241,7 +241,7 @@
 
     function openModal() { document.getElementById('faqModal').style.display = "flex"; }
     function closeModal() { document.getElementById('faqModal').style.display = "none"; }
-    function logout() { if(confirm("Apakah Anda yakin ingin keluar?")) { localStorage.clear(); window.location.href = "login.html"; } }
+    function logout() { if(confirm("Apakah Anda yakin ingin keluar?")) { localStorage.clear(); window.location.href = "index.html"; } }
 </script>
 </body>
 </html>

@@ -61,7 +61,7 @@ async function prosesDaftar() {
         const data = await response.json();
         if (response.ok) {
             alert(data.message);
-            window.location.href = 'login.html'; 
+            window.location.href = 'index.html'; 
         } else {
             alert(data.message);
         }

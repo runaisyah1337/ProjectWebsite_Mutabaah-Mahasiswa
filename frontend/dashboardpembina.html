@@ -82,7 +82,7 @@
         const currentWeek = getWeekOfMonth();
 
         if (!user || user.role !== 'pembina') {
-            window.location.href = "login.html";
+            window.location.href = "index.html";
             return;
         }
 
@@ -178,7 +178,7 @@
     function logout() {
         if(confirm("Apakah Anda yakin ingin keluar?")) {
             localStorage.clear();
-            window.location.href = "login.html";
+            window.location.href = "index.html";
         }
     }
 </script>

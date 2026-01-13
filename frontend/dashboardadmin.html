@@ -114,7 +114,7 @@
         window.onload = function() {
             const user = JSON.parse(localStorage.getItem('tazkia_session'));
             if (!user || user.role !== 'admin') { 
-                window.location.href = "login.html"; 
+                window.location.href = "index.html"; 
                 return; 
             }
             document.getElementById('adminName').innerText = "Assalamu'alaikum " + user.nama + "!";
@@ -123,7 +123,7 @@
         function logout() { 
             if(confirm("Keluar dari sistem?")) { 
                 localStorage.clear(); 
-                window.location.href = "login.html"; 
+                window.location.href = "index.html"; 
             } 
         }
     </script>

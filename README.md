@@ -43,7 +43,7 @@ npm start
 ### 3. Setup Frontend (Tampilan)
 - Jangan tutup terminal backend yang sedang berjalan.
 - Masuk ke folder `frontend`.
-- Cari file **login.html**.
+- Cari file **index.html**.
 - Klik kanan, lalu pilih "Open with Live Server" (jika pakai VS Code) atau langsung klik 2x untuk membuka di Browser.
 
 ---
