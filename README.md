@@ -1,108 +1,106 @@
-📚 Sistem Monitoring Mutaba'ah Mahasiswa - STMIK Tazkia
-Aplikasi berbasis web untuk memantau aktivitas ibadah harian mahasiswa secara real-time. Dilengkapi dengan grafik analisis progres dan sistem indikator periode otomatis.
+# 📚 SISTEM MONITORING MUTABA'AH MAHASISWA - STMIK TAZKIA
+Aplikasi pemantauan amalan ibadah harian mahasiswa berbasis web. Dirancang untuk memudahkan evaluasi spiritual secara mandiri dan transparan antara mahasiswa, pembina, dan admin.
 
-🚀 Fitur Utama
-Dashboard Mahasiswa: Indikator minggu berjalan otomatis (Minggu ke-, Bulan, Tahun).
+# 🚀 FITUR UTAMA
+DASHBOARD DINAMIS: Menampilkan periode minggu berjalan secara otomatis.
 
-Grafik Dinamis: Visualisasi persentase capaian amalan menggunakan Chart.js.
+SISTEM PERINGATAN (SMART ALERT): Indikator periode berubah menjadi MERAH pada hari Sabtu & Minggu sebagai pengingat batas pengisian.
 
-Monitoring Admin: Pantau statistik global amalan mahasiswa dengan indikator warna (Hijau/Kuning/Merah).
+VISUALISASI DATA: Grafik persentase capaian amalan yang interaktif menggunakan Chart.js.
 
-Keamanan: Autentikasi aman menggunakan JSON Web Token (JWT).
+REKAPAN & RIWAYAT: Mahasiswa dapat melihat kembali catatan amalan yang telah diisi sebelumnya.
 
-🛠️ Panduan Instalasi (Langkah demi Langkah)
-Ikuti langkah-langkah di bawah ini untuk menjalankan aplikasi di komputer lokal Anda.
+MULTI-USER: Sistem login terpisah untuk Mahasiswa, Pembina, dan Admin.
 
-Langkah 1: Instalasi Database (MongoDB)
-Aplikasi ini membutuhkan MongoDB sebagai penyimpanan data.
+# 🛠️ PANDUAN INSTALASI & PERSIAPAN
+Ikuti langkah-langkah di bawah ini untuk menjalankan aplikasi di lingkungan lokal (laptop) Anda.
 
-Unduh MongoDB Community Server di mongodb.com/try/download/community.
+## 1. PRASYARAT
+Pastikan laptop Anda sudah terinstal:
 
-Instal seperti biasa. Pada saat instalasi, pastikan centang "Install MongoDB as a Service".
+Node.js (Versi LTS)
 
-Unduh dan instal MongoDB Compass (opsional) untuk melihat data secara visual.
+Git (Untuk melakukan push ke GitHub)
 
-Pastikan MongoDB sudah berjalan. Buka terminal/CMD dan ketik:
+Koneksi Internet (Karena database menggunakan MongoDB Atlas)
 
-Bash
-
-mongosh
-(Jika masuk ke shell MongoDB, berarti instalasi berhasil).
-
-Langkah 2: Persiapan Lingkungan Node.js
-Pastikan Anda sudah menginstal Node.js (Versi LTS direkomendasikan).
-
-Clone repository ini:
+## 2. CLONE & INSTALASI
+Buka terminal atau CMD, lalu jalankan perintah berikut:
 
 Bash
 
+## Clone proyek dari GitHub
 git clone https://github.com/username/mutabaah-tazkia.git
+
+### Masuk ke folder proyek
 cd mutabaah-tazkia
-Instal semua library yang dibutuhkan:
 
-Bash
-
+### Instal semua library (dependencies)
 npm install
-Langkah 3: Konfigurasi Environment (.env)
-Buat file baru bernama .env di folder utama (root) proyek dan masukkan kode berikut:
+## 3. KONFIGURASI DATABASE (MONGODB ATLAS)
+Buat file bernama .env di folder utama proyek (sejajar dengan server.js). Masukkan kode berikut (Sesuaikan dengan kredensial Atlas Anda):
 
 Cuplikan kode
 
 PORT=3000
-MONGO_URI=mongodb://localhost:27017/mutabaah_db
+MONGO_URI=mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/mutabaah_db?retryWrites=true&w=majority
 JWT_SECRET=rahasia_tazkia_2026
-Langkah 4: Menjalankan Aplikasi
-Jalankan server:
+PENTING: Pastikan Anda sudah mengatur Network Access di MongoDB Atlas menjadi "Allow Access from Anywhere" (0.0.0.0/0) agar koneksi dari laptop lokal tidak diblokir.
 
+## 4. MENJALANKAN APLIKASI
 Bash
 
+### Jalankan server
 npm start
-Atau jika menggunakan nodemon:
-
-Bash
-
-npm run dev
 Buka browser dan akses: http://localhost:3000
 
-📖 Panduan Penggunaan (User Manual)
-1. Peran Mahasiswa
-Login: Gunakan kredensial yang diberikan.
+# 📖 PANDUAN PENGGUNAAN (USER MANUAL)
+#### A. MAHASISWA AREA
+LOGIN: Masuk menggunakan email dan password yang terdaftar.
 
-Isi Mutaba'ah: Klik "Isi Sekarang" untuk menginput amalan mingguan.
+ISI MUTABA'AH: Klik tombol "Isi Sekarang". Isi sesuai dengan capaian amalan Anda.
 
-Pantau Grafik: Lihat progres perkembangan ibadah Anda di menu "Grafik".
+MONITORING: Cek menu "Grafik" untuk melihat persentase keberhasilan ibadah Anda minggu ini.
 
-Peringatan: Segera isi form jika indikator periode sudah berwarna Merah (Sabtu/Minggu).
+LOGOUT: Tekan tombol keluar dan konfirmasi pada jendela pesan yang muncul.
 
-2. Peran Admin
-Monitoring: Lihat statistik rata-rata amalan seluruh mahasiswa.
+#### B. ADMIN AREA
+PANTAU STATISTIK: Lihat grafik global mahasiswa untuk mengetahui tren ibadah di kampus.
 
-Analisis Warna:
+INDIKATOR WARNA:
 
-🟢 Hijau (≥ 85%): Amalan sangat baik.
+🟢 HIJAU: Capaian ≥ 85% (Sangat Baik)
 
-🟡 Kuning (50-84%): Perlu ditingkatkan.
+🟡 KUNING: Capaian 50% - 84% (Perlu Ditingkatkan)
 
-🔴 Merah (< 50%): Perlu pembinaan khusus.
+🔴 MERAH: Capaian < 50% (Perlu Perhatian/Pembinaan)
 
-3. Peran Pembina
-Monitoring:Memantau perkembangan anak binaan melalui rekapan perminggu
+#### C. ADMIN AREA
+Memantau perkembangan anak binaan
 
-📂 Struktur Folder
-public/: File frontend (HTML, CSS, JS, Assets).
+Melihat rekap mutaba'ah per minggu
 
-models/: Skema database MongoDB.
+# 📂 STRUKTUR PROYEK
+public/ : Berisi file frontend (HTML, CSS, Assets).
 
-routes/: Jalur API (Endpoint).
+public/js/ : Berisi logika JavaScript (Dashboard, Grafik, Main).
 
-js/: Logika frontend yang telah dipisah (Main, Dashboard, Grafik).
+models/ : Definisi skema data (Database Schema).
 
-server.js: File utama backend.
+routes/ : Pengaturan endpoint API.
 
-📞 Kontak & Kontribusi
-Jika ditemukan kendala atau ingin melakukan pengembangan fitur, silakan hubungi tim kami.
+server.js : File utama penggerak backend.
 
-Developed by : - Aisyah
-               - Abdurrahman Fathi Mubarok
-               - Destri Komalasari
-               - Mutiara Adinda
+# 👥 Tim Pengembang
+
+Aisyah
+
+Abdurrahman Fathi Mubarok
+
+Destri Komalasari
+
+Mutiara Adinda
+
+# 📞 Kontak & Kontribusi
+
+Jika menemukan bug atau ingin mengembangkan fitur, silakan hubungi tim pengembang atau lakukan kontribusi melalui repository ini.
