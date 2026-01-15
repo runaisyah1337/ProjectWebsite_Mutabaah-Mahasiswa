@@ -1,66 +1,108 @@
-# 🌟 Website Mutabaah Mahasiswa - STMIK Tazkia
+📚 Sistem Monitoring Mutaba'ah Mahasiswa - STMIK Tazkia
+Aplikasi berbasis web untuk memantau aktivitas ibadah harian mahasiswa secara real-time. Dilengkapi dengan grafik analisis progres dan sistem indikator periode otomatis.
 
-Aplikasi pemantauan ibadah harian mahasiswa berbasis web. Dibuat untuk memudahkan mahasiswa mencatat amal harian dan membantu Pembina melihat perkembangan statistik secara real-time.
+🚀 Fitur Utama
+Dashboard Mahasiswa: Indikator minggu berjalan otomatis (Minggu ke-, Bulan, Tahun).
 
----
+Grafik Dinamis: Visualisasi persentase capaian amalan menggunakan Chart.js.
 
-## 🛠️ Persiapan Sebelum Menjalankan
-Sebelum memulai, pastikan laptop kamu sudah terinstall:
-1. **Node.js** (Versi 16 ke atas)
-2. **Git**
-3. **Browser** (Chrome/Edge/Firefox)
+Monitoring Admin: Pantau statistik global amalan mahasiswa dengan indikator warna (Hijau/Kuning/Merah).
 
----
+Keamanan: Autentikasi aman menggunakan JSON Web Token (JWT).
 
-## 🚀 Cara Menjalankan di Laptop (Lokal)
+🛠️ Panduan Instalasi (Langkah demi Langkah)
+Ikuti langkah-langkah di bawah ini untuk menjalankan aplikasi di komputer lokal Anda.
 
-Ikuti langkah-langkah ini secara berurutan:
+Langkah 1: Instalasi Database (MongoDB)
+Aplikasi ini membutuhkan MongoDB sebagai penyimpanan data.
 
-### 1. Persiapan Database (MongoDB Atlas)
-Aplikasi ini memerlukan database cloud. 
-- Pastikan kamu sudah punya akun di MongoDB Atlas.
-- Dapatkan **Connection String** (Contoh: mongodb+srv://user:pass@cluster.mongodb.net/db_name).
+Unduh MongoDB Community Server di mongodb.com/try/download/community.
 
-### 2. Setup Backend (Server)
-Buka Terminal/CMD, lalu ketik perintah berikut:
+Instal seperti biasa. Pada saat instalasi, pastikan centang "Install MongoDB as a Service".
 
-#### Masuk ke folder backend
-cd backend
+Unduh dan instal MongoDB Compass (opsional) untuk melihat data secara visual.
 
-#### Install semua library yang dibutuhkan
+Pastikan MongoDB sudah berjalan. Buka terminal/CMD dan ketik:
+
+Bash
+
+mongosh
+(Jika masuk ke shell MongoDB, berarti instalasi berhasil).
+
+Langkah 2: Persiapan Lingkungan Node.js
+Pastikan Anda sudah menginstal Node.js (Versi LTS direkomendasikan).
+
+Clone repository ini:
+
+Bash
+
+git clone https://github.com/username/mutabaah-tazkia.git
+cd mutabaah-tazkia
+Instal semua library yang dibutuhkan:
+
+Bash
+
 npm install
+Langkah 3: Konfigurasi Environment (.env)
+Buat file baru bernama .env di folder utama (root) proyek dan masukkan kode berikut:
 
-#### Buat file .env di dalam folder backend
-#### Isi file tersebut dengan:
-MONGO_URI=isi_dengan_connection_string_atlas_kamu
+Cuplikan kode
+
 PORT=3000
+MONGO_URI=mongodb://localhost:27017/mutabaah_db
+JWT_SECRET=rahasia_tazkia_2026
+Langkah 4: Menjalankan Aplikasi
+Jalankan server:
 
-#### Jalankan servernya
+Bash
+
 npm start
+Atau jika menggunakan nodemon:
 
-*Jika muncul tulisan "✅ Terhubung ke Database", berarti server sudah jalan.*
+Bash
 
-### 3. Setup Frontend (Tampilan)
-- Jangan tutup terminal backend yang sedang berjalan.
-- Masuk ke folder `frontend`.
-- Cari file **index.html**.
-- Klik kanan, lalu pilih "Open with Live Server" (jika pakai VS Code) atau langsung klik 2x untuk membuka di Browser.
+npm run dev
+Buka browser dan akses: http://localhost:3000
 
----
+📖 Panduan Penggunaan (User Manual)
+1. Peran Mahasiswa
+Login: Gunakan kredensial yang diberikan.
 
-## 📂 Struktur Folder Proyek
-- root/: Berisi dokumentasi (README) dan pengaturan Git (.gitignore).
-- backend/: Server Node.js, koneksi database, dan logika API.
-- frontend/: File tampilan (HTML, CSS, JS) dan grafik Chart.js.
+Isi Mutaba'ah: Klik "Isi Sekarang" untuk menginput amalan mingguan.
 
----
+Pantau Grafik: Lihat progres perkembangan ibadah Anda di menu "Grafik".
 
-## ⚠️ Catatan Penting
-- **CORS**: Pastikan backend sudah mengizinkan akses dari frontend agar data bisa tampil.
-- **Database**: Pastikan IP Address kamu sudah di-whitelist di Dashboard MongoDB Atlas (Network Access) agar koneksi tidak ditolak.
+Peringatan: Segera isi form jika indikator periode sudah berwarna Merah (Sabtu/Minggu).
 
----
-Developed by :- Aisyah
-              - Abdurrahman Fathi Mubarok
-              - Destri Komalasari
-              - Mutiara Adinda
+2. Peran Admin
+Monitoring: Lihat statistik rata-rata amalan seluruh mahasiswa.
+
+Analisis Warna:
+
+🟢 Hijau (≥ 85%): Amalan sangat baik.
+
+🟡 Kuning (50-84%): Perlu ditingkatkan.
+
+🔴 Merah (< 50%): Perlu pembinaan khusus.
+
+3. Peran Pembina
+Monitoring:Memantau perkembangan anak binaan melalui rekapan perminggu
+
+📂 Struktur Folder
+public/: File frontend (HTML, CSS, JS, Assets).
+
+models/: Skema database MongoDB.
+
+routes/: Jalur API (Endpoint).
+
+js/: Logika frontend yang telah dipisah (Main, Dashboard, Grafik).
+
+server.js: File utama backend.
+
+📞 Kontak & Kontribusi
+Jika ditemukan kendala atau ingin melakukan pengembangan fitur, silakan hubungi tim kami.
+
+Developed by : - Aisyah
+               - Abdurrahman Fathi Mubarok
+               - Destri Komalasari
+               - Mutiara Adinda
