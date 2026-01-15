@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Admin - STMIK Tazkia</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <style>
         /* CSS KHUSUS DASHBOARD DESKTOP */
         @media (min-width: 992px) {
@@ -71,7 +71,7 @@
     <div class="mobile-container container-wide">
         <div class="header">
             <div style="display: flex; align-items: center;">
-                <img src="image-removebg-preview.png" alt="Logo Tazkia" class="logo-header">
+                <img src="assets/image-removebg-preview.png" alt="Logo Tazkia" class="logo-header">
                 <div class="header-title">
                     <h3>DASHBOARD</h3>
                     <p>Admin Area</p>
@@ -110,22 +110,7 @@
         </div>
     </div>
 
-    <script>
-        window.onload = function() {
-            const user = JSON.parse(localStorage.getItem('tazkia_session'));
-            if (!user || user.role !== 'admin') { 
-                window.location.href = "index.html"; 
-                return; 
-            }
-            document.getElementById('adminName').innerText = "Assalamu'alaikum " + user.nama + "!";
-        };
-
-        function logout() { 
-            if(confirm("Keluar dari sistem?")) { 
-                localStorage.clear(); 
-                window.location.href = "index.html"; 
-            } 
-        }
-    </script>
+    <script src="js/main.js"></script>
+    <script src="js/dashboardadmin.js"></script>
 </body>
 </html>

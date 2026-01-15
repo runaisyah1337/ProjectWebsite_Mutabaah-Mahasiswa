@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sandi Baru - STMIK Tazkia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .password-wrapper { position: relative; width: 100%; }
+        .toggle-icon {
+            position: absolute; right: 15px; top: 50%;
+            transform: translateY(-50%); cursor: pointer;
+            color: var(--tazkia-blue, #003399); font-size: 18px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 5px; z-index: 10;
+        }
+        .toggle-icon:hover {
+            color: var(--tazkia-orange, #FF7A00) !important;
+            transform: translateY(-50%) scale(1.2);
+        }
+        input[type="password"], input[type="text"] { padding-right: 45px; }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <div class="auth-card">
+            <img src="assets/image-removebg-preview.png" class="logo" alt="Logo Tazkia">
+            <h1>Sandi Baru</h1>
+            <p class="footer-text" style="color: #666; margin-bottom: 25px;">
+                Silakan buat kata sandi baru yang kuat.
+            </p>
+            
+            <div class="form-group">
+                <label>Kata Sandi Baru</label>
+                <div class="password-wrapper">
+                    <input type="password" id="newPass" placeholder="••••••">
+                    <i class="fas fa-eye-slash toggle-icon" onclick="toggleVisibility('newPass', this)"></i>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Konfirmasi Kata Sandi</label>
+                <div class="password-wrapper">
+                    <input type="password" id="confirmPass" placeholder="••••••">
+                    <i class="fas fa-eye-slash toggle-icon" onclick="toggleVisibility('confirmPass', this)"></i>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="updateSandi()">Simpan Sandi</button>
+        </div>
+    </div>
+
+    <script src="js/reset.js"></script>
+</body>
+</html>

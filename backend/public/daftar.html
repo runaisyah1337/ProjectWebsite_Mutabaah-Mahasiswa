@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar - STMIK Tazkia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* CSS Khusus Ikon Mata agar Lucu & Pas */
+        .password-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        #togglePassword {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--tazkia-blue, #003399);
+            font-size: 18px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 5px;
+            z-index: 10;
+        }
+
+        #togglePassword:hover {
+            color: var(--tazkia-orange, #FF7A00) !important;
+            transform: translateY(-50%) scale(1.2);
+        }
+
+        /* Beri ruang agar teks sandi tidak tertutup ikon */
+        #regPass {
+            padding-right: 45px;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <div class="auth-card">
+            <img src="assets/image-removebg-preview.png" alt="Logo" class="logo">
+            <h1>Daftar Akun</h1>
+
+            <div class="form-group">
+                <label>Nama Lengkap</label>
+                <input type="text" id="regNama" placeholder="Nama Lengkap">
+            </div>
+
+            <div class="form-group">
+                <label>Daftar Sebagai</label>
+                <select id="regRole" onchange="updateLabel()">
+                    <option value="mahasiswa">Mahasiswa</option>
+                    <option value="pembina">Pembina</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label id="dynamicLabel">NIM</label>
+                <input type="text" id="regId">
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="regEmail">
+            </div>
+
+            <div class="form-group">
+                <label>Kata Sandi</label>
+                <div class="password-wrapper">
+                    <input type="password" id="regPass" placeholder="••••••">
+                    <i class="fas fa-eye-slash" id="togglePassword"></i>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="prosesDaftar()">Daftar Sekarang</button>
+            
+            <div class="footer-text">
+                Sudah punya akun? <a href="index.html">Masuk</a>
+            </div>
+        </div>
+    </div>
+<script>
+    // 1. FUNGSI UNTUK MENGUBAH LABEL (NIM vs Nomor HP)
+    function updateLabel() {
+        const role = document.getElementById('regRole').value;
+        const label = document.getElementById('dynamicLabel');
+        const input = document.getElementById('regId');
+
+        if (role === "mahasiswa") {
+            label.innerText = "NIM";
+            input.placeholder = "Masukkan NIM";
+        } else {
+            label.innerText = "Nomor HP";
+            input.placeholder = "Contoh: 08123456789";
+        }
+    }
+
+    // 2. FUNGSI UNTUK TOGGLE MATA PASSWORD
+    const togglePassword = document.querySelector('#togglePassword');
+    // PERHATIKAN: Di daftar.html ID inputnya adalah 'regPass', bukan 'passInput'
+    const passwordInput = document.querySelector('#regPass'); 
+
+    togglePassword.addEventListener('click', function () {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        
+        // Ganti ikon
+        this.classList.toggle('fa-eye');
+        this.classList.toggle('fa-eye-slash');
+    });
+</script>
+
+<script src="js/auth.js"></script>
+  
+</body>
+</html>

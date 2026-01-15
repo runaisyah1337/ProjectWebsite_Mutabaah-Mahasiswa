@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pantau Mahasiswa - Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* 1. STICKY HEADER & TABLE STYLING */
+        .dashboard-table-wrapper {
+            max-height: 70vh; 
+            overflow-y: auto;
+            border-radius: 12px;
+            border: 1px solid #eee;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            position: sticky;
+            top: 0;
+            background-color: #ffffff; /* Putih bersih */
+            z-index: 10;
+            box-shadow: 0 2px 2px -1px rgba(0,0,0,0.1);
+            padding: 15px 8px;
+            cursor: default;
+        }
+
+        /* 2. ZEBRA STRIPING & HOVER */
+        tbody tr:nth-child(even) {
+            background-color: #fcfcfc; /* Baris genap warna abu tipis */
+        }
+
+        tbody tr:hover {
+            background-color: #f1f5f9; /* Sorotan saat kursor di atas baris */
+            transition: background-color 0.2s;
+        }
+
+        /* 3. SORTING HEADER STYLE */
+        .sortable {
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.2s;
+        }
+        .sortable:hover {
+            color: var(--tazkia-orange, #f37021);
+        }
+
+        /* 4. SEARCH BAR STYLING */
+        .search-container {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 15px 12px 40px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+
+        /* 5. ACTION BUTTONS (CENTERED VERTICAL) */
+        .action-buttons-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+        }
+
+        .btn-action {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 4px 10px;
+            background: #fdfdfd;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            min-width: 85px;
+        }
+
+        .btn-grafik { color: var(--tazkia-blue, #0056b3); }
+        .btn-rekapan { color: #f37021; }
+
+        @media (min-width: 992px) {
+            .dashboard-table-wrapper { max-height: 75vh; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="mobile-container container-wide">
+    <div class="header">
+        <img src="assets/image-removebg-preview.png" alt="Logo Tazkia" class="logo-header">
+        <div class="header-title">
+            <h3>PANTAU MAHASISWA</h3>
+            <p>Daftar Seluruh Mahasiswa</p>
+        </div>
+        <a href="dashboardadmin.html" class="arrow-icon"><i class="fas fa-arrow-right"></i></a>
+    </div>
+
+    <div class="content">
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="Cari nama atau NIM mahasiswa..." onkeyup="filterTable()">
+        </div>
+
+        <div class="table-card dashboard-table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="text-align: left;">MAHASISWA</th>
+                        <th style="text-align: center;" class="sortable" onclick="toggleSort()">
+                            RERATA <i id="sortIcon" class="fas fa-sort"></i>
+                        </th>
+                        <th style="text-align: center;">AKSI & LAPORAN</th>
+                    </tr>
+                </thead>
+                <tbody id="listMhsBody">
+                    <tr><td colspan="3" style="text-align:center; padding:20px;">Memuat data...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="js/adminpantau.js"></script>
+</body>
+</html>

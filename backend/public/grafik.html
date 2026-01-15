@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grafik Ibadah - STMIK Tazkia</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* CSS DESKTOP LAYOUT & HEADER NAVIGATION */
+        .desktop-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .arrow-icon {
+            font-size: 24px;
+            color: #003399;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .arrow-icon:hover {
+            transform: translateX(5px);
+        }
+
+        @media (min-width: 992px) {
+            .charts-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+                align-items: start;
+            }
+            
+            .mobile-container {
+                max-width: 100% !important;
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        canvas {
+            width: 100% !important;
+        }
+    </style>
+</head>
+<body>
+
+<div class="desktop-wrapper">
+    <div class="mobile-container">
+        <div class="header">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <img src="assets/image-removebg-preview.png" alt="Logo" class="logo-header" style="width: 45px;">
+                <div class="header-title">
+                    <h3 id="displayTitle" style="margin: 0; font-size: 18px;">Grafik Perkembangan</h3>
+                    <p id="displayName" style="margin: 0; font-size: 12px; color: #888;">Memuat...</p>
+                </div>
+            </div>
+            <a href="javascript:void(0)" onclick="goBack()" class="arrow-icon">
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="charts-grid">
+            <div class="card">
+                <h4 id="pieTitle" style="margin-top: 0; font-size: 16px;">Distribusi Skor Amalan</h4>
+                <div style="height: 400px;"> 
+                    <canvas id="horizontalBarChart"></canvas>
+                </div>
+                <p style="text-align: center; font-size: 11px; color: #888; margin-top: 15px; border-top: 1px solid #f0f0f0; padding-top: 10px;">
+                    Skala:
+                    <span class="score-merah">1</span> = Kurang | 
+                    <span class="score-kuning">2</span> = Cukup | 
+                    <span class="score-hijau">3</span> = Baik
+                </p>
+            </div>
+
+            <div class="card">
+                <h4 style="margin-top: 0; font-size: 16px;">Tren Skor Mingguan (M1 - M4)</h4>
+                <div style="height: 400px;"> 
+                    <canvas id="lineChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="js/charts.js"></script>
+</body>
+</html>

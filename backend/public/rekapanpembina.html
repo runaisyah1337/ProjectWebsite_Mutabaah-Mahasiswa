@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekap Kelompok - STMIK Tazkia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body style="background-color: #f4f7f6;">
+
+<div class="mobile-container">
+    <div class="header" style="background: #1a1a1a; color: white; padding: 25px 20px; text-align: center; border-bottom: 3px solid #f37021;">
+        <h3 style="margin: 0; letter-spacing: 2px; font-weight: 800;">REKAPITULASI KUALITAS</h3>
+        <p style="font-size: 11px; color: #f37021; margin-top: 5px; font-weight: bold; text-transform: uppercase;">Performa Kelompok Pembina</p>
+    </div>
+
+    <div class="content" style="padding: 15px;">
+        <div class="monitor-card" style="background: #1a1a1a; color: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.4); border: 1px solid #333;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead style="background: #262626; color: #888; font-size: 10px; text-transform: uppercase; letter-spacing: 1px;">
+                    <tr>
+                        <th style="padding: 15px; text-align: left;">Nama Kelompok</th>
+                        <th style="text-align:center;">Anggota</th>
+                        <th style="text-align:center;">Rerata</th>
+                        <th style="text-align:left; padding-right: 15px;">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="rekapKelompokBody" style="font-size: 13px;">
+                    <tr><td colspan="4" style="text-align:center; padding: 60px; color: #555;">
+                        <i class="fas fa-spinner fa-spin" style="font-size: 24px; margin-bottom: 10px;"></i><br>
+                        Menganalisis data kelompok...
+                    </td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="padding: 0 10px;">
+            <a href="dashboardpembina.html" class="nav-back" style="display: block; margin-top: 30px; text-align: center; background: white; padding: 15px; border-radius: 12px; color: #1a1a1a; font-weight: bold; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid #ddd;">
+                <i class="fas fa-arrow-left"></i> Kembali ke Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<script src="js/rekappembina.js"></script>
+</body>
+</html>

@@ -1,9 +1,12 @@
+// public/js/auth.js
+
 async function prosesLogin() {
+    // Sesuaikan ID dengan index.html
     const userInput = document.getElementById('userInput').value;
     const passInput = document.getElementById('passInput').value;
 
     try {
-        const response = await fetch('https://extensive-essy-mutabaahmahasiswa-1ba513c9.koyeb.app/api/auth/login', {
+        const response = await fetch('/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
@@ -28,42 +31,44 @@ async function prosesLogin() {
                 window.location.href = 'dashboardmahasiswa.html';
             }
         } else {
-            // REVISI: Logika pesan error spesifik
-            if (data.message === "User tidak ditemukan") {
-                // Jika input diawali '08', anggap No HP, jika tidak anggap NIM
-                if (userInput.startsWith('08')) {
-                    alert("No HP salah atau tidak terdaftar!");
-                } else {
-                    alert("NIM salah atau tidak terdaftar!");
-                }
-            } else {
-                alert(data.message);
-            }
+            alert(data.message);
         }
     } catch (error) {
-        console.error("Error Detail:", error);
         alert("Gagal terhubung ke server!");
     }
 }
 
 async function prosesDaftar() {
-    const nama = document.getElementById('namaInput').value;
-    const nim = document.getElementById('nimInput').value;
-    const password = document.getElementById('passInput').value;
+    // SINKRONKAN ID DENGAN daftar.html
+    const nama = document.getElementById('regNama').value;
+    const identifier = document.getElementById('regId').value; 
+    const role = document.getElementById('regRole').value;
+    const email = document.getElementById('regEmail').value;
+    const password = document.getElementById('regPass').value;
+
+    if(!nama || !identifier || !email || !password) return alert("Lengkapi data!");
+
+    const payload = {
+        nama,
+        email,
+        password,
+        role,
+        identifier // Kita kirim sebagai 'identifier' agar diterima controller
+    };
 
     try {
         const response = await fetch('/api/auth/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nama, nim, password, role: 'mahasiswa' })
+            body: JSON.stringify(payload)
         });
 
         const data = await response.json();
         if (response.ok) {
-            alert(data.message);
+            alert("✅ " + data.message);
             window.location.href = 'index.html'; 
         } else {
-            alert(data.message);
+            alert("❌ " + data.message);
         }
     } catch (error) {
         alert("Gagal terhubung ke server.");

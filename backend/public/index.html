@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Masuk Akun - STMIK Tazkia</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <style>
         /* CSS Tambahan Khusus untuk Ikon Mata agar Lucu & Pas */
         .password-wrapper {
@@ -39,7 +39,7 @@
 <body>
     <div class="mobile-container">
         <div class="auth-card">
-            <img src="image-removebg-preview.png" class="logo" alt="Logo Tazkia">
+            <img src="assets/image-removebg-preview.png" class="logo" alt="Logo Tazkia">
             <h1>Masuk Akun</h1>
             
             <div class="form-group">
@@ -68,42 +68,19 @@
             </div>
         </div>
     </div>
+<script>
+    const togglePassword = document.querySelector('#togglePassword');
+    const passwordInput = document.querySelector('#passInput');
 
-    <script>
-        const togglePassword = document.querySelector('#togglePassword');
-        const passwordInput = document.querySelector('#passInput');
-
-        togglePassword.addEventListener('click', function () {
-    const isPassword = passwordInput.getAttribute('type') === 'password';
+    togglePassword.addEventListener('click', function () {
+        const isPassword = passwordInput.getAttribute('type') === 'password';
+        passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+        this.classList.toggle('fa-eye');
+        this.classList.toggle('fa-eye-slash');
+    });
     
-    if (isPassword) {
-        // Ubah jadi kelihatan
-        passwordInput.setAttribute('type', 'text');
-        this.classList.replace('fa-eye-slash', 'fa-eye'); // Mata terbuka (karena teks kelihatan)
-    } else {
-        // Sembunyikan lagi
-        passwordInput.setAttribute('type', 'password');
-        this.classList.replace('fa-eye', 'fa-eye-slash'); // Mata dicoret (karena teks sembunyi)
-    }
+</script>
 
-    // Efek animasi tetap ada
-    this.style.transform = 'translateY(-50%) scale(1.4)';
-    setTimeout(() => {
-        this.style.transform = 'translateY(-50%) scale(1)';
-    }, 250);
-});
-
-        // Simulasi fungsi login (sambungkan ke script.js kamu)
-        function prosesLogin() {
-            // Panggil fungsi login yang ada di script.js
-            if (typeof window.prosesLogin === 'function') {
-                window.prosesLogin();
-            } else {
-                console.log("Fungsi login di script.js belum terdeteksi.");
-            }
-        }
-    </script>
-
-    <script src="script.js"></script>
+<script src="js/auth.js"></script>
 </body>
 </html>

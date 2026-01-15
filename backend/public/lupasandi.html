@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lupa Sandi - STMIK Tazkia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="mobile-container">
+        <div class="auth-card">
+            <img src="assets/image-removebg-preview.png" class="logo" alt="Logo Tazkia">
+            <h1>Reset Sandi</h1>
+            <p class="footer-text" style="color: #666; margin-bottom: 25px;">
+                Masukkan email Anda untuk menerima instruksi pemulihan akun.
+            </p>
+            
+            <div class="form-group">
+                <label for="emailInput">Email Terdaftar</label>
+                <input type="email" id="emailInput" placeholder="nama@email.com">
+            </div>
+
+            <button class="btn-primary" onclick="prosesReset()">Kirim Link Reset</button>
+            
+            <div class="footer-text">
+                Ingat kata sandi? <a href="index.html">Masuk Kembali</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/reset.js"></script>
+</body>
+</html>

@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Mahasiswa - STMIK Tazkia</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <style>
         /* CSS KHUSUS DASHBOARD MAHASISWA DESKTOP */
         @media (min-width: 992px) {
             .student-menu-grid {
                 display: grid;
-                grid-template-columns: 1fr 1fr; /* Membagi menu jadi 2 kolom */
+                grid-template-columns: 1fr 1fr;
                 gap: 25px;
                 margin-top: 40px;
             }
@@ -55,7 +55,6 @@
             margin-top: 15px;
         }
 
-        /* Styling Tombol agar lebih konsisten */
         .action-btn, .secondary-btn {
             flex: 1;
             padding: 12px;
@@ -70,18 +69,34 @@
             transition: 0.3s;
         }
 
-        .action-btn { background: var(--tazkia-blue); color: white; }
-        .secondary-btn { background: #f0f4f8; color: var(--tazkia-blue); }
+        .action-btn { background: var(--tazkia-blue); color: white; border: none; cursor: pointer; }
+        .secondary-btn { background: #f0f4f8; color: var(--tazkia-blue); border: none; cursor: pointer; }
         
-        .action-btn.locked {
-            background: #e2e8f0;
-            color: #94a3b8;
-            cursor: not-allowed;
+        /* Warna Badge Periode */
+        .week-status {
+            background: #f0f4f8;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            color: var(--tazkia-blue);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        /* Modal Centering di Desktop */
+        /* Modal Styling */
         .modal {
-            align-items: center;
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.6); 
+            z-index: 1000; 
+            align-items: center; 
             justify-content: center;
         }
     </style>
@@ -91,10 +106,10 @@
 <div class="mobile-container container-wide">
     <div class="header">
         <div style="display: flex; align-items: center;">
-            <img src="image-removebg-preview.png" alt="Logo Tazkia" class="logo-header">
+            <img src="assets/image-removebg-preview.png" alt="Logo Tazkia" class="logo-header">
             <div class="header-title">
                 <h3>DASHBOARD</h3>
-                <p id="userRoleHeader">Mahasiswa Area</p>
+                <p>Mahasiswa Area</p>
             </div>
         </div>
         <button class="logout-btn" onclick="logout()" style="background:none; border:none; color:var(--tazkia-blue); font-size:20px; cursor:pointer;">
@@ -105,10 +120,10 @@
     <div class="content" style="padding: 25px 20px;">
         <div class="welcome-section" style="text-align: center;">
             <div class="status-row" style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 10px;">
-                <div id="weekIndicator" class="week-status" style="background: #f0f4f8; padding: 5px 15px; border-radius: 20px; font-size: 11px; font-weight: bold; color: var(--tazkia-blue);">
-                    MEMUAT MINGGU...
+                <div id="weekIndicator" class="week-status">
+                    <i class="fas fa-spinner fa-spin"></i> MEMUAT PERIODE...
                 </div>
-                <div class="help-btn-small" onclick="openModal()" style="cursor: pointer; color: #888;">
+                <div class="help-btn-small" onclick="openModal()" style="cursor: pointer; color: #888; font-size: 18px;">
                     <i class="fas fa-question-circle"></i>
                 </div>
             </div>
@@ -152,7 +167,7 @@
     </div>
 </div>
 
-<div id="faqModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center;">
+<div id="faqModal" class="modal">
     <div class="modal-content" style="background: white; padding: 30px; border-radius: 20px; width: 90%; max-width: 450px; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.2);">
         
         <h3 style="color: var(--tazkia-blue); margin-top: 0; text-align: center; font-size: 20px;">
@@ -165,7 +180,7 @@
                     <i class="fas fa-door-open"></i> Kapan Form Terbuka?
                 </h5>
                 <p style="margin: 5px 0; font-size: 13px; color: #555; line-height: 1.5;">
-                    Formulir dibuka setiap hari <b>Senin pukul 04:00 WIB</b> (Waktu Subuh).
+                    Formulir dibuka setiap hari <b>Senin pukul 04:00 WIB</b>.
                 </p>
             </div>
 
@@ -183,7 +198,7 @@
                     <i class="fas fa-chart-bar"></i> Data Tidak Muncul?
                 </h5>
                 <p style="margin: 5px 0; font-size: 13px; color: #555; line-height: 1.5;">
-                    Pastikan Anda telah menekan tombol <b>Kirim</b> pada formulir. Data grafik dan rekapan akan diperbarui secara real-time setelah pengiriman.
+                    Pastikan Anda telah menekan tombol <b>Kirim</b> pada formulir. Data diperbarui secara real-time.
                 </p>
             </div>
         </div>
@@ -193,55 +208,7 @@
         </button>
     </div>
 </div>
-
-<script>
-    function getWeekOfMonth() {
-        const today = new Date();
-        const day = today.getDate();
-        const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
-        const adjustedDate = day + (firstDay === 0 ? 6 : firstDay - 1);
-        return Math.ceil(adjustedDate / 7);
-    }
-
-    window.onload = function() {
-        const user = JSON.parse(localStorage.getItem('tazkia_session'));
-        if (!user) { window.location.href = "index.html"; return; }
-
-        const today = new Date();
-        const currentDay = today.getDay(); 
-        const currentHour = today.getHours();
-        const currentMin = today.getMinutes();
-
-        // Logika Penguncian
-        let isLocked = false;
-        // Minggu malam
-        if (currentDay === 0 && (currentHour > 23 || (currentHour === 23 && currentMin >= 59))) isLocked = true;
-        // Senin pagi
-        if (currentDay === 1 && currentHour < 4) isLocked = true;
-
-        const btnIsi = document.getElementById('btnIsiMutabaah');
-        const lockStatusText = document.getElementById('lockStatusText');
-
-        if (isLocked) {
-            btnIsi.classList.add('locked');
-            btnIsi.href = "#"; // Nonaktifkan link
-            btnIsi.innerHTML = '<i class="fas fa-lock"></i> <span>TERKUNCI</span>';
-            lockStatusText.innerHTML = `<b style="color:#ef4444;">Form sedang diproses. Dibuka kembali Senin jam 04:00 Subuh.</b>`;
-        }
-
-        const currentWeek = getWeekOfMonth();
-        const monthNames = ["JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI", "JULI", "AGUSTUS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DESEMBER"];
-        document.getElementById('weekIndicator').innerText = `MINGGU ${currentWeek} | ${monthNames[today.getMonth()]} ${today.getFullYear()}`;
-        document.getElementById('welcomeName').innerText = "Assalamu'alaikum " + user.nama + "!";
-        document.getElementById('userRoleHeader').innerText = "Mahasiswa Area";
-        
-        document.getElementById('rekapLink').href = `rekapan.html?week=${currentWeek}`;
-        document.getElementById('grafikLink').href = `grafik.html?week=${currentWeek}`;
-    };
-
-    function openModal() { document.getElementById('faqModal').style.display = "flex"; }
-    function closeModal() { document.getElementById('faqModal').style.display = "none"; }
-    function logout() { if(confirm("Apakah Anda yakin ingin keluar?")) { localStorage.clear(); window.location.href = "index.html"; } }
-</script>
+<script src="js/main.js"></script>
+<script src="js/dashboardmahasiswa.js"></script>
 </body>
 </html>

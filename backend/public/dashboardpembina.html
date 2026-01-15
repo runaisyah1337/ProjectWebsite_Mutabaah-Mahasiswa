@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Pembina - STMIK Tazkia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .dashboard-table-wrapper { max-height: 65vh; overflow-y: auto; border-radius: 12px; border: 1px solid #eee; background: white; }
+        table { width: 100%; border-collapse: collapse; }
+        thead th { position: sticky; top: 0; background-color: #f8fafc; z-index: 10; box-shadow: 0 2px 2px -1px rgba(0,0,0,0.1); padding: 15px 8px; color: var(--tazkia-blue); font-size: 13px; }
+        tbody tr:nth-child(even) { background-color: #fcfcfc; }
+        tbody tr:hover { background-color: #f1f5f9; transition: 0.2s; }
+        .search-container { margin: 20px 0; position: relative; }
+        .search-input { width: 100%; padding: 12px 15px 12px 40px; border-radius: 10px; border: 1px solid #ddd; font-size: 14px; outline: none; transition: 0.3s; }
+        .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #888; }
+        .action-buttons-group { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+        .btn-action { text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 10px; font-weight: bold; padding: 6px 12px; background: #fdfdfd; border: 1px solid #eee; border-radius: 6px; min-width: 90px; color: var(--tazkia-blue); }
+        .score-pill { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; display: inline-block; }
+        @media (min-width: 992px) { .dashboard-table-wrapper { max-height: 70vh; } .greeting h1 { font-size: 26px; } }
+    </style>
+</head>
+<body>
+
+<div class="mobile-container container-wide">
+    <div class="header">
+        <div style="display: flex; align-items: center;">
+            <img src="assets/image-removebg-preview.png" alt="Logo" class="logo-header">
+            <div class="header-title">
+                <h3>DASHBOARD</h3>
+                <p>Pembina Area</p>
+            </div>
+        </div>
+        <button onclick="logout()" style="background:none; border:none; cursor:pointer; padding: 5px;">
+            <i class="fas fa-sign-out-alt" style="color:var(--tazkia-blue); font-size: 22px;"></i>
+        </button>
+    </div>
+
+    <div class="content" style="padding: 20px;">
+        <div class="greeting">
+            <h1 id="pembinaName" style="color:var(--tazkia-blue); margin-bottom: 5px;">Assalamu'alaikum!</h1>
+            <p style="color:#666; font-size:14px;">Pantau Rekapan Ibadah Anak Binaan Anda</p>
+        </div>
+
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchInput" class="search-input" placeholder="Cari nama atau NIM binaan..." onkeyup="filterTable()">
+        </div>
+
+        <div class="table-card dashboard-table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="text-align: left;">MAHASISWA</th>
+                        <th style="text-align: center;">RERATA</th>
+                        <th style="text-align: center;">AKSI & LAPORAN</th>
+                    </tr>
+                </thead>
+                <tbody id="listBinaan">
+                    <tr><td colspan="3" style="text-align:center; padding:30px;">Memuat data mahasiswa...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="js/main.js"></script>
+<script src="js/dashboardpembina.js"></script>
+</body>
+</html>

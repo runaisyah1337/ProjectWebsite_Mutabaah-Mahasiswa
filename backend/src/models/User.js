@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const UserSchema = new mongoose.Schema({
     nama: { type: String, required: true },
     role: { type: String, required: true },
-    email: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     // sparse: true memungkinkan banyak nilai 'null' untuk Admin/Pembina
     nim: { type: String, unique: true, sparse: true }, 

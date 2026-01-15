@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tren Kampus - Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        /* Tambahan style khusus untuk legenda agar rapi */
+        .legend-container {
+            margin-top: 15px; 
+            padding-top: 15px; 
+            border-top: 1px solid #eee; 
+            display: flex; 
+            justify-content: center; 
+            gap: 15px; 
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            font-size: 11px; 
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="mobile-container container-wide">
+    <div class="header">
+        <div style="display: flex; align-items: center;">
+            <img src="assets/image-removebg-preview.png" alt="Logo" class="logo-header">
+            <div class="header-title">
+                <h3>TREN KAMPUS</h3>
+                <p>Statistik Global Mahasiswa</p>
+            </div>
+        </div>
+        <a href="dashboardadmin.html" class="nav-icon-back">
+            <i class="fas fa-arrow-alt-circle-left"></i>
+        </a>
+    </div>
+
+    <div class="card" style="margin-bottom: 10px; padding: 15px;">
+        <label for="weekFilter" style="font-weight: bold; font-size: 13px; color: var(--tazkia-blue);">
+            <i class="fas fa-calendar-alt"></i> Pilih Periode Pantauan:
+        </label>
+        <select id="weekFilter" onchange="changeWeek()" style="width: 100%; margin-top: 8px; padding: 10px; border-radius: 8px; border: 1px solid #ddd; outline: none; font-weight: bold;">
+            <option value="1">Minggu 1</option>
+            <option value="2">Minggu 2</option>
+            <option value="3">Minggu 3</option>
+            <option value="4">Minggu 4</option>
+        </select>
+    </div>
+
+    <div class="content-grid">
+        <div class="card">
+            <h4 style="color: var(--tazkia-blue);" id="barChartTitle">
+                <i class="fas fa-users" style="color: var(--tazkia-orange);"></i> 
+                Kualitas Amalan Mingguan
+            </h4>
+            <div style="height: 350px;"> 
+                <canvas id="frequencyChart"></canvas>
+            </div>
+
+            <div class="legend-container">
+                <div class="legend-item" style="color: #ef4444;">
+                    <i class="fas fa-circle"></i> < 50% (Kurang)
+                </div>
+                <div class="legend-item" style="color: #eab308;">
+                    <i class="fas fa-circle"></i> 50% - 84% (Cukup)
+                </div>
+                <div class="legend-item" style="color: #22c55e;">
+                    <i class="fas fa-circle"></i> ≥ 85% (Baik)
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h4 style="color: var(--tazkia-blue);">
+                <i class="fas fa-chart-line" style="color: var(--tazkia-orange);"></i> 
+                Tingkat Partisipasi Mahasiswa (%)
+            </h4>
+            <div style="height: 350px;">
+                <canvas id="trendChart"></canvas>
+            </div>
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid transparent;"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+<script src="js/admintren.js"></script> </body>
+</html>
