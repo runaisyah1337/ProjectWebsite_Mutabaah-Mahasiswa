@@ -26,7 +26,6 @@ Pastikan laptop Anda sudah terinstal:
 Buka terminal atau CMD, lalu jalankan perintah berikut:
 ```Bash
 #Clone proyek dari GitHub
-
 git clone https://github.com/runaisyah1337/ProjectWebsite_Mutabaah-Mahasiswa
 
 # Masuk ke folder proyek
@@ -50,7 +49,6 @@ JWT_SECRET=rahasia_tazkia_2026
 ### 4. MENJALANKAN APLIKASI
 ```Bash
 #Jalankan server
-
 npm start
 
 Buka browser dan akses: http://localhost:3000
