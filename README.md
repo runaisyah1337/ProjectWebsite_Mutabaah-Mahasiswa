@@ -24,14 +24,17 @@ Pastikan laptop Anda sudah terinstal:
 
 ### 2. CLONE & INSTALASI
 Buka terminal atau CMD, lalu jalankan perintah berikut:
-```Bash
-#Clone proyek dari GitHub
+
+* Clone proyek dari GitHub
+```bash
 git clone https://github.com/runaisyah1337/ProjectWebsite_Mutabaah-Mahasiswa
-
-# Masuk ke folder proyek
+```
+* Masuk ke folder proyek
+```bash
 cd ProjectWebsite_Mutabaah-Mahasiswa
-
-# Instal semua library (dependencies)
+```
+* Instal semua library (dependencies)
+```bash
 npm install
 ```
 
@@ -47,12 +50,12 @@ JWT_SECRET=rahasia_tazkia_2026
 **PENTING**: Pastikan Anda sudah mengatur Network Access di MongoDB Atlas menjadi "Allow Access from Anywhere" (0.0.0.0/0) agar koneksi dari laptop lokal tidak diblokir.
 
 ### 4. MENJALANKAN APLIKASI
-```Bash
-#Jalankan server
-npm start
 
-Buka browser dan akses: http://localhost:3000
+* Jalankan server
+```bash
+npm start
 ```
+Buka browser dan akses: http://localhost:3000
 
 ## 📖 PANDUAN PENGGUNAAN (USER MANUAL)
 ### **A. MAHASISWA AREA**
