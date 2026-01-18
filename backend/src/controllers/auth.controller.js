@@ -122,7 +122,34 @@ exports.forgotPassword = async (req, res) => {
     }
 };
 
+exports.resetPassword = async (req, res) => {
+    try {
+        const { token, newPassword } = req.body; // Sesuaikan nama dengan frontend
 
+        // 1. Cari user yang punya token tersebut dan cek apakah belum expired
+        const user = await User.findOne({
+            resetPasswordToken: token,
+            resetPasswordExpires: { $gt: Date.now() } // $gt artinya 'Greater Than' (lebih besar dari sekarang)
+        });
 
+        if (!user) {
+            return res.status(400).json({ message: "Token tidak valid atau sudah kedaluwarsa" });
+        }
 
+        // 2. Hash password baru
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(newPassword, salt);
 
+        // 3. Hapus token reset agar tidak bisa dipakai 2x
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+
+        // 4. Simpan perubahan ke MongoDB Atlas
+        await user.save();
+
+        res.status(200).json({ message: "Sandi berhasil diperbarui! Silakan login kembali." });
+    } catch (error) {
+        console.error("Error Reset Password:", error);
+        res.status(500).json({ message: "Gagal reset sandi", error: error.message });
+    }
+};
