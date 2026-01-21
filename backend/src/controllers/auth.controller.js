@@ -4,44 +4,67 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
+const DataMaster = require('../models/DataMaster'); // Import model tadi
 
-// 1. FUNGSI DAFTAR (REGISTER)
 exports.register = async (req, res) => {
+    console.log("=== ADA PERMINTAAN DAFTAR MASUK ===");
     try {
-        const { nama, identifier, email, password, role } = req.body;
+        const { password, role, email } = req.body;
+        const namaInput = req.body.nama ? req.body.nama.trim() : "";
+        const identifier = req.body.identifier ? req.body.identifier.trim() : "";
 
+        // 1. Cari berdasarkan identitas (NIM/No HP) dan Role dulu
+        let kriteriaCari = { role: role };
+        if (role === 'mahasiswa') {
+            kriteriaCari.nim = identifier;
+        } else {
+            kriteriaCari.no_hp = identifier;
+        }
+
+        const dataMaster = await DataMaster.findOne(kriteriaCari);
+
+        if (!dataMaster) {
+            console.log("HASIL: Identitas atau Role tidak ditemukan di DataMaster");
+            return res.status(400).json({ message: "Data Master tidak ditemukan!" });
+        }
+
+        // 2. Cek kecocokan Nama (Gunakan field 'name' sesuai MongoDB kamu)
+        // Kita bandingkan namaInput dari form dengan dataMaster.name dari DB
+        const namaResmi = dataMaster.name; 
+        const isNamaCocok = new RegExp(namaInput, 'i').test(namaResmi);
+
+        if (!isNamaCocok) {
+            console.log(`HASIL: Nama '${namaInput}' tidak cocok dengan '${namaResmi}' di DB`);
+            return res.status(400).json({ message: "Nama tidak sesuai dengan data resmi kampus!" });
+        }
+
+        console.log("HASIL: Data COCOK. Menyimpan akun baru...");
+
+        // 3. Cek apakah sudah ada akun di collection User
+        const userAda = await User.findOne({ $or: [{ email }, { nim: identifier }, { no_hp: identifier }] });
+        if (userAda) return res.status(400).json({ message: "Email atau ID sudah digunakan!" });
+
+        // 4. Simpan ke database User
         const hashedPassword = await bcrypt.hash(password, 10);
-
-        const userData = {
-            nama,
+        const newUser = new User({
+            nama: namaResmi, // Pakai nama resmi dari DB
             email,
             password: hashedPassword,
-            role
-        };
+            role,
+            nim: role === 'mahasiswa' ? identifier : undefined,
+            no_hp: role !== 'mahasiswa' ? identifier : undefined
+        });
 
-        // Logika Pemisahan: Masukkan identifier ke kolom yang tepat
-        if (role === "mahasiswa") {
-            userData.nim = identifier;
-            // no_hp dibiarkan undefined agar tidak kena validasi unique
-        } else {
-            userData.no_hp = identifier;
-            // nim dibiarkan undefined
-        }
-
-        const user = new User(userData);
-        await user.save();
-
+        await newUser.save();
+        console.log("HASIL: Registrasi BERHASIL!");
         res.status(201).json({ message: "Registrasi berhasil!" });
+
     } catch (err) {
-        // Jika error karena NIM/No HP sudah ada
-        if (err.code === 11000) {
-            return res.status(400).json({ message: "NIM atau No HP sudah terdaftar!" });
-        }
-        res.status(400).json({ message: "Gagal daftar", error: err.message });
+        console.error("ERROR SERVER:", err);
+        res.status(500).json({ message: "Gagal daftar", error: err.message });
     }
 };
 
-// REVISI FUNGSI LOGIN
 // REVISI LOGIN CASE-INSENSITIVE
 exports.login = async (req, res) => {
     try {
