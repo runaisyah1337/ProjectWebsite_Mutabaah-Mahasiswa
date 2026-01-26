@@ -3,7 +3,6 @@ const User = require('../models/User');
 
 /**
  * FUNGSI PEMBANTU: Menghitung minggu berjalan secara otomatis (Senin-Minggu)
- * JANGAN DIUBAH
  */
 function getAutoWeek() {
   const today = new Date();
@@ -13,7 +12,7 @@ function getAutoWeek() {
   return Math.ceil(adjustedDate / 7);
 }
 
-// 1. Fungsi Webhook (Menerima data dari Google Form) - TETAP AMAN
+// 1. Fungsi Webhook (Menerima data dari Google Form)
 exports.handleWebhook = async (req, res) => {
   try {
     let { studentId, jawaban } = req.body;
@@ -21,7 +20,7 @@ exports.handleWebhook = async (req, res) => {
 
     console.log(`Menerima data dari NIM ${studentId}. Dipaksa ke Minggu: ${forcedWeek}`);
 
-    const result = await Evaluation.findOneAndUpdate(
+    await Evaluation.findOneAndUpdate(
       { 
         studentId: String(studentId), 
         weekStart: forcedWeek 
@@ -37,7 +36,7 @@ exports.handleWebhook = async (req, res) => {
   }
 };
 
-// 2. Fungsi getStats (Untuk Grafik Per Mahasiswa) - TETAP AMAN
+// 2. Fungsi getStats (Untuk Grafik Per Mahasiswa)
 exports.getStats = async (req, res) => {
   try {
     const nim = req.query.nim || (req.user ? req.user.nim : null);
@@ -53,66 +52,59 @@ exports.getStats = async (req, res) => {
   }
 };
 
-// 3. Fungsi getAllStats (HANYA BAGIAN INI YANG DIPERBAIKI UNTUK GRAFIK ADMIN)
+// 3. Fungsi getAllStats (DIPERBAIKI: Support Minggu 1-5 secara Dinamis)
 exports.getAllStats = async (req, res) => {
   try {
     if (req.user.role !== 'admin' && req.user.role !== 'pembina') {
       return res.status(403).json({ message: "Akses ditolak." });
     }
 
-    const currentWeek = getAutoWeek(); // Ambil minggu saat ini (1-4)
+    const currentWeek = getAutoWeek(); 
     const allStudents = await User.find({ role: 'mahasiswa' }, 'nama nim');
     const allEvaluations = await Evaluation.find();
 
-    // --- 1. HITUNG RATA-RATA AMALAN MINGGU INI SAJA (BAR CHART) ---
+    // --- 1. HITUNG RATA-RATA AMALAN MINGGU BERJALAN (BAR CHART) ---
+    // Bar chart akan otomatis menampilkan rata-rata dari minggu ke-5 jika currentWeek = 5
     let totals = { tilawah: 0, matsurot: 0, sholatMasjid: 0, sholatMalam: 0, puasa: 0, olahraga: 0, keluarga: 0, infaq: 0, donasiPalestina: 0 };
     let counts = { tilawah: 0, matsurot: 0, sholatMasjid: 0, sholatMalam: 0, puasa: 0, olahraga: 0, keluarga: 0, infaq: 0, donasiPalestina: 0 };
 
-    // Filter evaluasi hanya untuk minggu berjalan
     const currentWeekEvals = allEvaluations.filter(ev => parseInt(ev.weekStart) === currentWeek);
 
     currentWeekEvals.forEach(ev => {
       const j = ev.jawaban || {};
-      const addData = (key, target) => {
-        if (j[key] !== undefined && j[key] !== null) {
-          totals[target] += Number(j[key]);
-          counts[target]++;
+      const fields = ['tilawah', 'matsurot', 'sholatMasjid', 'sholatMalam', 'puasa', 'olahraga', 'keluarga', 'infaq', 'donasiPalestina'];
+      
+      fields.forEach(field => {
+        // Penyesuaian: handle field 'donasiPalestina' vs 'donasi' jika ada perbedaan nama di DB
+        let val = j[field];
+        if (val !== undefined && val !== null) {
+          totals[field] += Number(val);
+          counts[field]++;
         }
-      };
-
-      addData('tilawah', 'tilawah');
-      addData('matsurot', 'matsurot');
-      addData('sholatMasjid', 'sholatMasjid');
-      addData('sholatMalam', 'sholatMalam');
-      addData('puasa', 'puasa');
-      addData('olahraga', 'olahraga');
-      addData('keluarga', 'keluarga');
-      addData('infaq', 'infaq');
-      addData('donasiPalestina', 'donasiPalestina');
+      });
     });
 
-    const averageData = [
-      counts.tilawah > 0 ? (totals.tilawah / counts.tilawah).toFixed(2) : 0,
-      counts.matsurot > 0 ? (totals.matsurot / counts.matsurot).toFixed(2) : 0,
-      counts.sholatMasjid > 0 ? (totals.sholatMasjid / counts.sholatMasjid).toFixed(2) : 0,
-      counts.sholatMalam > 0 ? (totals.sholatMalam / counts.sholatMalam).toFixed(2) : 0,
-      counts.puasa > 0 ? (totals.puasa / counts.puasa).toFixed(2) : 0,
-      counts.olahraga > 0 ? (totals.olahraga / counts.olahraga).toFixed(2) : 0,
-      counts.keluarga > 0 ? (totals.keluarga / counts.keluarga).toFixed(2) : 0,
-      counts.infaq > 0 ? (totals.infaq / counts.infaq).toFixed(2) : 0,
-      counts.donasiPalestina > 0 ? (totals.donasiPalestina / counts.donasiPalestina).toFixed(2) : 0
-    ];
+    const averageData = Object.keys(totals).map(key => 
+      counts[key] > 0 ? (totals[key] / counts[key]).toFixed(2) : 0
+    );
 
-    // --- 2. HITUNG TREN SKOR TOTAL (TETAP SEMUA MINGGU) ---
-    const weeklyTotalScores = [0, 0, 0, 0]; 
+    // --- 2. HITUNG TREN SKOR TOTAL (LINE CHART DINAMIS) ---
+    // Cek apakah ada data di minggu ke-5 dalam database
+    const hasWeek5 = allEvaluations.some(ev => parseInt(ev.weekStart) === 5);
+    const maxWeeks = (currentWeek >= 5 || hasWeek5) ? 5 : 4;
+
+    // Buat array skor dengan panjang dinamis (4 atau 5)
+    const weeklyTotalScores = Array(maxWeeks).fill(0); 
+
     allEvaluations.forEach(ev => {
       const week = parseInt(ev.weekStart);
-      if (week >= 1 && week <= 4) {
+      if (week >= 1 && week <= maxWeeks) {
         const totalSkor = Object.values(ev.jawaban || {}).reduce((acc, val) => acc + (Number(val) || 0), 0);
         weeklyTotalScores[week - 1] += totalSkor;
       }
     });
 
+    // --- 3. GABUNGKAN DATA UNTUK TABEL ---
     const combinedData = allStudents.map(student => {
       const studentEvals = allEvaluations.filter(e => String(e.studentId) === String(student.nim));
       return { studentId: student.nim, nama: student.nama, evaluations: studentEvals };
@@ -122,11 +114,12 @@ exports.getAllStats = async (req, res) => {
       success: true, 
       students: combinedData, 
       frequencyData: averageData, 
-      weeklyTotalScores,
-      currentWeek // Tambahan info minggu berjalan
+      weeklyTotalScores, // Isinya bisa 4 atau 5 data tergantung kondisi
+      currentWeek 
     });
 
   } catch (error) {
+    console.error("Error getAllStats:", error);
     res.status(500).json({ message: "Gagal mengambil data." });
   }
 };

@@ -1,4 +1,4 @@
-// charts.js - Logika Visualisasi Data Ibadah Mahasiswa
+// charts.js - Logika Visualisasi Data Ibadah Mahasiswa (Full Dynamic Version)
 
 // Konfigurasi Warna berdasarkan Skor
 function getStatusColor(score) {
@@ -9,10 +9,12 @@ function getStatusColor(score) {
     return '#e9ecef';
 }
 
+// Logika Minggu Berjalan yang Sinkron dengan Backend
 function getWeekOfMonth() {
     const today = new Date();
     const day = today.getDate();
     const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
+    // Penyesuaian agar Senin dianggap awal minggu
     const adjustedDate = day + (firstDay === 0 ? 6 : firstDay - 1);
     return Math.ceil(adjustedDate / 7);
 }
@@ -34,9 +36,14 @@ window.onload = async function() {
 
     const urlParams = new URLSearchParams(window.location.search);
     const targetNim = urlParams.get('nim') || user.nim;
-    const targetWeek = urlParams.get('week') || getWeekOfMonth(); 
+    
+    // Tentukan minggu filter (Default: minggu saat ini)
+    const currentRealWeek = getWeekOfMonth();
+    const targetWeek = urlParams.get('week') || currentRealWeek; 
 
     document.getElementById('displayName').innerText = "NIM: " + targetNim;
+    
+    // Update Judul Komposisi Amal agar sinkron dengan minggu berjalan
     if (document.getElementById('pieTitle')) {
         document.getElementById('pieTitle').innerText = `Komposisi Amal (Minggu ${targetWeek})`;
     }
@@ -46,15 +53,16 @@ window.onload = async function() {
 
 async function loadCharts(nim, token, weekFilter) {
     try {
-        // REVISI: Menggunakan URL relatif untuk sistem Monolith
         const response = await fetch(`/api/evaluasi/stats?nim=${nim}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         const allEvaluations = await response.json();
+        
+        // Filter data untuk Bar Chart (Minggu yang sedang dilihat)
         const currentWeekData = allEvaluations.find(ev => String(ev.weekStart) === String(weekFilter));
         
         renderBarChart(currentWeekData ? currentWeekData.jawaban : {});
-        renderLineChart(allEvaluations);
+        renderLineChart(allEvaluations, weekFilter);
     } catch (err) { 
         console.error("Gagal memuat grafik:", err); 
     }
@@ -100,24 +108,37 @@ function renderBarChart(jawaban) {
     });
 }
 
-function renderLineChart(dataArray) {
+function renderLineChart(dataArray, currentWeekFilter) {
     const canvas = document.getElementById('lineChart');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (lineChartInstance) lineChartInstance.destroy();
 
-    const scores = [0, 0, 0, 0];
-    dataArray.forEach(ev => {
-        const w = parseInt(ev.weekStart);
-        if (w >= 1 && w <= 4) {
-            scores[w-1] = Object.values(ev.jawaban || {}).reduce((a, b) => Number(a) + Number(b || 0), 0);
+    // 1. Tentukan batas minggu secara dinamis
+    const maxWeekInData = dataArray.length > 0 ? Math.max(...dataArray.map(ev => parseInt(ev.weekStart))) : 4;
+    const displayWeeks = Math.max(maxWeekInData, parseInt(currentWeekFilter), 4);
+    
+    // 2. Siapkan array label dan skor
+    const labels = [];
+    const scores = [];
+
+    for (let i = 1; i <= displayWeeks; i++) {
+        labels.push(`Minggu ${i}`);
+        
+        // Cari data di minggu ke-i
+        const weekData = dataArray.find(ev => parseInt(ev.weekStart) === i);
+        if (weekData) {
+            const total = Object.values(weekData.jawaban || {}).reduce((a, b) => Number(a) + Number(b || 0), 0);
+            scores.push(total);
+        } else {
+            scores.push(0); // Titik nol jika belum diisi
         }
-    });
+    }
 
     lineChartInstance = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4'],
+            labels: labels,
             datasets: [{
                 label: 'Total Skor',
                 data: scores,
@@ -133,7 +154,11 @@ function renderLineChart(dataArray) {
             responsive: true,
             maintainAspectRatio: false,
             scales: { 
-                y: { beginAtZero: true, max: 35, title: { display: true, text: 'Total Skor' } },
+                y: { 
+                    beginAtZero: true, 
+                    max: 30, 
+                    title: { display: true, text: 'Total Skor' } 
+                },
                 x: { title: { display: true, text: 'Periode Bulan Ini' } }
             } 
         }
