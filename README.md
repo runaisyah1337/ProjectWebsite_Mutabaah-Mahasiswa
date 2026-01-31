@@ -33,6 +33,9 @@ git clone https://github.com/runaisyah1337/ProjectWebsite_Mutabaah-Mahasiswa
 ```bash
 cd ProjectWebsite_Mutabaah-Mahasiswa
 ```
+```bash
+cd backend
+```
 * Instal semua library (dependencies)
 ```bash
 npm install
