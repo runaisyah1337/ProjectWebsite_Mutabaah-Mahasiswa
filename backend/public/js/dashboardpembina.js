@@ -15,7 +15,7 @@ window.onload = async function() {
 
     // Proteksi Halaman
     if (!user || user.role !== 'pembina') {
-        window.location.href = "index.html";
+        window.location.href = "/";
         return;
     }
 

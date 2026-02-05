@@ -5,7 +5,7 @@ const token = localStorage.getItem('token');
 
 // Proteksi: Jika tidak ada session, tendang balik ke login
 if (!sessionStr || !token) { 
-    window.location.href = "index.html"; 
+    window.location.href = "/"; 
 }
 
 const session = JSON.parse(sessionStr);

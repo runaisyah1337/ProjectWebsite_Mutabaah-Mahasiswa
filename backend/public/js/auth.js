@@ -85,7 +85,7 @@ async function prosesDaftar(event) {
 
         if (response.ok) {
             alert("✅ " + data.message);
-            window.location.href = 'index.html'; 
+            window.location.href = '/'; 
         } else {
             // Jika ditolak oleh sistem validasi DataMaster
             alert("❌ " + data.message);

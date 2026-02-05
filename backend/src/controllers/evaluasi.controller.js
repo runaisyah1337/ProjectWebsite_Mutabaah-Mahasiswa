@@ -16,14 +16,17 @@ function getAutoWeek() {
 exports.handleWebhook = async (req, res) => {
   try {
     let { studentId, jawaban } = req.body;
+    const today = new Date();
     const forcedWeek = getAutoWeek(); 
-
-    console.log(`Menerima data dari NIM ${studentId}. Dipaksa ke Minggu: ${forcedWeek}`);
+    const currentMonth = today.getMonth() + 1; // Januari = 1, Februari = 2
+    const currentYear = today.getFullYear();
 
     await Evaluation.findOneAndUpdate(
       { 
         studentId: String(studentId), 
-        weekStart: forcedWeek 
+        weekStart: forcedWeek,
+        month: currentMonth, // TAMBAHKAN INI
+        year: currentYear   // TAMBAHKAN INI
       },
       { jawaban },
       { upsert: true, new: true }
@@ -40,12 +43,21 @@ exports.handleWebhook = async (req, res) => {
 exports.getStats = async (req, res) => {
   try {
     const nim = req.query.nim || (req.user ? req.user.nim : null);
+    const today = new Date();
+    const currentMonth = today.getMonth() + 1;
+    const currentYear = today.getFullYear();
 
     if (!nim || nim === "undefined") {
       return res.status(200).json([]);
     }
 
-    const data = await Evaluation.find({ studentId: String(nim) }).sort({ weekStart: 1 });
+    // FILTER: Cari berdasarkan NIM + BULAN SEKARANG + TAHUN SEKARANG
+    const data = await Evaluation.find({ 
+      studentId: String(nim),
+      month: currentMonth,
+      year: currentYear
+    }).sort({ weekStart: 1 }); // Tetap urutkan per minggu (1-5)
+
     res.status(200).json(data);
   } catch (error) {
     res.status(500).json({ message: "Gagal mengambil statistik" });
@@ -59,23 +71,31 @@ exports.getAllStats = async (req, res) => {
       return res.status(403).json({ message: "Akses ditolak." });
     }
 
+    const today = new Date();
+    const currentMonth = today.getMonth() + 1; // Februari = 2
+    const currentYear = today.getFullYear(); // 2026
     const currentWeek = getAutoWeek(); 
+
     const allStudents = await User.find({ role: 'mahasiswa' }, 'nama nim');
-    const allEvaluations = await Evaluation.find();
+    
+    // --- FILTER UTAMA: Hanya ambil data bulan ini ---
+    const allEvaluations = await Evaluation.find({ 
+      month: currentMonth, 
+      year: currentYear 
+    });
 
     // --- 1. HITUNG RATA-RATA AMALAN MINGGU BERJALAN (BAR CHART) ---
-    // Bar chart akan otomatis menampilkan rata-rata dari minggu ke-5 jika currentWeek = 5
     let totals = { tilawah: 0, matsurot: 0, sholatMasjid: 0, sholatMalam: 0, puasa: 0, olahraga: 0, keluarga: 0, infaq: 0, donasiPalestina: 0 };
     let counts = { tilawah: 0, matsurot: 0, sholatMasjid: 0, sholatMalam: 0, puasa: 0, olahraga: 0, keluarga: 0, infaq: 0, donasiPalestina: 0 };
 
+    // Filter evaluasi hanya untuk minggu yang sedang berjalan di bulan ini
     const currentWeekEvals = allEvaluations.filter(ev => parseInt(ev.weekStart) === currentWeek);
 
     currentWeekEvals.forEach(ev => {
       const j = ev.jawaban || {};
-      const fields = ['tilawah', 'matsurot', 'sholatMasjid', 'sholatMalam', 'puasa', 'olahraga', 'keluarga', 'infaq', 'donasiPalestina'];
+      const fields = Object.keys(totals);
       
       fields.forEach(field => {
-        // Penyesuaian: handle field 'donasiPalestina' vs 'donasi' jika ada perbedaan nama di DB
         let val = j[field];
         if (val !== undefined && val !== null) {
           totals[field] += Number(val);
@@ -89,11 +109,9 @@ exports.getAllStats = async (req, res) => {
     );
 
     // --- 2. HITUNG TREN SKOR TOTAL (LINE CHART DINAMIS) ---
-    // Cek apakah ada data di minggu ke-5 dalam database
     const hasWeek5 = allEvaluations.some(ev => parseInt(ev.weekStart) === 5);
     const maxWeeks = (currentWeek >= 5 || hasWeek5) ? 5 : 4;
 
-    // Buat array skor dengan panjang dinamis (4 atau 5)
     const weeklyTotalScores = Array(maxWeeks).fill(0); 
 
     allEvaluations.forEach(ev => {
@@ -114,8 +132,9 @@ exports.getAllStats = async (req, res) => {
       success: true, 
       students: combinedData, 
       frequencyData: averageData, 
-      weeklyTotalScores, // Isinya bisa 4 atau 5 data tergantung kondisi
-      currentWeek 
+      weeklyTotalScores,
+      currentWeek,
+      currentMonth // Tambahan informasi bulan apa yang sedang tampil
     });
 
   } catch (error) {

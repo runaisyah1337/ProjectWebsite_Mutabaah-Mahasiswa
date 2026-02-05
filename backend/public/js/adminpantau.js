@@ -19,7 +19,7 @@ window.onload = async function() {
 
     // PROTEKSI: Hanya Admin yang boleh mengakses halaman ini
     if (!token || !user || user.role !== 'admin') {
-        window.location.href = "index.html";
+        window.location.href = "/";
         return;
     }
 

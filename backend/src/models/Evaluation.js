@@ -1,9 +1,12 @@
 const mongoose = require('mongoose');
 
 const EvaluationSchema = new mongoose.Schema({
-  // Disesuaikan dengan indeks di MongoDB Atlas kamu
-  studentId: { type: String, required: true }, // Ini untuk menyimpan NIM
-  weekStart: { type: Number, required: true }, // Ini untuk menyimpan MingguKe
+  studentId: { type: String, required: true },
+  weekStart: { type: Number, required: true },
+  // --- TAMBAHKAN DUA BARIS INI ---
+  month: { type: Number, required: true }, 
+  year: { type: Number, required: true },
+  // ------------------------------
   jawaban: {
     tilawah: Number,
     matsurot: Number,

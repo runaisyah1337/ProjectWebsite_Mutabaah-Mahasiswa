@@ -21,7 +21,7 @@ async function prosesReset() {
 
         if (response.ok) {
             alert("Berhasil! " + data.message);
-            window.location.href = "index.html";
+            window.location.href = "/";
         } else {
             alert("Gagal: " + data.message);
         }
@@ -71,7 +71,7 @@ async function updateSandi() {
 
         if (response.ok) {
             alert("Alhamdulillah, kata sandi berhasil diperbarui!");
-            window.location.href = "index.html";
+            window.location.href = "/";
         } else {
             alert("Gagal: " + (data.message || "Token kedaluwarsa"));
         }

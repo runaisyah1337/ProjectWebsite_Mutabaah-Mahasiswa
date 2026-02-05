@@ -22,7 +22,7 @@ window.onload = function() {
     
     // Jika tidak ada session, tendang balik ke login
     if (!user) { 
-        window.location.href = "index.html"; 
+        window.location.href = "/"; 
         return; 
     }
 
