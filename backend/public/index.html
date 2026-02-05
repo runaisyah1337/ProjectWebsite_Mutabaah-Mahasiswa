@@ -3,84 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masuk Akun - STMIK Tazkia</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="/css/style.css">
+    <title>Mutabaah Mahasiswa | STMIK Tazkia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* CSS Tambahan Khusus untuk Ikon Mata agar Lucu & Pas */
-        .password-wrapper {
-            position: relative;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Overlay Navy Tazkia lebih gelap agar kartu putih makin menonjol */
+            background: linear-gradient(rgba(1, 41, 88, 0.9), rgba(1, 41, 88, 0.85)), 
+                        url('https://images.unsplash.com/photo-1609599006353-e629aaabfeae?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            z-index: 1;
+            padding: 20px;
+        }
+
+        /* Kartu Putih Elegan (Bukan Transparan) */
+        .white-card {
+            background: #ffffff;
+            padding: 50px 40px;
+            border-radius: 24px;
+            max-width: 450px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+            border-bottom: 6px solid #F37021; /* Aksen Orange di bawah */
+        }
+
+        .logo-tazkia {
+            width: 130px;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            color: #012958; /* Navy Tazkia */
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+        }
+
+        /* Bagian Kata-kata Nyindir */
+        .quote {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 35px;
+            font-style: italic;
+            border-left: 3px solid #F37021;
+            padding-left: 15px;
+            text-align: left;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn-login {
+            background-color: #F37021; /* Orange Tazkia */
+            color: white;
+            padding: 16px 0;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
             width: 100%;
+            display: block;
+            box-shadow: 0 8px 15px rgba(243, 112, 33, 0.3);
         }
 
-        #togglePassword {
+        .btn-login:hover {
+            background-color: #d25b18;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(243, 112, 33, 0.4);
+        }
+
+        .register-link {
+            color: #666;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+
+        .register-link a {
+            color: #012958;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .register-link a:hover {
+            color: #F37021;
+        }
+
+        .footer-text {
             position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: var(--tazkia-blue);
-            font-size: 18px;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            padding: 5px; /* Biar area klik lebih luas */
-        }
-
-        #togglePassword:hover {
-            color: var(--tazkia-orange) !important;
-            transform: translateY(-50%) scale(1.2);
-        }
-
-        /* Beri ruang di kanan input agar teks tidak tertutup ikon */
-        #passInput {
-            padding-right: 45px;
+            bottom: 30px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.7rem;
+            letter-spacing: 2px;
         }
     </style>
 </head>
 <body>
-    <div class="mobile-container">
-        <div class="auth-card">
-            <img src="assets/image-removebg-preview.png" class="logo" alt="Logo Tazkia">
-            <h1>Masuk Akun</h1>
-            
-            <div class="form-group">
-                <label for="userInput">NIM / No HP</label>
-                <input type="text" id="userInput">
-                <small style="font-size: 10px; color: #888; margin-top: 5px; display: block; line-height: 1.4;">
-                    *NIM untuk mahasiswa, No HP untuk admin dan pembina
-                </small>
-            </div>
 
-            <div class="form-group">
-                <div class="label-wrapper">
-                    <label for="passInput">Kata Sandi</label>
-                    <a href="lupasandi.html" class="forgot-link-inline">Lupa Sandi?</a>
-                </div>
-                <div class="password-wrapper">
-                    <input type="password" id="passInput" placeholder="••••••">
-                    <i class="fas fa-eye-slash" id="togglePassword"></i>
-                </div>
-            </div>
-
-            <button class="btn-primary" onclick="prosesLogin()">Masuk</button>
+    <div class="container">
+        <div class="white-card">
+            <img src="assets/image-removebg-preview.png" alt="Logo STMIK Tazkia" class="logo-tazkia">
             
-            <div class="footer-text">
-                Belum punya akun? <a href="daftar.html">Daftar</a>
+            <h1>Evaluasi Ibadah</h1>
+            
+            <div class="quote">
+                "Sesungguhnya Allah tidak melihat rupa dan harta kalian,tetapi Dia melihat hati dan amal kalian (HR. Muslim)."
+            </div>
+            
+            <div class="btn-group">
+                <a href="login.html" class="btn-login">Login</a>
+                <div class="register-link">
+                    Belum punya akun? <a href="daftar.html">Daftar sekarang</a>
+                </div>
             </div>
         </div>
     </div>
-<script>
-    const togglePassword = document.querySelector('#togglePassword');
-    const passwordInput = document.querySelector('#passInput');
 
-    togglePassword.addEventListener('click', function () {
-        const isPassword = passwordInput.getAttribute('type') === 'password';
-        passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
-        this.classList.toggle('fa-eye');
-        this.classList.toggle('fa-eye-slash');
-    });
-    
-</script>
-
+    <div class="footer-text">
+        MUTABAAH SYSTEM 
+    </div>
 <script src="js/auth.js"></script>
 </body>
 </html>

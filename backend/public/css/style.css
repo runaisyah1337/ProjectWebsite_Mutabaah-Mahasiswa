@@ -1288,3 +1288,204 @@ input::-ms-clear {
 input[type="password"] {
     background-image: none !important;
 }
+/* --- RESET DASAR --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    /* Background Navy & Al-Qur'an Gelap */
+    background: linear-gradient(rgba(1, 41, 88, 0.9), rgba(1, 41, 88, 0.85)), 
+                url('https://images.unsplash.com/photo-1584281722571-085f16238676?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+/* --- MODEL CARD PUTIH (SAMA UNTUK SEMUA) --- */
+.white-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 450px; /* Ukuran yang pas untuk memanjang vertikal */
+    padding: 50px 40px;
+    border-radius: 24px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    /* AKSEN ORANGE DI BAWAH (IDENTIK DENGAN INDEX) */
+    border-bottom: 12px solid #F37021; 
+}
+
+/* --- ELEMEN DI DALAM CARD --- */
+.logo-tazkia {
+    width: 130px;
+    margin-bottom: 25px;
+}
+
+h1 {
+    font-family: 'Playfair Display', serif;
+    color: #012958; /* Navy Tazkia */
+    font-size: 2.1rem;
+    margin-bottom: 20px;
+}
+
+/* Styling Dalil/Quote */
+.dalil-container {
+    margin-bottom: 30px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    border-left: 4px solid #F37021;
+    text-align: left;
+}
+
+.ayat-arab {
+    font-size: 1.3rem;
+    color: #012958;
+    margin-bottom: 8px;
+    direction: rtl;
+    font-weight: 600;
+}
+
+.arti-ayat {
+    color: #555;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    font-style: italic;
+}
+
+/* Styling Form (Untuk Login & Daftar) */
+.form-group {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #012958;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: #F37021;
+    box-shadow: 0 0 8px rgba(243, 112, 33, 0.1);
+}
+
+/* --- TOMBOL ORANGE (SAMA UNTUK SEMUA) --- */
+.btn-action {
+    background-color: #F37021;
+    color: white;
+    padding: 16px 0;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: 0.3s;
+    width: 100%;
+    display: block;
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-action:hover {
+    background-color: #d25b18;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(243, 112, 33, 0.3);
+}
+
+.link-text {
+    margin-top: 20px;
+    font-size: 0.85rem;
+    color: #777;
+}
+
+.link-text a {
+    color: #012958;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.link-text a:hover {
+    color: #F37021;
+}
+/* --- VARIASI CARD LEBAR UNTUK DASHBOARD --- */
+.card-large {
+    max-width: 1100px; /* Jauh lebih lebar untuk grafik */
+    width: 95%;
+    padding: 40px;
+    margin: 20px auto;
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+    /* AKSEN ORANGE TETAP SAMA */
+    border-bottom: 12px solid #F37021; 
+}
+
+/* Header Dashboard agar Logo & Judul sejajar (Kiri-Kanan) */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.dashboard-header img {
+    width: 80px; /* Logo lebih kecil sedikit agar tidak makan tempat */
+}
+
+.dashboard-header h1 {
+    font-size: 1.8rem;
+    margin-bottom: 0;
+}
+
+/* Grid untuk Grafik agar rapi */
+.chart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Tombol Logout (Warna Navy agar beda dengan Orange utama) */
+.btn-logout {
+    background: #012958;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: 0.3s;
+}
+
+.btn-logout:hover {
+    background: #F37021; /* Berubah orange saat di-hover */
+}
