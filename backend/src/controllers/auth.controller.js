@@ -4,60 +4,62 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-const DataMaster = require('../models/DataMaster'); // Import model tadi
+const DataMaster = require('../models/DataMaster'); // Pastikan model ini sudah benar
 
 exports.register = async (req, res) => {
-    console.log("=== ADA PERMINTAAN DAFTAR MASUK ===");
+    // 1. Ambil data dari req.body DULU
+    const { nama, email, password, role, identifier } = req.body;
+
+    // 2. Baru boleh console.log identifier-nya
+    console.log("=== PROSES DAFTAR:", identifier, role, "===");
+
     try {
-        const { password, role, email } = req.body;
-        const namaInput = req.body.nama ? req.body.nama.trim() : "";
-        const identifier = req.body.identifier ? req.body.identifier.trim() : "";
-
-        // 1. Cari berdasarkan identitas (NIM/No HP) dan Role dulu
-        let kriteriaCari = { role: role };
-        if (role === 'mahasiswa') {
-            kriteriaCari.nim = identifier;
-        } else {
-            kriteriaCari.no_hp = identifier;
-        }
-
-        const dataMaster = await DataMaster.findOne(kriteriaCari);
+        // CARI DI DATA MASTER DENGAN LOGIKA "ATAU" ($or)
+        const dataMaster = await DataMaster.findOne({
+            $or: [
+                { nim: identifier },
+                { "no hp": identifier }
+            ]
+        });
 
         if (!dataMaster) {
-            console.log("HASIL: Identitas atau Role tidak ditemukan di DataMaster");
-            return res.status(400).json({ message: "Data Master tidak ditemukan!" });
+            console.log("HASIL: Identifier tidak ditemukan di tabel Master.");
+            return res.status(400).json({ message: 'Data Master tidak ditemukan!' });
         }
 
-        // 2. Cek kecocokan Nama (Gunakan field 'name' sesuai MongoDB kamu)
-        // Kita bandingkan namaInput dari form dengan dataMaster.name dari DB
-        const namaResmi = dataMaster.name; 
-        const isNamaCocok = new RegExp(namaInput, 'i').test(namaResmi);
-
+        // Ambil nama resmi (sesuai field di Atlas kamu: name)
+        const namaResmi = dataMaster.name;
+        
+        // Cek Nama (Case Insensitive)
+        const isNamaCocok = new RegExp(nama, 'i').test(namaResmi);
         if (!isNamaCocok) {
-            console.log(`HASIL: Nama '${namaInput}' tidak cocok dengan '${namaResmi}' di DB`);
             return res.status(400).json({ message: "Nama tidak sesuai dengan data resmi kampus!" });
         }
 
-        console.log("HASIL: Data COCOK. Menyimpan akun baru...");
+        // Cek apakah sudah ada di tabel User
+        const userAda = await User.findOne({ 
+            $or: [{ email }, { nim: identifier }, { no_hp: identifier }, { identifier: identifier }] 
+        });
+        
+        if (userAda) {
+            return res.status(400).json({ message: "Email atau ID sudah digunakan!" });
+        }
 
-        // 3. Cek apakah sudah ada akun di collection User
-        const userAda = await User.findOne({ $or: [{ email }, { nim: identifier }, { no_hp: identifier }] });
-        if (userAda) return res.status(400).json({ message: "Email atau ID sudah digunakan!" });
-
-        // 4. Simpan ke database User
+        // Hash password & Simpan
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new User({
-            nama: namaResmi, // Pakai nama resmi dari DB
+            nama: namaResmi,
             email,
             password: hashedPassword,
             role,
             nim: role === 'mahasiswa' ? identifier : undefined,
-            no_hp: role !== 'mahasiswa' ? identifier : undefined
+            no_hp: role !== 'mahasiswa' ? identifier : undefined,
+            identifier: identifier
         });
 
         await newUser.save();
         console.log("HASIL: Registrasi BERHASIL!");
-        res.status(201).json({ message: "Registrasi berhasil!" });
+        res.status(201).json({ success: true, message: "Registrasi berhasil!" });
 
     } catch (err) {
         console.error("ERROR SERVER:", err);
@@ -132,7 +134,7 @@ exports.forgotPassword = async (req, res) => {
             auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
         });
 
-        const resetUrl = `${req.protocol}://${req.get('host')}/gantisandi.html?token=${resetToken}`;
+        const resetUrl = `${req.headers.origin}/gantisandi.html?token=${resetToken}`;
         await transporter.sendMail({
             to: user.email,
             subject: 'Reset Password Mutabaah',
