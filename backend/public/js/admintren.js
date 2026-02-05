@@ -10,7 +10,7 @@ window.onload = async function() {
     const user = JSON.parse(localStorage.getItem('tazkia_session'));
 
     if (!token || !user || (user.role !== 'admin' && user.role !== 'pembina')) {
-        window.location.href = "index.html";
+        window.location.href = "/";
         return;
     }
 

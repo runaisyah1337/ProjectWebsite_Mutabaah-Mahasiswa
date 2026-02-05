@@ -9,7 +9,7 @@ function getStatusKualitas(skor) {
 
 window.onload = async function() {
     const token = localStorage.getItem('token');
-    if (!token) { window.location.href = "index.html"; return; }
+    if (!token) { window.location.href = "/"; return; }
 
     try {
         // REVISI: Menggunakan URL relatif untuk sistem Monolith

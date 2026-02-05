@@ -32,7 +32,7 @@ let lineChartInstance = null;
 window.onload = async function() {
     const user = JSON.parse(localStorage.getItem('tazkia_session'));
     const token = localStorage.getItem('token');
-    if (!token || !user) { window.location.href = "index.html"; return; }
+    if (!token || !user) { window.location.href = "/"; return; }
 
     const urlParams = new URLSearchParams(window.location.search);
     const targetNim = urlParams.get('nim') || user.nim;

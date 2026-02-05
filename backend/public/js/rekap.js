@@ -11,7 +11,7 @@ function getWeekOfMonth() {
 
 function goBack() {
     const user = JSON.parse(localStorage.getItem('tazkia_session'));
-    if (!user) { window.location.href = 'index.html'; return; }
+    if (!user) { window.location.href = '/'; return; }
     
     // Navigasi pintar berdasarkan role
     if (user.role === 'admin') window.location.href = 'adminpantau.html';
@@ -22,7 +22,7 @@ function goBack() {
 window.onload = async function() {
     const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('tazkia_session'));
-    if (!token || !user) { window.location.href = "index.html"; return; }
+    if (!token || !user) { window.location.href = "/"; return; }
 
     const urlParams = new URLSearchParams(window.location.search);
     const targetWeek = urlParams.get('week') || getWeekOfMonth(); 

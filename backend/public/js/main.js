@@ -4,7 +4,7 @@
 function logout() {
     if (confirm("Apakah Anda yakin ingin keluar dari sistem?")) {
         localStorage.clear(); // Hapus token & session
-        window.location.href = "index.html";
+        window.location.href = "/";
     }
 }
 
@@ -15,7 +15,7 @@ function checkAuth() {
     const token = localStorage.getItem('token');
 
     if (!token && !publicPages.includes(currentPath)) {
-        window.location.href = "index.html";
+        window.location.href = "/";
     }
 }
 
