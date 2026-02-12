@@ -5,8 +5,10 @@ function getWeekOfMonth() {
     const today = new Date();
     const day = today.getDate();
     const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
-    const adjustedDate = day + (firstDay === 0 ? 6 : firstDay - 1);
-    return Math.ceil(adjustedDate / 7);
+    
+    // Logika: Tanggal sekarang + hari pertama dalam bulan itu, dibagi 7
+    // Ini menghitung baris di kalender
+    return Math.ceil((day + firstDay) / 7);
 }
 
 function goBack() {

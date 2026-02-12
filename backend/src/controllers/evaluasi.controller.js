@@ -7,9 +7,11 @@ const User = require('../models/User');
 function getAutoWeek() {
   const today = new Date();
   const day = today.getDate();
+  // Ambil posisi hari pertama bulan ini (0 = Minggu, 1 = Senin, dst)
   const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
-  const adjustedDate = day + (firstDay === 0 ? 6 : firstDay - 1);
-  return Math.ceil(adjustedDate / 7);
+  
+  // Rumus baru agar sinkron dengan Frontend
+  return Math.ceil((day + firstDay) / 7);
 }
 
 // 1. Fungsi Webhook (Menerima data dari Google Form)
