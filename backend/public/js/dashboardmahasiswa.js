@@ -12,8 +12,10 @@ window.onload = function() {
     const today = new Date();
     const day = today.getDate();
     const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
-    const adjustedDate = day + (firstDay === 0 ? 6 : firstDay - 1);
-    return Math.ceil(adjustedDate / 7);
+    
+    // Logika: Tanggal sekarang + hari pertama dalam bulan itu, dibagi 7
+    // Ini menghitung baris di kalender
+    return Math.ceil((day + firstDay) / 7);
 }
 
 window.onload = function() {
@@ -83,11 +85,14 @@ function updatePeriodeDashboard() {
     const month = today.getMonth();
     const year = today.getFullYear();
 
-    // 1. Logika Hitung Minggu Berjalan (Start Senin)
-    const firstDay = new Date(year, month, 1).getDay();
-    const adjustedDate = date + (firstDay === 0 ? 6 : firstDay - 1);
-    const week = Math.ceil(adjustedDate / 7);
+    // 1. Logika Hitung Minggu Berjalan (Sesuai Baris Kalender)
+    const firstDayOfMonth = new Date(year, month, 1).getDay(); // 0 (Minggu) sampai 6 (Sabtu)
+    // Rumus simpel: (tanggal sekarang + posisi hari pertama) / 7
+    const week = Math.ceil((date + firstDayOfMonth) / 7);
 
+    // Jika hasilnya 0 (jarang terjadi tapi untuk jaga-jaga), set ke 1
+    const finalWeek = week === 0 ? 1 : week;
+    
     // 2. PERBAIKAN NAMA USER (Agar tidak terpotong)
     const session = JSON.parse(localStorage.getItem('tazkia_session'));
     if (session && session.nama) {

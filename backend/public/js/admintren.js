@@ -23,17 +23,16 @@ window.onload = async function() {
         ALL_STUDENT_DATA = result.students || [];
         
         // 1. Sinkronisasi dropdown filter minggu
+       const today = new Date();
+        const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
+        // Rumus sakti kita:
+        const realCurrentWeek = Math.ceil((today.getDate() + firstDay) / 7);
+        // -------------------------
+        
         const weekFilterEl = document.getElementById('weekFilter');
-        if (result.currentWeek > 4) {
-            // Jika masuk minggu 5, tambahkan opsi di dropdown secara otomatis
-            if (!weekFilterEl.querySelector('option[value="5"]')) {
-                const opt = document.createElement('option');
-                opt.value = "5";
-                opt.text = "Minggu 5";
-                weekFilterEl.add(opt);
-            }
-        }
-        weekFilterEl.value = result.currentWeek || 1;
+        
+        // Set dropdown ke minggu yang benar (Minggu 2)
+        weekFilterEl.value = realCurrentWeek;
         
         updateDashboard();
         
