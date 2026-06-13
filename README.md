@@ -41,16 +41,22 @@ cd backend
 npm install
 ```
 
-### 3. KONFIGURASI DATABASE (MONGODB ATLAS)
-Buat file bernama `.env` di dalam folder utama proyek (sejajar dengan file `package.json`). Masukkan kode berikut:
+### 3. KONFIGURASI DATABASE & EMAIL
+Buat file bernama `.env` di dalam folder `backend` (sejajar dengan file `package.json`). Masukkan kode berikut:
 
 ```env
 PORT=3000
 MONGO_URI=mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/mutabaah_db
 JWT_SECRET=rahasia_tazkia_2026
+
+# Konfigurasi Email untuk fitur Lupa Sandi (wajib diisi)
+EMAIL_USER=email_pengirim@gmail.com
+EMAIL_PASS=xxxx_xxxx_xxxx_xxxx
 ```
 
-**PENTING**: Pastikan Anda sudah mengatur Network Access di MongoDB Atlas menjadi "Allow Access from Anywhere" (0.0.0.0/0) agar koneksi dari laptop lokal tidak diblokir.
+**PENTING**:
+* Pastikan Anda sudah mengatur Network Access di MongoDB Atlas menjadi "Allow Access from Anywhere" (0.0.0.0/0) agar koneksi dari laptop lokal tidak diblokir.
+* Untuk `EMAIL_PASS`, gunakan **App Password** dari Google (bukan password Gmail biasa). Buka [https://myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords) untuk membuatnya. Fitur ini memerlukan 2-Step Verification aktif.
 
 ### 4. MENJALANKAN APLIKASI
 

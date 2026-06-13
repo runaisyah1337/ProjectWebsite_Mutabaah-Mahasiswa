@@ -14,10 +14,26 @@ function getAutoWeek() {
   return Math.ceil((day + firstDay) / 7);
 }
 
-// 1. Fungsi Webhook (Menerima data dari Google Form)
+// 1. Fungsi Webhook (Menerima data evaluasi amalan - Dilindungi JWT)
 exports.handleWebhook = async (req, res) => {
   try {
     let { studentId, jawaban } = req.body;
+
+    // SECURITY FIX: Validasi otorisasi - mahasiswa hanya boleh submit data miliknya sendiri
+    const userRole = req.user.role;
+    const userNim = req.user.nim;
+
+    if (userRole === 'mahasiswa') {
+      // Paksa studentId = NIM dari token JWT, abaikan input dari body
+      // Ini mencegah mahasiswa memalsukan data orang lain
+      studentId = String(userNim);
+    }
+
+    // Validasi: pastikan studentId tersedia setelah pengecekan
+    if (!studentId) {
+      return res.status(400).json({ message: "studentId tidak valid." });
+    }
+
     const today = new Date();
     const forcedWeek = getAutoWeek(); 
     const currentMonth = today.getMonth() + 1; // Januari = 1, Februari = 2
@@ -27,8 +43,8 @@ exports.handleWebhook = async (req, res) => {
       { 
         studentId: String(studentId), 
         weekStart: forcedWeek,
-        month: currentMonth, // TAMBAHKAN INI
-        year: currentYear   // TAMBAHKAN INI
+        month: currentMonth,
+        year: currentYear
       },
       { jawaban },
       { upsert: true, new: true }

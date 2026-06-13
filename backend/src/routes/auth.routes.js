@@ -2,10 +2,12 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/auth.controller');
+const { authLimiter, forgotPasswordLimiter } = require('../middleware/rateLimiter');
 
-router.post('/register', authController.register);
-router.post('/login', authController.login);
-router.post('/forgot-password', authController.forgotPassword); // Rute baru
-router.post('/reset-password', authController.resetPassword);
+// SECURITY FIX: Semua route auth dilindungi rate limiter
+router.post('/register', authLimiter, authController.register);
+router.post('/login', authLimiter, authController.login);
+router.post('/forgot-password', forgotPasswordLimiter, authController.forgotPassword);
+router.post('/reset-password', authLimiter, authController.resetPassword);
 
-module.exports = router;
+module.exports = router;

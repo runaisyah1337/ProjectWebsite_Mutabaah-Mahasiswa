@@ -116,7 +116,6 @@ res.status(200).json({
     }
 };
 
-
 // --- FUNGSI FORGOT PASSWORD ---
 exports.forgotPassword = async (req, res) => {
     const { email } = req.body;
@@ -124,9 +123,14 @@ exports.forgotPassword = async (req, res) => {
         const user = await User.findOne({ email });
         if (!user) return res.status(404).json({ message: "Email tidak terdaftar" });
 
-        const resetToken = crypto.randomBytes(20).toString('hex');
-        user.resetPasswordToken = resetToken;
-        user.resetPasswordExpires = Date.now() + 3600000;
+        // Generate token acak
+        const resetToken = crypto.randomBytes(32).toString('hex');
+
+        // SECURITY FIX: Simpan versi HASH dari token ke database (bukan plaintext)
+        // Jika database bocor, penyerang tidak bisa menggunakan token ini langsung
+        const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+        user.resetPasswordToken = hashedToken;
+        user.resetPasswordExpires = Date.now() + 3600000; // 1 jam
         await user.save();
 
         const transporter = nodemailer.createTransport({
@@ -134,42 +138,45 @@ exports.forgotPassword = async (req, res) => {
             auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
         });
 
+        // Kirim token PLAINTEXT ke email (bukan hash)
         const resetUrl = `${req.headers.origin}/gantisandi.html?token=${resetToken}`;
         await transporter.sendMail({
             to: user.email,
             subject: 'Reset Password Mutabaah',
-            html: `<h3>Reset Password</h3><p>Klik link ini: <a href="${resetUrl}">${resetUrl}</a></p>`
+            html: `<h3>Reset Password</h3><p>Klik link ini: <a href="${resetUrl}">${resetUrl}</a></p><p>Link ini berlaku selama 1 jam.</p>`
         });
 
         res.json({ message: "Link reset terkirim ke email" });
     } catch (err) {
+        console.error("Error Forgot Password:", err);
         res.status(500).json({ message: "Gagal kirim email" });
     }
 };
 
 exports.resetPassword = async (req, res) => {
     try {
-        const { token, newPassword } = req.body; // Sesuaikan nama dengan frontend
+        const { token, newPassword } = req.body;
 
-        // 1. Cari user yang punya token tersebut dan cek apakah belum expired
+        // SECURITY FIX: Hash token dari user, lalu cocokkan dengan hash yang tersimpan di DB
+        const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
         const user = await User.findOne({
-            resetPasswordToken: token,
-            resetPasswordExpires: { $gt: Date.now() } // $gt artinya 'Greater Than' (lebih besar dari sekarang)
+            resetPasswordToken: hashedToken,
+            resetPasswordExpires: { $gt: Date.now() }
         });
 
         if (!user) {
             return res.status(400).json({ message: "Token tidak valid atau sudah kedaluwarsa" });
         }
 
-        // 2. Hash password baru
+        // Hash password baru
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(newPassword, salt);
 
-        // 3. Hapus token reset agar tidak bisa dipakai 2x
+        // Hapus token reset agar tidak bisa dipakai 2x
         user.resetPasswordToken = undefined;
         user.resetPasswordExpires = undefined;
 
-        // 4. Simpan perubahan ke MongoDB Atlas
         await user.save();
 
         res.status(200).json({ message: "Sandi berhasil diperbarui! Silakan login kembali." });

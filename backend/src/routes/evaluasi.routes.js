@@ -3,8 +3,8 @@ const router = express.Router();
 const evaluasiController = require('../controllers/evaluasi.controller');
 const auth = require('../middleware/auth'); // PASTIKAN BARIS INI ADA
 
-// Baris ini biasanya yang menyebabkan error jika evaluasiController.handleWebhook typo
-router.post('/webhook', evaluasiController.handleWebhook);
+// SECURITY FIX: Menambahkan middleware 'auth' agar endpoint webhook terlindungi JWT
+router.post('/webhook', auth, evaluasiController.handleWebhook);
 
 // Baris 10: Pastikan 'auth' dan 'evaluasiController.getStats' BUKAN undefined
 router.get('/stats', auth, evaluasiController.getStats); 

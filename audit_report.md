@@ -6,35 +6,31 @@ Berikut adalah hasil audit kode komprehensif terhadap proyek Sistem Monitoring M
 
 ## 1. Masalah Keamanan (Security Issues)
 
-> [!CAUTION]
-> **Endpoint Webhook Tidak Terlindungi (KRITIS)**
+> [!TIP]
+> **~~Endpoint Webhook Tidak Terlindungi (KRITIS)~~** ✅ SELESAI DIPERBAIKI
 > - **Lokasi:** [`evaluasi.routes.js`](file:///e:/ProjectWebsite_Mutabaah-Mahasiswa/backend/src/routes/evaluasi.routes.js#L7)
-> - **Masalah:** Route `POST /api/evaluasi/webhook` tidak menggunakan middleware `auth`.
-> - **Dampak:** Siapa saja dapat mengirimkan HTTP POST request ke endpoint ini untuk memodifikasi atau memalsukan data evaluasi/amalan mahasiswa lain hanya dengan menebak `studentId`.
+> - **Solusi:** Menambahkan middleware `auth` ke route webhook. Menambahkan validasi otorisasi di controller agar mahasiswa hanya bisa submit data NIM miliknya sendiri (diambil dari JWT token), mencegah pemalsuan data.
 
-> [!IMPORTANT]
-> **Vulnerabilitas Dependensi NPM (TINGGI)**
+> [!TIP]
+> **~~Vulnerabilitas Dependensi NPM (TINGGI)~~** ✅ SELESAI DIPERBAIKI
 > - **Lokasi:** [`package.json`](file:///e:/ProjectWebsite_Mutabaah-Mahasiswa/backend/package.json)
-> - **Masalah:** Hasil `npm audit` menunjukkan 4 kerentanan (2 High, 2 Moderate), termasuk potensi NoSQL Injection di `mongoose` (versi 9.1.1) dan ReDoS (Regular Expression Denial of Service) di `path-to-regexp` (dependensi Express).
-> - **Saran:** Segera jalankan `npm audit fix` untuk memperbarui dependensi ke versi aman.
+> - **Solusi:** Menjalankan `npm audit fix` dan `npm audit fix --force`. Semua 4 kerentanan (mongoose, path-to-regexp, qs, nodemailer) telah ditutup. Hasil audit sekarang: **0 vulnerabilities**.
 
-> [!WARNING]
-> **Variabel Lingkungan `.env` Kurang Lengkap (TINGGI)**
-> - **Lokasi:** [`auth.controller.js`](file:///e:/ProjectWebsite_Mutabaah-Mahasiswa/backend/src/controllers/auth.controller.js#L134) & [`README.md`](file:///e:/ProjectWebsite_Mutabaah-Mahasiswa/README.md)
-> - **Masalah:** Fitur lupa kata sandi menggunakan `process.env.EMAIL_USER` dan `process.env.EMAIL_PASS` untuk Nodemailer, namun variabel ini tidak diinstruksikan dalam konfigurasi `.env` di file README.
-> - **Dampak:** Jika pengguna baru mengikut panduan README, fitur lupa sandi akan gagal dan menyebabkan server error saat mengirim email.
+> [!TIP]
+> **~~Variabel Lingkungan `.env` Kurang Lengkap (TINGGI)~~** ✅ SELESAI DIPERBAIKI
+> - **Lokasi:** [`README.md`](file:///e:/ProjectWebsite_Mutabaah-Mahasiswa/README.md)
+> - **Solusi:** Memperbarui dokumentasi README dengan menambahkan variabel `EMAIL_USER` dan `EMAIL_PASS` ke contoh konfigurasi `.env`, disertai panduan cara mendapatkan App Password Gmail.
 
-> [!NOTE]
-> **Penyimpanan Token Reset Password (SEDANG)**
-> - **Lokasi:** [`auth.controller.js`](file:///e:/ProjectWebsite_Mutabaah-Mahasiswa/backend/src/controllers/auth.controller.js#L127)
-> - **Masalah:** `resetPasswordToken` disimpan dalam bentuk *plaintext* (teks asli) di database Mongoose.
-> - **Dampak:** Jika database bocor, penyerang dapat menggunakan token reset yang masih aktif untuk mengambil alih akun. Sebaiknya token ini di-*hash* sebelum disimpan.
+> [!TIP]
+> **~~Penyimpanan Token Reset Password (SEDANG)~~** ✅ SELESAI DIPERBAIKI
+> - **Lokasi:** [`auth.controller.js`](file:///e:/ProjectWebsite_Mutabaah-Mahasiswa/backend/src/controllers/auth.controller.js)
+> - **Solusi:** Token reset password sekarang di-hash dengan SHA-256 sebelum disimpan ke database. Token plaintext dikirim ke email, tapi yang tersimpan di DB adalah hash-nya. Saat verifikasi, token dari user di-hash ulang lalu dicocokkan.
 
-> [!NOTE]
-> **Tidak Ada Batasan Laju (Rate Limiting) (RENDAH)**
-> - **Lokasi:** Semua route autentikasi
-> - **Masalah:** Route `/login`, `/register`, dan `/forgot-password` tidak dilindungi oleh *rate limiter*.
-> - **Dampak:** Rentan terhadap serangan *brute force* dan pengiriman email massal (Spamming) pada fitur lupa sandi.
+> [!TIP]
+> **~~Tidak Ada Batasan Laju / Rate Limiting (RENDAH)~~** ✅ SELESAI DIPERBAIKI
+> - **Lokasi:** [`auth.routes.js`](file:///e:/ProjectWebsite_Mutabaah-Mahasiswa/backend/src/routes/auth.routes.js) & [`rateLimiter.js`](file:///e:/ProjectWebsite_Mutabaah-Mahasiswa/backend/src/middleware/rateLimiter.js) *(file baru)*
+> - **Solusi:** Menginstal `express-rate-limit` dan membuat middleware rate limiter. Login/register dibatasi 10 request per 15 menit per IP. Forgot-password lebih ketat di 3 request per 15 menit.
+
 
 ---
 
