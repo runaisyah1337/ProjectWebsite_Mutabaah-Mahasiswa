@@ -94,7 +94,8 @@ exports.getAllStats = async (req, res) => {
     const currentYear = today.getFullYear(); // 2026
     const currentWeek = getAutoWeek(); 
 
-    const allStudents = await User.find({ role: 'mahasiswa' }, 'nama nim');
+    // BUG FIX: Tambahkan field 'pembina' agar data relasi pembina tersedia
+    const allStudents = await User.find({ role: 'mahasiswa' }, 'nama nim pembina');
     
     // --- FILTER UTAMA: Hanya ambil data bulan ini ---
     const allEvaluations = await Evaluation.find({ 
@@ -143,7 +144,8 @@ exports.getAllStats = async (req, res) => {
     // --- 3. GABUNGKAN DATA UNTUK TABEL ---
     const combinedData = allStudents.map(student => {
       const studentEvals = allEvaluations.filter(e => String(e.studentId) === String(student.nim));
-      return { studentId: student.nim, nama: student.nama, evaluations: studentEvals };
+      // BUG FIX: Sertakan pembinaName agar rekap pembina berfungsi
+      return { studentId: student.nim, nama: student.nama, pembinaName: student.pembina || null, evaluations: studentEvals };
     });
     
     res.status(200).json({ 

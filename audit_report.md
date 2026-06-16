@@ -36,23 +36,20 @@ Berikut adalah hasil audit kode komprehensif terhadap proyek Sistem Monitoring M
 
 ## 2. Bug Fungsional & Cacat Logika (Bugs)
 
-> [!WARNING]
-> **Konflik Event `window.onload` di Dashboard Mahasiswa (TINGGI)**
+> [!TIP]
+> **~~Konflik Event `window.onload` di Dashboard Mahasiswa (TINGGI)~~** ✅ SELESAI DIPERBAIKI
 > - **Lokasi:** [`dashboardmahasiswa.js`](file:///e:/ProjectWebsite_Mutabaah-Mahasiswa/backend/public/js/dashboardmahasiswa.js)
-> - **Masalah:** Terdapat tiga penugasan terpisah untuk `window.onload` pada file yang sama. Penugasan terakhir (`window.onload = updatePeriodeDashboard`) menimpa deklarasi sebelumnya.
-> - **Dampak:** Logika penting untuk mengunci tombol pengisian form (`isLocked`) pada akhir pekan dan penyisipan parameter url ke tombol grafik (`rekapLink.href` dan `grafikLink.href`) **tidak pernah tereksekusi**. Hal ini membuat sistem penguncian tidak berfungsi dan link grafik rusak.
+> - **Solusi:** Menulis ulang file menjadi satu fungsi `window.onload` terpadu yang menggabungkan semua logika: update nama user, badge periode, warning akhir pekan, penguncian form, dan update link rekapan/grafik. Duplikasi `openModal`/`closeModal` juga dihapus.
 
-> [!WARNING]
-> **Fitur Rekap Kelompok Pembina Tidak Berfungsi (TINGGI)**
-> - **Lokasi:** [`rekappembina.js`](file:///e:/ProjectWebsite_Mutabaah-Mahasiswa/backend/public/js/rekappembina.js#L27) & [`User.js`](file:///e:/ProjectWebsite_Mutabaah-Mahasiswa/backend/src/models/User.js)
-> - **Masalah:** File `rekappembina.js` mencoba mengelompokkan mahasiswa menggunakan variabel `s.pembinaName`. Namun, skema Mongoose `User` tidak menyimpan relasi nama pembina, dan endpoint `getAllStats` tidak menyediakannya. 
-> - **Dampak:** Seluruh mahasiswa akan selalu dikelompokkan ke dalam kategori *default* `"Tanpa Pembina"`. Selain itu, halaman `rekapanpembina.html` bersifat yatim (*orphan*) dan tidak ditautkan di dashboard manapun.
+> [!TIP]
+> **~~Fitur Rekap Kelompok Pembina Tidak Berfungsi (TINGGI)~~** ✅ SELESAI DIPERBAIKI
+> - **Lokasi:** [`User.js`](file:///e:/ProjectWebsite_Mutabaah-Mahasiswa/backend/src/models/User.js), [`evaluasi.controller.js`](file:///e:/ProjectWebsite_Mutabaah-Mahasiswa/backend/src/controllers/evaluasi.controller.js), [`rekappembina.js`](file:///e:/ProjectWebsite_Mutabaah-Mahasiswa/backend/public/js/rekappembina.js), [`dashboardpembina.html`](file:///e:/ProjectWebsite_Mutabaah-Mahasiswa/backend/public/dashboardpembina.html)
+> - **Solusi:** Menambahkan field `pembina` ke skema User, menyertakan `pembinaName` di response API `getAllStats`, menambahkan proteksi role di frontend, dan menautkan halaman `rekapanpembina.html` dari dashboard pembina agar tidak lagi menjadi orphan page.
 
-> [!NOTE]
-> **Penyimpanan Field Identifier Gagal (SEDANG)**
-> - **Lokasi:** [`auth.controller.js`](file:///e:/ProjectWebsite_Mutabaah-Mahasiswa/backend/src/controllers/auth.controller.js#L57)
-> - **Masalah:** Saat registrasi, terdapat kode `identifier: identifier` yang dimasukkan ke objek `new User`.
-> - **Dampak:** Karena `identifier` tidak didefinisikan di `UserSchema`, Mongoose secara otomatis membuang properti ini dan tidak menyimpannya di database Mongoose Atlas. Ini adalah buang-buang pemrosesan walaupun tidak menyebabkan server mati.
+> [!TIP]
+> **~~Penyimpanan Field Identifier Gagal (SEDANG)~~** ✅ SELESAI DIPERBAIKI
+> - **Lokasi:** [`auth.controller.js`](file:///e:/ProjectWebsite_Mutabaah-Mahasiswa/backend/src/controllers/auth.controller.js)
+> - **Solusi:** Menghapus referensi `identifier: identifier` dari objek `new User` dan dari query `$or` pengecekan duplikasi, karena field ini tidak ada di `UserSchema`.
 
 ---
 

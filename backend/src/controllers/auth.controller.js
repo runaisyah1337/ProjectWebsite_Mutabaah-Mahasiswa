@@ -38,7 +38,8 @@ exports.register = async (req, res) => {
 
         // Cek apakah sudah ada di tabel User
         const userAda = await User.findOne({ 
-            $or: [{ email }, { nim: identifier }, { no_hp: identifier }, { identifier: identifier }] 
+            // BUG FIX: Hapus query { identifier } karena field tsb tidak ada di schema
+            $or: [{ email }, { nim: identifier }, { no_hp: identifier }] 
         });
         
         if (userAda) {
@@ -53,8 +54,8 @@ exports.register = async (req, res) => {
             password: hashedPassword,
             role,
             nim: role === 'mahasiswa' ? identifier : undefined,
-            no_hp: role !== 'mahasiswa' ? identifier : undefined,
-            identifier: identifier
+            no_hp: role !== 'mahasiswa' ? identifier : undefined
+            // BUG FIX: Dihapus "identifier: identifier" karena tidak ada di UserSchema
         });
 
         await newUser.save();
