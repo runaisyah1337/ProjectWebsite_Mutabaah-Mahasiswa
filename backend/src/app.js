@@ -17,10 +17,17 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/evaluasi', evaluasiRoutes);
 
-// 2. Static Files
+// 2. Test Helper Routes — HANYA aktif saat NODE_ENV === 'test'
+// ⚠️  Endpoint ini TIDAK BOLEH aktif di production/development
+if (process.env.NODE_ENV === 'test') {
+    const testHelperRoutes = require('./routes/testHelper.routes');
+    app.use('/api/test', testHelperRoutes);
+}
+
+// 3. Static Files
 app.use(express.static(path.join(__dirname, '../public')));
 
-// 3. Catch-all HTML
+// 4. Catch-all HTML
 app.get(/^((?!\/api|.*\..*).)*$/, (req, res) => {
     res.sendFile(path.join(__dirname, '../public', 'index.html'));
 });
