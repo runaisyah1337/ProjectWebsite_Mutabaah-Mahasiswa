@@ -9,6 +9,11 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    env:
+      MONGOMS_VERSION: 7.0.12
+      MONGOMS_DOWNLOAD_DIR: /home/runner/.cache/mongodb-binaries
 
     steps:
       - name: Checkout repository
@@ -24,10 +29,8 @@ jobs:
       - name: Cache MongoDB binaries
         uses: actions/cache@v4
         with:
-          path: ~/.cache/mongodb-binaries
-          key: ${{ runner.os }}-mongodb-binaries
-          restore-keys: |
-            ${{ runner.os }}-mongodb-binaries-
+          path: /home/runner/.cache/mongodb-binaries
+          key: ${{ runner.os }}-mongodb-7.0.12
 
       - name: Install backend dependencies
         run: |
@@ -40,7 +43,8 @@ jobs:
           npm test
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4
+        if: success()
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./backend/coverage/lcov.info
