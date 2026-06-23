@@ -18,6 +18,12 @@ function getAutoWeek() {
 exports.handleWebhook = async (req, res) => {
   try {
     let { studentId, jawaban } = req.body;
+
+    // RBAC: Mahasiswa hanya boleh mengisi/mengedit datanya sendiri
+    if (req.user && req.user.role === 'mahasiswa' && req.user.nim !== String(studentId)) {
+      return res.status(403).json({ message: "Akses ditolak, Anda tidak dapat memodifikasi data mahasiswa lain" });
+    }
+
     const today = new Date();
     const forcedWeek = getAutoWeek(); 
     const currentMonth = today.getMonth() + 1; // Januari = 1, Februari = 2
@@ -45,6 +51,12 @@ exports.handleWebhook = async (req, res) => {
 exports.getStats = async (req, res) => {
   try {
     const nim = req.query.nim || (req.user ? req.user.nim : null);
+
+    // RBAC: Mahasiswa hanya boleh melihat datanya sendiri
+    if (req.user && req.user.role === 'mahasiswa' && req.user.nim !== nim) {
+      return res.status(403).json({ message: "Akses ditolak, Anda tidak dapat melihat data mahasiswa lain" });
+    }
+
     const today = new Date();
     const currentMonth = today.getMonth() + 1;
     const currentYear = today.getFullYear();
