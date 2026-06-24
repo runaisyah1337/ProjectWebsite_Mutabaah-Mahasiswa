@@ -1,15 +1,25 @@
 // playwright.config.js
 const { defineConfig, devices } = require('@playwright/test');
 
+// Deteksi apakah sedang dijalankan dalam mode lambat (headed/demo)
+// PWSLOWMO diisi oleh script test:e2e:headed di package.json
+const slowMoMs = Number(process.env.PWSLOWMO) || 0;
+
+// Jika slowMo aktif (mode headed), timeout per test diperbesar agar
+// tidak kehabisan waktu akibat jeda yang disengaja
+const testTimeout = slowMoMs > 0
+    ? 5 * 60 * 1000  // 5 menit — cukup longgar untuk demo kecepatan lambat
+    : 60 * 1000;     // 1 menit — untuk mode headless normal
+
 module.exports = defineConfig({
     // Folder tempat semua file spec E2E
     testDir: './e2e',
 
-    // Timeout per test (60 detik)
-    timeout: 60 * 1000,
+    // Timeout per test (otomatis menyesuaikan mode)
+    timeout: testTimeout,
 
     // Timeout untuk tiap assertion/expect
-    expect: { timeout: 10000 },
+    expect: { timeout: slowMoMs > 0 ? 30000 : 10000 },
 
     // Jalankan test secara berurutan (bukan paralel)
     // untuk menghindari konflik data pada MongoMemoryServer
@@ -17,7 +27,8 @@ module.exports = defineConfig({
     workers: 1,
 
     // Ulangi test yang gagal sekali sebelum dianggap fail
-    retries: 1,
+    // Mode headed tidak perlu retry (bisa membingungkan saat demo)
+    retries: slowMoMs > 0 ? 0 : 1,
 
     // Reporter: HTML (buka di browser) + terminal ringkas
     reporter: [
@@ -40,8 +51,8 @@ module.exports = defineConfig({
         trace: 'on-first-retry',
 
         // Sedikit delay agar UI sempat merender
-        actionTimeout: 10000,
-        navigationTimeout: 15000
+        actionTimeout: slowMoMs > 0 ? 30000 : 10000,
+        navigationTimeout: slowMoMs > 0 ? 30000 : 15000
     },
 
     // Jalankan server backend sebelum test dimulai
@@ -53,7 +64,16 @@ module.exports = defineConfig({
     projects: [
         {
             name: 'chromium',
-            use: { ...devices['Desktop Chrome'] }
+            use: {
+                ...devices['Desktop Chrome'],
+
+                // slowMo: Jeda antar setiap aksi Playwright (klik, isi form, navigasi, dsb.)
+                // Nilai diambil dari environment variable PWSLOWMO (dalam milidetik).
+                //   - Mode normal/headless : PWSLOWMO tidak diset → slowMo = 0 (tidak ada jeda, cepat)
+                //   - Mode headed (demo)   : PWSLOWMO=1000 → jeda 1 detik per aksi
+                // Cara aktifkan: jalankan 'npm run test:e2e:headed'
+                slowMo: slowMoMs
+            }
         }
     ]
 });

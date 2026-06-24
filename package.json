@@ -6,12 +6,14 @@
     "test:integration": "cd backend && npm test",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "test:e2e:headed": "playwright test --headed --workers=1",
+    "test:e2e:headed": "cross-env PWSLOWMO=1000 playwright test --headed --workers=1",
+    "test:e2e:headed:fast": "playwright test --headed --workers=1",
     "test:e2e:debug": "playwright test --debug",
     "test:all": "npm run test:integration && npm run test:e2e",
     "test:report": "playwright show-report"
   },
   "devDependencies": {
-    "@playwright/test": "^1.61.0"
+    "@playwright/test": "^1.61.0",
+    "cross-env": "^10.1.0"
   }
 }
