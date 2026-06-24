@@ -8,7 +8,7 @@ const slowMoMs = Number(process.env.PWSLOWMO) || 0;
 // Jika slowMo aktif (mode headed), timeout per test diperbesar agar
 // tidak kehabisan waktu akibat jeda yang disengaja
 const testTimeout = slowMoMs > 0
-    ? 5 * 60 * 1000  // 5 menit — cukup longgar untuk demo kecepatan lambat
+    ? 10 * 60 * 1000 // 10 menit — sangat longgar untuk demo dengan kecepatan sangat lambat
     : 60 * 1000;     // 1 menit — untuk mode headless normal
 
 module.exports = defineConfig({
@@ -19,7 +19,7 @@ module.exports = defineConfig({
     timeout: testTimeout,
 
     // Timeout untuk tiap assertion/expect
-    expect: { timeout: slowMoMs > 0 ? 30000 : 10000 },
+    expect: { timeout: slowMoMs > 0 ? 60000 : 10000 },
 
     // Jalankan test secara berurutan (bukan paralel)
     // untuk menghindari konflik data pada MongoMemoryServer
@@ -51,8 +51,8 @@ module.exports = defineConfig({
         trace: 'on-first-retry',
 
         // Sedikit delay agar UI sempat merender
-        actionTimeout: slowMoMs > 0 ? 30000 : 10000,
-        navigationTimeout: slowMoMs > 0 ? 30000 : 15000
+        actionTimeout: slowMoMs > 0 ? 60000 : 10000,
+        navigationTimeout: slowMoMs > 0 ? 60000 : 15000
     },
 
     // Jalankan server backend sebelum test dimulai
