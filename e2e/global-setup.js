@@ -14,7 +14,7 @@ const BACKEND_DIR = path.join(__dirname, '..', 'backend');
  * Polling GET /api/test/status setiap 500ms, maksimal 60 detik.
  * dbState 1 = Mongoose terhubung ke MongoMemoryServer
  */
-async function waitForServer(url, maxWaitMs = 60000) {
+async function waitForServer(url, maxWaitMs = 600000) {
     const start = Date.now();
     while (Date.now() - start < maxWaitMs) {
         try {

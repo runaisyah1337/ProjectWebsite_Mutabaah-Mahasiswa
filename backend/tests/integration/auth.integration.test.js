@@ -213,6 +213,24 @@ describe('Auth – Login', () => {
         expect(res.body).toHaveProperty('token');
     });
 
+    it('berhasil login untuk akun lama yang menyimpan password plain text', async () => {
+        await DataMaster.create({ name: 'Fulan', nim: '112234', role: 'mahasiswa' });
+        await User.create({
+            nama: 'Fulan',
+            email: 'fulan2@test.com',
+            password: 'password123',
+            role: 'mahasiswa',
+            nim: '112234'
+        });
+
+        const res = await request(app)
+            .post('/api/auth/login')
+            .send({ identifier: '112234', password: 'password123' });
+
+        expect(res.statusCode).toEqual(200);
+        expect(res.body).toHaveProperty('token');
+    });
+
     it('gagal login dengan password salah', async () => {
         // TINDAKAN: Kirim request login memakai NIM yang terdaftar tapi password-nya asal-asalan
         const res = await request(app)
