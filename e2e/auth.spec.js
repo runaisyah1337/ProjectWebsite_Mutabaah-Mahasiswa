@@ -14,6 +14,55 @@ test.afterEach(async ({ page }) => {
 });
 
 // ─────────────────────────────────────────────
+// GRUP PENGUJIAN: PROSES REGISTER
+// ─────────────────────────────────────────────
+test.describe('Register', () => {
+
+    test('mahasiswa berhasil mendaftar dengan data valid', async ({ page }) => {
+        await resetDatabase();
+
+        const uniqueEmail = `newuser${Date.now()}@test.com`;
+        const alertMessage = await new Promise(resolve => {
+            page.once('dialog', async dialog => {
+                resolve(dialog.message());
+                await dialog.accept();
+            });
+
+            page.goto('/daftar.html');
+            page.fill('#regNama', 'Ahmad Fulan');
+            page.fill('#regId', '20210003');
+            page.fill('#regEmail', uniqueEmail);
+            page.fill('#regPass', 'TestPass123!');
+            page.click('button.btn-primary');
+        });
+
+        expect(alertMessage).toMatch(/berhasil/i);
+        await expect(page).toHaveURL(/\/$/);
+    });
+
+    test('menampilkan pesan error saat nama tidak sesuai data master', async ({ page }) => {
+        await resetDatabase();
+
+        const alertMessage = await new Promise(resolve => {
+            page.once('dialog', async dialog => {
+                resolve(dialog.message());
+                await dialog.accept();
+            });
+
+            page.goto('/daftar.html');
+            page.fill('#regNama', 'Nama Salah');
+            page.fill('#regId', '20210001');
+            page.fill('#regEmail', `wrongname${Date.now()}@test.com`);
+            page.fill('#regPass', 'TestPass123!');
+            page.click('button.btn-primary');
+        });
+
+        expect(alertMessage).toMatch(/Nama tidak sesuai|Data Master/i);
+        await expect(page).toHaveURL(/daftar\.html/);
+    });
+});
+
+// ─────────────────────────────────────────────
 // GRUP PENGUJIAN: PROSES LOGIN YANG BERHASIL
 // ─────────────────────────────────────────────
 test.describe('Login – Berhasil', () => {

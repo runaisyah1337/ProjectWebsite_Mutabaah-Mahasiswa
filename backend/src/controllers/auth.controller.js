@@ -81,38 +81,49 @@ exports.login = async (req, res) => {
                 { email: { $regex: new RegExp(`^${identifier}$`, 'i') } }
             ]
         });
-    
 
         if (!user) {
             return res.status(404).json({ message: "User tidak ditemukan" });
         }
 
-        const isMatch = await bcrypt.compare(password, user.password);
+        let isMatch = false;
+        const storedPassword = user.password;
+
+        if (typeof storedPassword === 'string' && storedPassword.startsWith('$2')) {
+            isMatch = await bcrypt.compare(password, storedPassword);
+        } else if (typeof storedPassword === 'string') {
+            isMatch = password === storedPassword;
+        }
+
         if (!isMatch) {
             return res.status(400).json({ message: "Password salah" });
         }
 
-        // Di dalam fungsi login/register saat membuat token
-const token = jwt.sign(
-    { 
-        id: user._id, 
-        nim: user.nim, // WAJIB ADA: Ini yang akan dibaca oleh req.user.nim
-        role: user.role 
-    }, 
-    process.env.JWT_SECRET, 
-    { expiresIn: '1d' }
-);
+        if (typeof storedPassword === 'string' && !storedPassword.startsWith('$2')) {
+            user.password = await bcrypt.hash(password, 10);
+            await user.save();
+        }
 
-        // Di dalam auth.controller.js fungsi login
-res.status(200).json({ 
-    token, 
-    user: { 
-        nama: user.nama, 
-        nim: user.nim,  // PASTIKAN BARIS INI ADA
-        role: user.role 
-    } 
-});
+        const token = jwt.sign(
+            {
+                id: user._id,
+                nim: user.nim,
+                role: user.role
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: '1d' }
+        );
+
+        res.status(200).json({
+            token,
+            user: {
+                nama: user.nama,
+                nim: user.nim,
+                role: user.role
+            }
+        });
     } catch (error) {
+        console.error('Login error:', error);
         res.status(500).json({ message: "Terjadi kesalahan server" });
     }
 };
