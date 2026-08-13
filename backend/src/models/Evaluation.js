@@ -20,4 +20,9 @@ const EvaluationSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
+// --- PERBAIKAN POIN 4: COMPOUND INDEX ---
+// Mempercepat pencarian data saat query getStats & getAllStats
+EvaluationSchema.index({ studentId: 1, month: 1, year: 1 });
+EvaluationSchema.index({ studentId: 1, weekStart: 1, month: 1, year: 1 }, { unique: true });
+
 module.exports = mongoose.model('Evaluation', EvaluationSchema);
