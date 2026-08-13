@@ -3,17 +3,52 @@ const User = require('../models/User');
 // 1. IMPORT HELPER TANGGAL TERPUSAT
 const { getWeekOfMonth } = require('../utils/dateHelper');
 
+<<<<<<< HEAD
 // 1. Fungsi Webhook (Menerima data dari Google Form / Frontend Form)
+=======
+/**
+ * FUNGSI PEMBANTU: Menghitung minggu berjalan secara otomatis (Senin-Minggu)
+ */
+function getAutoWeek() {
+  const today = new Date();
+  const day = today.getDate();
+  // Ambil posisi hari pertama bulan ini (0 = Minggu, 1 = Senin, dst)
+  const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
+  
+  // Rumus baru agar sinkron dengan Frontend
+  return Math.ceil((day + firstDay) / 7);
+}
+
+// 1. Fungsi Webhook (Menerima data evaluasi amalan - Dilindungi JWT)
+>>>>>>> origin/main
 exports.handleWebhook = async (req, res) => {
   try {
     let { studentId, jawaban } = req.body;
 
+<<<<<<< HEAD
     // RBAC: Mahasiswa hanya boleh mengisi/mengedit datanya sendiri
     if (req.user && req.user.role === 'mahasiswa' && req.user.nim !== String(studentId)) {
       return res.status(403).json({ message: "Akses ditolak, Anda tidak dapat memodifikasi data mahasiswa lain" });
     }
 
     // --- VALIDASI WAKTU PENGISIAN DI BACKEND (PRODUKSI) ---
+=======
+    // SECURITY FIX: Validasi otorisasi - mahasiswa hanya boleh submit data miliknya sendiri
+    const userRole = req.user.role;
+    const userNim = req.user.nim;
+
+    if (userRole === 'mahasiswa') {
+      // Paksa studentId = NIM dari token JWT, abaikan input dari body
+      // Ini mencegah mahasiswa memalsukan data orang lain
+      studentId = String(userNim);
+    }
+
+    // Validasi: pastikan studentId tersedia setelah pengecekan
+    if (!studentId) {
+      return res.status(400).json({ message: "studentId tidak valid." });
+    }
+
+>>>>>>> origin/main
     const today = new Date();
     const dayOfWeek = today.getDay(); // 0 = Minggu, 1 = Senin, dst.
     const currentHour = today.getHours(); // 0 - 23
@@ -34,8 +69,13 @@ exports.handleWebhook = async (req, res) => {
       { 
         studentId: String(studentId), 
         weekStart: forcedWeek,
+<<<<<<< HEAD
         month: currentMonth, 
         year: currentYear   
+=======
+        month: currentMonth,
+        year: currentYear
+>>>>>>> origin/main
       },
       { jawaban },
       { upsert: true, new: true }
@@ -91,7 +131,8 @@ exports.getAllStats = async (req, res) => {
     const currentYear = today.getFullYear();
     const currentWeek = getWeekOfMonth(today); 
 
-    const allStudents = await User.find({ role: 'mahasiswa' }, 'nama nim');
+    // BUG FIX: Tambahkan field 'pembina' agar data relasi pembina tersedia
+    const allStudents = await User.find({ role: 'mahasiswa' }, 'nama nim pembina');
     
     // --- FILTER UTAMA: Hanya ambil data bulan ini ---
     const allEvaluations = await Evaluation.find({ 
@@ -140,7 +181,8 @@ exports.getAllStats = async (req, res) => {
     // --- 3. GABUNGKAN DATA UNTUK TABEL ---
     const combinedData = allStudents.map(student => {
       const studentEvals = allEvaluations.filter(e => String(e.studentId) === String(student.nim));
-      return { studentId: student.nim, nama: student.nama, evaluations: studentEvals };
+      // BUG FIX: Sertakan pembinaName agar rekap pembina berfungsi
+      return { studentId: student.nim, nama: student.nama, pembinaName: student.pembina || null, evaluations: studentEvals };
     });
     
     res.status(200).json({ 

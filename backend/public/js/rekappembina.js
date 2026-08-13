@@ -9,7 +9,12 @@ function getStatusKualitas(skor) {
 
 window.onload = async function() {
     const token = localStorage.getItem('token');
-    if (!token) { window.location.href = "/"; return; }
+    const user = JSON.parse(localStorage.getItem('tazkia_session'));
+    // BUG FIX: Proteksi halaman - hanya pembina dan admin yang boleh akses
+    if (!token || !user || (user.role !== 'pembina' && user.role !== 'admin')) { 
+        window.location.href = "/"; 
+        return; 
+    }
 
     try {
         // REVISI: Menggunakan URL relatif untuk sistem Monolith

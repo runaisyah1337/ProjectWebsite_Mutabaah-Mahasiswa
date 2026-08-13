@@ -1,0 +1,51 @@
+name: CI & Codecov Coverage
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    env:
+      MONGOMS_VERSION: 7.0.12
+      MONGOMS_DOWNLOAD_DIR: /home/runner/.cache/mongodb-binaries
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Cache MongoDB binaries
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/.cache/mongodb-binaries
+          key: ${{ runner.os }}-mongodb-7.0.12
+
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          npm ci
+
+      - name: Run Integration Tests with Coverage
+        run: |
+          cd backend
+          npm test
+
+      - name: Upload coverage reports to Codecov
+        if: success()
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./backend/coverage/lcov.info
+          fail_ci_if_error: false

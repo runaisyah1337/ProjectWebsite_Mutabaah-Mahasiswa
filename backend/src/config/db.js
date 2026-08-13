@@ -5,6 +5,10 @@ const path = require('path'); // Tambahkan ini agar lebih aman
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') }); 
 
 const connectDB = async () => {
+    if (process.env.NODE_ENV === 'test') {
+        // Jangan konek ke DB asli saat test, biarkan testSetup.js yang mengatur memory server
+        return;
+    }
     try {
         const uri = process.env.MONGO_URI;
         if (!uri) {
