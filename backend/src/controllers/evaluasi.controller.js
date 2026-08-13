@@ -61,10 +61,6 @@ exports.getStats = async (req, res) => {
       return res.status(403).json({ message: "Akses ditolak, Anda tidak dapat melihat data mahasiswa lain" });
     }
 
-    const today = new Date();
-    const currentMonth = today.getMonth() + 1;
-    const currentYear = today.getFullYear();
-
     if (!nim || nim === "undefined") {
       return res.status(200).json([]);
     }
