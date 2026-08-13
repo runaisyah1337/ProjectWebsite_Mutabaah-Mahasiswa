@@ -35,17 +35,12 @@ exports.register = async (req, res) => {
 
         // 2. Cek apakah user sudah terdaftar di database
         const userAda = await User.findOne({ 
-<<<<<<< HEAD
             $or: [
                 { email: cleanEmail }, 
                 { nim: cleanIdentifier }, 
                 { no_hp: cleanIdentifier }, 
                 { identifier: cleanIdentifier }
             ] 
-=======
-            // BUG FIX: Hapus query { identifier } karena field tsb tidak ada di schema
-            $or: [{ email }, { nim: identifier }, { no_hp: identifier }] 
->>>>>>> origin/main
         });
         
         if (userAda) {
@@ -59,15 +54,9 @@ exports.register = async (req, res) => {
             email: cleanEmail,
             password: hashedPassword,
             role,
-<<<<<<< HEAD
             nim: role === 'mahasiswa' ? cleanIdentifier : undefined,
             no_hp: role !== 'mahasiswa' ? cleanIdentifier : undefined,
             identifier: cleanIdentifier
-=======
-            nim: role === 'mahasiswa' ? identifier : undefined,
-            no_hp: role !== 'mahasiswa' ? identifier : undefined
-            // BUG FIX: Dihapus "identifier: identifier" karena tidak ada di UserSchema
->>>>>>> origin/main
         });
 
         await newUser.save();
@@ -163,11 +152,7 @@ exports.forgotPassword = async (req, res) => {
 
         res.json({ message: "Link reset terkirim ke email" });
     } catch (err) {
-<<<<<<< HEAD
         console.error("ERROR FORGOT PASSWORD:", err);
-=======
-        console.error("Error Forgot Password:", err);
->>>>>>> origin/main
         res.status(500).json({ message: "Gagal kirim email" });
     }
 };
@@ -175,18 +160,9 @@ exports.forgotPassword = async (req, res) => {
 exports.resetPassword = async (req, res) => {
     try {
         const { token, newPassword } = req.body;
-<<<<<<< HEAD
 
         const user = await User.findOne({
             resetPasswordToken: token,
-=======
-
-        // SECURITY FIX: Hash token dari user, lalu cocokkan dengan hash yang tersimpan di DB
-        const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
-
-        const user = await User.findOne({
-            resetPasswordToken: hashedToken,
->>>>>>> origin/main
             resetPasswordExpires: { $gt: Date.now() }
         });
 
@@ -194,17 +170,9 @@ exports.resetPassword = async (req, res) => {
             return res.status(400).json({ message: "Token tidak valid atau sudah kedaluwarsa" });
         }
 
-<<<<<<< HEAD
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(newPassword, salt);
 
-=======
-        // Hash password baru
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(newPassword, salt);
-
-        // Hapus token reset agar tidak bisa dipakai 2x
->>>>>>> origin/main
         user.resetPasswordToken = undefined;
         user.resetPasswordExpires = undefined;
 
