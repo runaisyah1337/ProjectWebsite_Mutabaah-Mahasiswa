@@ -16,8 +16,6 @@ function getWeekOfMonth() {
     const day = today.getDate();
     const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
     
-    // Logika: Tanggal sekarang + hari pertama dalam bulan itu, dibagi 7
-    // Ini menghitung baris di kalender
     return Math.ceil((day + firstDay) / 7);
 }
 
@@ -74,13 +72,18 @@ document.getElementById('mutabaahForm').onsubmit = async function(e) {
             body: JSON.stringify({ studentId: session.nim, jawaban: jawaban })
         });
         
-        if(res.ok) { 
+        // BACA HASIL RESPON JSON DARI BACKEND
+        const result = await res.json();
+
+        if (res.ok) { 
             alert("Alhamdulillah, data berhasil disimpan!"); 
             window.location.href = "dashboardmahasiswa.html"; 
         } else {
-            alert("Gagal menyimpan data. Silakan coba lagi.");
+            // TAMPILKAN PESAN SPESIFIK DARI BACKEND (Termasuk Pesan Penolakan Jadwal)
+            alert(result.message || "Gagal menyimpan data. Silakan coba lagi.");
         }
     } catch (err) { 
+        console.error("Error submitting:", err);
         alert("Koneksi gagal. Pastikan server menyala."); 
     } finally { 
         btn.innerHTML = originalText;

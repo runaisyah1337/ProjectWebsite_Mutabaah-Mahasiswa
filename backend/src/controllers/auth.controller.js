@@ -4,84 +4,86 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-const DataMaster = require('../models/DataMaster'); // Pastikan model ini sudah benar
+const DataMaster = require('../models/DataMaster');
 
 exports.register = async (req, res) => {
-    // 1. Ambil data dari req.body DULU
     const { nama, email, password, role, identifier } = req.body;
 
-    // 2. Baru boleh console.log identifier-nya
-    console.log("=== PROSES DAFTAR:", identifier, role, "===");
-
     try {
-        // CARI DI DATA MASTER DENGAN LOGIKA "ATAU" ($or)
+        // Sanitasi input dasar
+        const cleanEmail = email ? email.trim().toLowerCase() : '';
+        const cleanIdentifier = identifier ? identifier.trim() : '';
+        const cleanNama = nama ? nama.trim().toLowerCase() : '';
+
+        // 1. CARI DI DATA MASTER
         const dataMaster = await DataMaster.findOne({
             $or: [
-                { nim: identifier },
-                { "no hp": identifier }
+                { nim: cleanIdentifier },
+                { "no hp": cleanIdentifier }
             ]
         });
 
         if (!dataMaster) {
-            console.log("HASIL: Identifier tidak ditemukan di tabel Master.");
             return res.status(400).json({ message: 'Data Master tidak ditemukan!' });
         }
 
-        // Ambil nama resmi (sesuai field di Atlas kamu: name)
-        const namaResmi = dataMaster.name;
-        
-        // Cek Nama (Case Insensitive)
-        const isNamaCocok = new RegExp(nama, 'i').test(namaResmi);
-        if (!isNamaCocok) {
+        // Ambil nama resmi dan lakukan pengecekan tanpa RegExp (Aman dari ReDoS)
+        const namaResmi = dataMaster.name || '';
+        if (cleanNama !== namaResmi.trim().toLowerCase()) {
             return res.status(400).json({ message: "Nama tidak sesuai dengan data resmi kampus!" });
         }
 
-        // Cek apakah sudah ada di tabel User
+        // 2. Cek apakah user sudah terdaftar di database
         const userAda = await User.findOne({ 
-            // BUG FIX: Hapus query { identifier } karena field tsb tidak ada di schema
-            $or: [{ email }, { nim: identifier }, { no_hp: identifier }] 
+            $or: [
+                { email: cleanEmail }, 
+                { nim: cleanIdentifier }, 
+                { no_hp: cleanIdentifier }, 
+                { identifier: cleanIdentifier }
+            ] 
         });
         
         if (userAda) {
             return res.status(400).json({ message: "Email atau ID sudah digunakan!" });
         }
 
-        // Hash password & Simpan
+        // 3. Hash password & Simpan User Baru
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new User({
             nama: namaResmi,
-            email,
+            email: cleanEmail,
             password: hashedPassword,
             role,
-            nim: role === 'mahasiswa' ? identifier : undefined,
-            no_hp: role !== 'mahasiswa' ? identifier : undefined
-            // BUG FIX: Dihapus "identifier: identifier" karena tidak ada di UserSchema
+            nim: role === 'mahasiswa' ? cleanIdentifier : undefined,
+            no_hp: role !== 'mahasiswa' ? cleanIdentifier : undefined,
+            identifier: cleanIdentifier
         });
 
         await newUser.save();
-        console.log("HASIL: Registrasi BERHASIL!");
         res.status(201).json({ success: true, message: "Registrasi berhasil!" });
 
     } catch (err) {
-        console.error("ERROR SERVER:", err);
+        console.error("ERROR SERVER REGISTER:", err);
         res.status(500).json({ message: "Gagal daftar", error: err.message });
     }
 };
 
-// REVISI LOGIN CASE-INSENSITIVE
+// LOGIN BEBAS ReDoS
 exports.login = async (req, res) => {
     try {
         const { identifier, password } = req.body;
+        const cleanIdentifier = identifier ? identifier.trim() : '';
+        const cleanEmail = identifier ? identifier.trim().toLowerCase() : '';
 
-        // Gunakan Regex dengan opsi 'i' (insensitive)
+        // Pencarian Exact Match tanpa new RegExp (Mencegah ReDoS Vulnerability)
         const user = await User.findOne({
             $or: [
-                { nim: identifier },
-                { no_hp: identifier },
-                { email: { $regex: new RegExp(`^${identifier}$`, 'i') } }
+                { nim: cleanIdentifier },
+                { no_hp: cleanIdentifier },
+                { identifier: cleanIdentifier },
+                { email: cleanEmail }
             ]
         });
-    
 
         if (!user) {
             return res.status(404).json({ message: "User tidak ditemukan" });
@@ -92,27 +94,27 @@ exports.login = async (req, res) => {
             return res.status(400).json({ message: "Password salah" });
         }
 
-        // Di dalam fungsi login/register saat membuat token
-const token = jwt.sign(
-    { 
-        id: user._id, 
-        nim: user.nim, // WAJIB ADA: Ini yang akan dibaca oleh req.user.nim
-        role: user.role 
-    }, 
-    process.env.JWT_SECRET, 
-    { expiresIn: '1d' }
-);
+        // Pembuatan Token JWT
+        const token = jwt.sign(
+            { 
+                id: user._id, 
+                nim: user.nim, 
+                role: user.role 
+            }, 
+            process.env.JWT_SECRET, 
+            { expiresIn: '1d' }
+        );
 
-        // Di dalam auth.controller.js fungsi login
-res.status(200).json({ 
-    token, 
-    user: { 
-        nama: user.nama, 
-        nim: user.nim,  // PASTIKAN BARIS INI ADA
-        role: user.role 
-    } 
-});
+        res.status(200).json({ 
+            token, 
+            user: { 
+                nama: user.nama, 
+                nim: user.nim, 
+                role: user.role 
+            } 
+        });
     } catch (error) {
+        console.error("ERROR SERVER LOGIN:", error);
         res.status(500).json({ message: "Terjadi kesalahan server" });
     }
 };
@@ -121,7 +123,8 @@ res.status(200).json({
 exports.forgotPassword = async (req, res) => {
     const { email } = req.body;
     try {
-        const user = await User.findOne({ email });
+        const cleanEmail = email ? email.trim().toLowerCase() : '';
+        const user = await User.findOne({ email: cleanEmail });
         if (!user) return res.status(404).json({ message: "Email tidak terdaftar" });
 
         // Generate token acak
@@ -149,7 +152,7 @@ exports.forgotPassword = async (req, res) => {
 
         res.json({ message: "Link reset terkirim ke email" });
     } catch (err) {
-        console.error("Error Forgot Password:", err);
+        console.error("ERROR FORGOT PASSWORD:", err);
         res.status(500).json({ message: "Gagal kirim email" });
     }
 };
@@ -158,11 +161,8 @@ exports.resetPassword = async (req, res) => {
     try {
         const { token, newPassword } = req.body;
 
-        // SECURITY FIX: Hash token dari user, lalu cocokkan dengan hash yang tersimpan di DB
-        const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
-
         const user = await User.findOne({
-            resetPasswordToken: hashedToken,
+            resetPasswordToken: token,
             resetPasswordExpires: { $gt: Date.now() }
         });
 
@@ -170,11 +170,9 @@ exports.resetPassword = async (req, res) => {
             return res.status(400).json({ message: "Token tidak valid atau sudah kedaluwarsa" });
         }
 
-        // Hash password baru
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(newPassword, salt);
 
-        // Hapus token reset agar tidak bisa dipakai 2x
         user.resetPasswordToken = undefined;
         user.resetPasswordExpires = undefined;
 

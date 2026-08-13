@@ -1,41 +1,32 @@
 const Evaluation = require('../models/Evaluation');
 const User = require('../models/User');
+// 1. IMPORT HELPER TANGGAL TERPUSAT
+const { getWeekOfMonth } = require('../utils/dateHelper');
 
-/**
- * FUNGSI PEMBANTU: Menghitung minggu berjalan secara otomatis (Senin-Minggu)
- */
-function getAutoWeek() {
-  const today = new Date();
-  const day = today.getDate();
-  // Ambil posisi hari pertama bulan ini (0 = Minggu, 1 = Senin, dst)
-  const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
-  
-  // Rumus baru agar sinkron dengan Frontend
-  return Math.ceil((day + firstDay) / 7);
-}
-
-// 1. Fungsi Webhook (Menerima data evaluasi amalan - Dilindungi JWT)
+// 1. Fungsi Webhook (Menerima data dari Google Form / Frontend Form)
 exports.handleWebhook = async (req, res) => {
   try {
     let { studentId, jawaban } = req.body;
 
-    // SECURITY FIX: Validasi otorisasi - mahasiswa hanya boleh submit data miliknya sendiri
-    const userRole = req.user.role;
-    const userNim = req.user.nim;
-
-    if (userRole === 'mahasiswa') {
-      // Paksa studentId = NIM dari token JWT, abaikan input dari body
-      // Ini mencegah mahasiswa memalsukan data orang lain
-      studentId = String(userNim);
+    // RBAC: Mahasiswa hanya boleh mengisi/mengedit datanya sendiri
+    if (req.user && req.user.role === 'mahasiswa' && req.user.nim !== String(studentId)) {
+      return res.status(403).json({ message: "Akses ditolak, Anda tidak dapat memodifikasi data mahasiswa lain" });
     }
 
-    // Validasi: pastikan studentId tersedia setelah pengecekan
-    if (!studentId) {
-      return res.status(400).json({ message: "studentId tidak valid." });
-    }
-
+    // --- VALIDASI WAKTU PENGISIAN DI BACKEND (PRODUKSI) ---
     const today = new Date();
-    const forcedWeek = getAutoWeek(); 
+    const dayOfWeek = today.getDay(); // 0 = Minggu, 1 = Senin, dst.
+    const currentHour = today.getHours(); // 0 - 23
+
+    // Form TUTUP HANYA pada hari Senin antara jam 00:00 sampai 03:59 WIB untuk rekap data
+    if (dayOfWeek === 1 && currentHour < 4) {
+      return res.status(400).json({ 
+        message: "Pengisian mutabaah sedang ditutup untuk pemrosesan data mingguan. Form akan dibuka kembali hari Senin pukul 04:00 WIB." 
+      });
+    }
+    // -----------------------------------------------------------------
+
+    const forcedWeek = getWeekOfMonth(today); 
     const currentMonth = today.getMonth() + 1; // Januari = 1, Februari = 2
     const currentYear = today.getFullYear();
 
@@ -43,8 +34,8 @@ exports.handleWebhook = async (req, res) => {
       { 
         studentId: String(studentId), 
         weekStart: forcedWeek,
-        month: currentMonth,
-        year: currentYear
+        month: currentMonth, 
+        year: currentYear   
       },
       { jawaban },
       { upsert: true, new: true }
@@ -65,6 +56,15 @@ exports.getStats = async (req, res) => {
     const currentMonth = today.getMonth() + 1;
     const currentYear = today.getFullYear();
 
+    // RBAC: Mahasiswa hanya boleh melihat datanya sendiri
+    if (req.user && req.user.role === 'mahasiswa' && req.user.nim !== nim) {
+      return res.status(403).json({ message: "Akses ditolak, Anda tidak dapat melihat data mahasiswa lain" });
+    }
+
+    const today = new Date();
+    const currentMonth = today.getMonth() + 1;
+    const currentYear = today.getFullYear();
+
     if (!nim || nim === "undefined") {
       return res.status(200).json([]);
     }
@@ -74,7 +74,7 @@ exports.getStats = async (req, res) => {
       studentId: String(nim),
       month: currentMonth,
       year: currentYear
-    }).sort({ weekStart: 1 }); // Tetap urutkan per minggu (1-5)
+    }).sort({ weekStart: 1 });
 
     res.status(200).json(data);
   } catch (error) {
@@ -82,7 +82,7 @@ exports.getStats = async (req, res) => {
   }
 };
 
-// 3. Fungsi getAllStats (DIPERBAIKI: Support Minggu 1-5 secara Dinamis)
+// 3. Fungsi getAllStats (Support Minggu 1-5 secara Dinamis)
 exports.getAllStats = async (req, res) => {
   try {
     if (req.user.role !== 'admin' && req.user.role !== 'pembina') {
@@ -90,9 +90,9 @@ exports.getAllStats = async (req, res) => {
     }
 
     const today = new Date();
-    const currentMonth = today.getMonth() + 1; // Februari = 2
-    const currentYear = today.getFullYear(); // 2026
-    const currentWeek = getAutoWeek(); 
+    const currentMonth = today.getMonth() + 1;
+    const currentYear = today.getFullYear();
+    const currentWeek = getWeekOfMonth(today); 
 
     // BUG FIX: Tambahkan field 'pembina' agar data relasi pembina tersedia
     const allStudents = await User.find({ role: 'mahasiswa' }, 'nama nim pembina');
@@ -154,7 +154,7 @@ exports.getAllStats = async (req, res) => {
       frequencyData: averageData, 
       weeklyTotalScores,
       currentWeek,
-      currentMonth // Tambahan informasi bulan apa yang sedang tampil
+      currentMonth 
     });
 
   } catch (error) {
